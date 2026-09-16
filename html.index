@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muhammed Rashid KP | Contact</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #05050a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ===== Moving Neon Orbs ===== */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: move 20s infinite alternate ease-in-out;
+      z-index: 0;
+    }
+
+    .orb1 {
+      width: 400px;
+      height: 400px;
+      background: #ff00ff;
+      top: -100px;
+      left: -100px;
+      animation-duration: 18s;
+    }
+
+    .orb2 {
+      width: 350px;
+      height: 350px;
+      background: #00f0ff;
+      bottom: -80px;
+      right: -80px;
+      animation-duration: 22s;
+      animation-delay: -5s;
+    }
+
+    .orb3 {
+      width: 300px;
+      height: 300px;
+      background: #9d00ff;
+      top: 40%;
+      left: 60%;
+      animation-duration: 25s;
+      animation-delay: -10s;
+    }
+
+    .orb4 {
+      width: 250px;
+      height: 250px;
+      background: #00ff9d;
+      bottom: 20%;
+      left: 10%;
+      animation-duration: 20s;
+      animation-delay: -3s;
+    }
+
+    @keyframes move {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(80px, -60px) scale(1.15);
+      }
+      100% {
+        transform: translate(-60px, 40px) scale(0.9);
+      }
+    }
+
+    /* ===== Main Container ===== */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .profile {
+      margin-bottom: 35px;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff00ff, #00f0ff, #9d00ff);
+      background-size: 200% 200%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      margin: 0 auto 18px;
+      box-shadow: 0 0 30px #ff00ff, 0 0 60px #00f0ff;
+      animation: glow 4s infinite alternate, gradientShift 6s infinite;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 25px #ff00ff, 0 0 50px #00f0ff; }
+      100% { box-shadow: 0 0 45px #ff00ff, 0 0 90px #00f0ff, 0 0 120px #9d00ff; }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      background: linear-gradient(90deg, #ff00ff, #00f0ff, #9d00ff, #ff00ff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShine 5s linear infinite;
+      margin-bottom: 6px;
+    }
+
+    @keyframes textShine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+
+    /* ===== Links ===== */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 17px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: all 0.35s ease;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: 0.5s;
+    }
+
+    .link:hover::before {
+      left: 100%;
+    }
+
+    .link i {
+      font-size: 1.35rem;
+      width: 30px;
+      text-align: center;
+    }
+
+    .link:hover {
+      transform: translateY(-5px) scale(1.03);
+      border-color: #00f0ff;
+      box-shadow: 0 0 25px #00f0ff66;
+      background: rgba(0, 240, 255, 0.12);
+    }
+
+    .link.instagram:hover {
+      border-color: #ff00ff;
+      box-shadow: 0 0 25px #ff00ff66;
+    }
+
+    .link.email:hover {
+      border-color: #00ff9d;
+      box-shadow: 0 0 25px #00ff9d66;
+    }
+
+    .link.phone:hover {
+      border-color: #ffaa00;
+      box-shadow: 0 0 25px #ffaa0066;
+    }
+
+    .link.whatsapp:hover {
+      border-color: #25d366;
+      box-shadow: 0 0 25px #25d36666;
+    }
+
+    .link.github:hover {
+      border-color: #ffffff;
+      box-shadow: 0 0 25px #ffffff55;
+    }
+
+    footer {
+      margin-top: 45px;
+      font-size: 0.82rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Moving Neon Orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+
+  <div class="container">
+    <div class="profile">
+      <div class="avatar">👨‍💻</div>
+      <h1>Muhammed Rashid KP</h1>
+      <p class="subtitle">Flutter Developer</p>
+    </div>
+
+    <div class="links">
+      <!-- Email -->
+      <a href="mailto:your.email@example.com" class="link email">
+        <i class="fas fa-envelope" style="color:#00ff9d"></i>
+        <span>your.email@example.com</span>
+      </a>
+
+      <!-- Phone -->
+      <a href="tel:+91XXXXXXXXXX" class="link phone">
+        <i class="fas fa-phone" style="color:#ffaa00"></i>
+        <span>+91 XXXXX XXXXX</span>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://instagram.com/your_instagram" target="_blank" class="link instagram">
+        <i class="fab fa-instagram" style="color:#ff00ff"></i>
+        <span>@your_instagram</span>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="link whatsapp">
+        <i class="fab fa-whatsapp" style="color:#25d366"></i>
+        <span>WhatsApp</span>
+      </a>
+
+      <!-- GitHub -->
+      <a href="https://github.com/yourusername" target="_blank" class="link github">
+        <i class="fab fa-github" style="color:#fff"></i>
+        <span>GitHub</span>
+      </a>
+
+      <!-- LinkedIn -->
+      <a href="https://linkedin.com/in/yourusername" target="_blank" class="link">
+        <i class="fab fa-linkedin" style="color:#00a0dc"></i>
+        <span>LinkedIn</span>
+      </a>
+    </div>
+
+    <footer>
+      © 2026 Muhammed Rashid KP
+    </footer>
+  </div>
+
+</body>
+</html>
