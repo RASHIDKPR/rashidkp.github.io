@@ -1,2879 +1,2235 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+
+  <title>Rashid AI Studio</title>
+
+  <meta
+    name="description"
+    content="AI image and video generation studio"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #08090d;
+      --bg2: #0e1017;
+      --card: rgba(20, 22, 31, 0.82);
+      --card2: rgba(27, 29, 40, 0.9);
+      --border: rgba(255, 255, 255, 0.09);
+      --border2: rgba(255, 255, 255, 0.15);
+      --text: #f5f7fb;
+      --muted: #9da3b1;
+      --primary: #7c5cff;
+      --primary2: #9b82ff;
+      --danger: #ff5f6d;
+      --success: #43d17a;
+      --radius: 20px;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 15% 0%,
+          rgba(124, 92, 255, 0.16),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 85% 10%,
+          rgba(0, 200, 255, 0.08),
+          transparent 28%
+        ),
+        var(--bg);
+
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    .app {
+      width: min(1180px, 100%);
+      margin: auto;
+      padding: 24px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 22px;
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7c5cff,
+          #b16cff
+        );
 
-<meta charset="UTF-8">
+      box-shadow:
+        0 10px 35px rgba(124, 92, 255, 0.3);
+    }
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+    }
+
+    .brand p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 9px 13px;
+      border-radius: 999px;
+
+      background: rgba(67, 209, 122, 0.08);
+      border: 1px solid rgba(67, 209, 122, 0.16);
+
+      color: #7deca5;
+      font-size: 12px;
+      font-weight: 600;
+    }
 
-<meta
-  name="theme-color"
-  content="#080b12"
->
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+    }
 
-<title>Rashid AI Studio</title>
+    /* =========================
+       TABS
+    ========================= */
 
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
 
-<style>
+      padding: 5px;
 
-/* =====================================================
-   RESET
-===================================================== */
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--border);
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+      border-radius: 15px;
 
+      margin-bottom: 20px;
+    }
 
-html {
-  scroll-behavior: smooth;
-}
+    .tab {
+      border: 0;
+      border-radius: 11px;
 
+      padding: 13px;
 
-body {
+      background: transparent;
+      color: var(--muted);
 
-  min-height: 100vh;
+      font-weight: 700;
+      transition: 0.2s;
+    }
 
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+    .tab.active {
+      background: var(--card2);
+      color: white;
 
-  color: #fff;
+      box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.2);
+    }
 
-  background:
+    /* =========================
+       MAIN GRID
+    ========================= */
 
-    radial-gradient(
-      circle at 10% 5%,
-      rgba(59, 130, 246, .20),
-      transparent 32%
-    ),
+    .workspace {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 20px;
+    }
 
-    radial-gradient(
-      circle at 90% 20%,
-      rgba(124, 58, 237, .18),
-      transparent 32%
-    ),
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
 
-    radial-gradient(
-      circle at 50% 100%,
-      rgba(37, 99, 235, .10),
-      transparent 35%
-    ),
+      backdrop-filter: blur(20px);
 
-    #070a11;
+      padding: 20px;
+    }
 
-  padding:
-    18px 12px 50px;
+    /* =========================
+       SECTION
+    ========================= */
 
-}
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
+      margin-bottom: 13px;
+    }
 
-/* =====================================================
-   CONTAINER
-===================================================== */
+    .section-title h2 {
+      font-size: 14px;
+      font-weight: 750;
+    }
 
-.container {
+    .section-title span {
+      font-size: 11px;
+      color: var(--muted);
+    }
 
-  width: 100%;
+    /* =========================
+       PROMPT
+    ========================= */
 
-  max-width: 980px;
+    textarea {
+      width: 100%;
+      min-height: 135px;
 
-  margin:
-    0 auto;
+      resize: vertical;
 
-}
+      padding: 15px;
 
+      border-radius: 15px;
 
-/* =====================================================
-   HEADER
-===================================================== */
+      border: 1px solid var(--border2);
+      outline: none;
 
-.header {
+      background: rgba(0, 0, 0, 0.23);
+      color: white;
 
-  text-align: center;
+      line-height: 1.55;
 
-  padding:
-    20px 0 25px;
+      transition: 0.2s;
+    }
 
-}
+    textarea::placeholder {
+      color: #686e7d;
+    }
 
+    textarea:focus {
+      border-color: rgba(124, 92, 255, 0.65);
 
-.header h1 {
+      box-shadow:
+        0 0 0 3px rgba(124, 92, 255, 0.1);
+    }
 
-  font-size:
-    clamp(28px, 5vw, 42px);
+    /* =========================
+       CHIPS
+    ========================= */
 
-  font-weight:
-    800;
+    .chips {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
 
-  letter-spacing:
-    -.8px;
+      margin-top: 10px;
+    }
 
-}
+    .chip {
+      border: 1px solid var(--border);
 
+      background: rgba(255, 255, 255, 0.035);
 
-.header p {
+      color: #bfc4d0;
 
-  margin-top:
-    8px;
+      border-radius: 999px;
 
-  color:
-    #8d96a8;
+      padding: 7px 10px;
 
-  font-size:
-    14px;
+      font-size: 11px;
 
-}
+      transition: 0.2s;
+    }
 
+    .chip:hover {
+      border-color: rgba(124, 92, 255, 0.5);
+      color: white;
+      background: rgba(124, 92, 255, 0.1);
+    }
 
-/* =====================================================
-   TABS
-===================================================== */
+    /* =========================
+       IMAGE UPLOAD
+    ========================= */
 
-.tabs {
+    .upload-box {
+      border: 1px dashed rgba(255, 255, 255, 0.18);
 
-  display:
-    flex;
+      border-radius: 17px;
 
-  gap:
-    7px;
+      padding: 16px;
 
-  padding:
-    6px;
+      background: rgba(255, 255, 255, 0.025);
 
-  border:
-    1px solid
-    rgba(255,255,255,.08);
+      transition: 0.2s;
+    }
 
-  border-radius:
-    16px;
+    .upload-box:hover {
+      border-color: rgba(124, 92, 255, 0.6);
+    }
 
-  background:
-    rgba(255,255,255,.055);
+    .upload-main {
+      min-height: 100px;
 
-  backdrop-filter:
-    blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-  margin-bottom:
-    18px;
+      text-align: center;
 
-}
+      cursor: pointer;
+    }
 
+    .upload-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
 
-.tab {
+    .upload-main strong {
+      font-size: 13px;
+    }
 
-  flex:
-    1;
+    .upload-main span {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
 
-  min-height:
-    46px;
+    input[type="file"] {
+      display: none;
+    }
 
-  border:
-    none;
+    .reference-grid {
+      display: grid;
 
-  border-radius:
-    12px;
+      grid-template-columns: repeat(4, 1fr);
 
-  color:
-    #8e96a5;
+      gap: 8px;
 
-  background:
-    transparent;
+      margin-top: 12px;
+    }
 
-  font-size:
-    15px;
+    .reference-item {
+      position: relative;
 
-  font-weight:
-    700;
+      aspect-ratio: 1;
 
-  cursor:
-    pointer;
+      border-radius: 11px;
 
-  transition:
-    .2s;
+      overflow: hidden;
 
-}
+      background: #11131a;
 
+      border: 1px solid var(--border);
+    }
 
-.tab:hover {
+    .reference-item img {
+      width: 100%;
+      height: 100%;
 
-  color:
-    #fff;
+      object-fit: cover;
+    }
 
-  background:
-    rgba(255,255,255,.06);
+    .remove-reference {
+      position: absolute;
 
-}
+      top: 5px;
+      right: 5px;
 
+      width: 23px;
+      height: 23px;
 
-.tab.active {
+      border: 0;
 
-  color:
-    #fff;
+      border-radius: 50%;
 
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #4f46e5
-    );
+      background: rgba(0, 0, 0, 0.72);
 
-  box-shadow:
-    0 8px 25px
-    rgba(99,102,241,.25);
+      color: white;
 
-}
+      font-size: 13px;
 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* =====================================================
-   MAIN CARD
-===================================================== */
+    /* =========================
+       OPTIONS
+    ========================= */
 
-.card {
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.075),
-      rgba(255,255,255,.035)
-    );
+      gap: 10px;
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+      margin-top: 15px;
+    }
 
-  border-radius:
-    23px;
+    .option {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
 
-  padding:
-    20px;
+    .option label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
 
-  backdrop-filter:
-    blur(25px);
+    select {
+      width: 100%;
 
-  box-shadow:
-    0 20px 70px
-    rgba(0,0,0,.25);
+      padding: 11px 12px;
 
-}
+      border-radius: 12px;
 
+      border: 1px solid var(--border);
 
-/* =====================================================
-   MODE
-===================================================== */
+      outline: none;
 
-.mode {
-  display: none;
-}
+      background: #141620;
+      color: white;
+    }
 
+    /* =========================
+       BUTTONS
+    ========================= */
 
-.mode.active {
-  display: block;
-}
+    .generate-btn {
+      width: 100%;
 
+      margin-top: 16px;
 
-/* =====================================================
-   SECTION TITLE
-===================================================== */
+      padding: 14px 18px;
 
-.section-title {
+      border: 0;
+      border-radius: 14px;
 
-  display:
-    flex;
+      color: white;
 
-  align-items:
-    center;
+      font-size: 14px;
+      font-weight: 800;
 
-  justify-content:
-    space-between;
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          #a16eff
+        );
 
-  gap:
-    10px;
+      box-shadow:
+        0 10px 30px rgba(124, 92, 255, 0.25);
 
-  margin-bottom:
-    12px;
+      transition: 0.2s;
+    }
 
-}
+    .generate-btn:hover {
+      transform: translateY(-1px);
 
+      box-shadow:
+        0 14px 35px rgba(124, 92, 255, 0.34);
+    }
 
-.section-title h2 {
+    .generate-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-  font-size:
-    18px;
+    .secondary-btn {
+      width: 100%;
 
-}
+      padding: 12px;
 
+      border-radius: 13px;
 
-.badge {
+      border: 1px solid var(--border2);
 
-  padding:
-    5px 9px;
+      background: rgba(255, 255, 255, 0.04);
 
-  border-radius:
-    20px;
+      color: white;
 
-  background:
-    rgba(34,197,94,.12);
+      font-weight: 700;
 
-  border:
-    1px solid
-    rgba(34,197,94,.25);
+      margin-top: 9px;
+    }
 
-  color:
-    #6ee7a0;
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
 
-  font-size:
-    10px;
+    /* =========================
+       NOTICE
+    ========================= */
 
-  font-weight:
-    700;
+    .notice {
+      margin-top: 12px;
 
-}
+      padding: 11px 13px;
 
+      border-radius: 12px;
 
-/* =====================================================
-   UPLOAD
-===================================================== */
+      background: rgba(255, 255, 255, 0.035);
 
-.upload {
+      border: 1px solid var(--border);
 
-  display:
-    block;
+      color: var(--muted);
 
-  width:
-    100%;
+      font-size: 11px;
 
-  border:
-    2px dashed
-    rgba(255,255,255,.18);
+      line-height: 1.5;
+    }
 
-  border-radius:
-    18px;
+    /* =========================
+       RESULT
+    ========================= */
 
-  padding:
-    32px 15px;
+    .result-panel {
+      min-height: 610px;
 
-  text-align:
-    center;
+      display: flex;
+      flex-direction: column;
+    }
 
-  cursor:
-    pointer;
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-  background:
-    rgba(255,255,255,.025);
+      margin-bottom: 14px;
+    }
 
-  transition:
-    .2s;
+    .result-header h2 {
+      font-size: 14px;
+    }
 
-}
+    .result-header span {
+      font-size: 11px;
+      color: var(--muted);
+    }
 
+    .result-area {
+      flex: 1;
 
-.upload:hover {
+      min-height: 520px;
 
-  border-color:
-    #8b5cf6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  background:
-    rgba(124,58,237,.07);
+      border-radius: 18px;
 
-}
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(124, 92, 255, 0.06),
+          transparent 50%
+        ),
+        rgba(0, 0, 0, 0.18);
 
+      border: 1px solid var(--border);
 
-.upload-icon {
+      overflow: hidden;
 
-  font-size:
-    40px;
+      position: relative;
+    }
 
-  margin-bottom:
-    9px;
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px;
+    }
 
-}
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 13px;
+      opacity: 0.7;
+    }
 
+    .empty-state h3 {
+      color: #dfe2e9;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
 
-.upload b {
+    .empty-state p {
+      font-size: 11px;
+      line-height: 1.5;
+    }
 
-  font-size:
-    15px;
+    #generatedImage {
+      display: none;
 
-}
+      max-width: 100%;
+      max-height: 520px;
 
+      object-fit: contain;
 
-.upload small {
+      border-radius: 12px;
 
-  display:
-    block;
+      cursor: pointer;
+    }
 
-  margin-top:
-    7px;
+    #generatedVideo {
+      display: none;
 
-  color:
-    #727b8b;
+      width: 100%;
+      max-height: 520px;
 
-  font-size:
-    12px;
+      object-fit: contain;
 
-}
+      border-radius: 12px;
 
+      background: black;
+    }
 
-input[type="file"] {
+    /* =========================
+       RESULT ACTIONS
+    ========================= */
 
-  display:
-    none;
+    .result-actions {
+      display: none;
 
-}
+      grid-template-columns: repeat(3, 1fr);
 
+      gap: 9px;
 
-/* =====================================================
-   IMAGE GRID
-===================================================== */
+      margin-top: 12px;
+    }
 
-.image-grid {
+    .result-actions button {
+      padding: 11px 8px;
 
-  display:
-    grid;
+      border-radius: 12px;
 
-  grid-template-columns:
-    repeat(4, 1fr);
+      border: 1px solid var(--border);
 
-  gap:
-    10px;
+      background: rgba(255, 255, 255, 0.04);
 
-  margin-top:
-    16px;
+      color: white;
 
-}
+      font-size: 11px;
+      font-weight: 700;
+    }
 
+    .result-actions button:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
 
-.image-card {
+    /* =========================
+       LOADING
+    ========================= */
 
-  position:
-    relative;
+    .loading {
+      display: none;
 
-  overflow:
-    hidden;
+      position: absolute;
 
-  border-radius:
-    14px;
+      inset: 0;
 
-  background:
-    #111722;
+      background: rgba(7, 8, 12, 0.78);
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+      backdrop-filter: blur(8px);
 
-}
+      align-items: center;
+      justify-content: center;
 
+      flex-direction: column;
 
-.image-card img {
+      z-index: 5;
+    }
 
-  display:
-    block;
+    .spinner {
+      width: 42px;
+      height: 42px;
 
-  width:
-    100%;
+      border-radius: 50%;
 
-  aspect-ratio:
-    1 / 1;
+      border: 3px solid rgba(255, 255, 255, 0.1);
 
-  object-fit:
-    cover;
+      border-top-color: var(--primary);
 
-}
+      animation: spin 0.8s linear infinite;
+    }
 
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.image-label {
+    .loading strong {
+      margin-top: 15px;
 
-  position:
-    absolute;
+      font-size: 14px;
+    }
 
-  top:
-    7px;
+    .loading span {
+      margin-top: 5px;
 
-  left:
-    7px;
+      color: var(--muted);
 
-  padding:
-    4px 7px;
+      font-size: 11px;
 
-  border-radius:
-    7px;
+      text-align: center;
 
-  background:
-    rgba(0,0,0,.68);
+      max-width: 300px;
+    }
 
-  backdrop-filter:
-    blur(8px);
+    /* =========================
+       ERROR
+    ========================= */
 
-  font-size:
-    10px;
+    .error {
+      display: none;
 
-  font-weight:
-    600;
+      margin-top: 12px;
 
-}
+      padding: 12px 14px;
 
+      border-radius: 13px;
 
-.remove {
+      border: 1px solid rgba(255, 95, 109, 0.2);
 
-  position:
-    absolute;
+      background: rgba(255, 95, 109, 0.08);
 
-  top:
-    6px;
+      color: #ff929c;
 
-  right:
-    6px;
+      font-size: 12px;
 
-  width:
-    27px;
+      line-height: 1.5;
+    }
 
-  height:
-    27px;
+    /* =========================
+       HISTORY
+    ========================= */
 
-  border:
-    none;
+    .history-section {
+      margin-top: 20px;
+    }
 
-  border-radius:
-    50%;
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-  color:
-    #fff;
+      margin-bottom: 13px;
+    }
 
-  background:
-    #ef4444;
+    .history-header h2 {
+      font-size: 15px;
+    }
 
-  cursor:
-    pointer;
+    .clear-history {
+      border: 0;
 
-  font-size:
-    17px;
+      background: transparent;
 
-  line-height:
-    27px;
+      color: #ff7883;
 
-}
+      font-size: 11px;
 
+      font-weight: 700;
+    }
 
-.image-count {
+    .history-grid {
+      display: grid;
 
-  margin-top:
-    9px;
+      grid-template-columns:
+        repeat(5, minmax(0, 1fr));
 
-  text-align:
-    center;
+      gap: 10px;
+    }
 
-  color:
-    #697384;
+    .history-item {
+      background: var(--card);
 
-  font-size:
-    12px;
+      border: 1px solid var(--border);
 
-}
+      border-radius: 15px;
 
+      overflow: hidden;
 
-/* =====================================================
-   TEXTAREA
-===================================================== */
+      cursor: pointer;
 
-textarea {
+      transition: 0.2s;
+    }
 
-  width:
-    100%;
+    .history-item:hover {
+      transform: translateY(-2px);
 
-  min-height:
-    145px;
+      border-color: rgba(124, 92, 255, 0.35);
+    }
 
-  margin-top:
-    18px;
+    .history-media {
+      aspect-ratio: 1;
 
-  padding:
-    15px;
+      background: #11131a;
 
-  resize:
-    vertical;
+      position: relative;
 
-  outline:
-    none;
+      overflow: hidden;
+    }
 
-  border:
-    1px solid
-    rgba(255,255,255,.12);
+    .history-media img,
+    .history-media video {
+      width: 100%;
+      height: 100%;
 
-  border-radius:
-    15px;
+      object-fit: cover;
+    }
 
-  background:
-    rgba(0,0,0,.30);
+    .video-badge {
+      position: absolute;
 
-  color:
-    #fff;
+      left: 7px;
+      bottom: 7px;
 
-  font-family:
-    inherit;
+      padding: 4px 7px;
 
-  font-size:
-    14px;
+      border-radius: 7px;
 
-  line-height:
-    1.6;
+      background: rgba(0, 0, 0, 0.72);
 
-  transition:
-    .2s;
+      font-size: 9px;
 
-}
+      font-weight: 700;
+    }
 
+    .history-info {
+      padding: 9px;
+    }
 
-textarea::placeholder {
-  color: #5f6877;
-}
+    .history-info p {
+      color: #dfe2e9;
 
+      font-size: 10px;
 
-textarea:focus {
+      display: -webkit-box;
 
-  border-color:
-    rgba(139,92,246,.75);
+      -webkit-line-clamp: 2;
 
-  box-shadow:
-    0 0 0 3px
-    rgba(124,58,237,.10);
+      -webkit-box-orient: vertical;
 
-}
+      overflow: hidden;
 
+      line-height: 1.4;
+    }
 
-/* =====================================================
-   PROMPT TOOLS
-===================================================== */
+    .history-info span {
+      display: block;
 
-.prompt-tools {
+      margin-top: 5px;
 
-  display:
-    flex;
+      color: #777d8c;
 
-  flex-wrap:
-    wrap;
+      font-size: 9px;
+    }
 
-  gap:
-    7px;
+    /* =========================
+       FULLSCREEN
+    ========================= */
 
-  margin-top:
-    9px;
+    .fullscreen {
+      display: none;
 
-}
+      position: fixed;
 
+      inset: 0;
 
-.prompt-chip {
+      z-index: 100;
 
-  padding:
-    7px 10px;
+      background: rgba(0, 0, 0, 0.94);
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+      align-items: center;
+      justify-content: center;
 
-  border-radius:
-    9px;
+      padding: 25px;
+    }
 
-  background:
-    rgba(255,255,255,.045);
+    .fullscreen img,
+    .fullscreen video {
+      max-width: 95vw;
+      max-height: 90vh;
 
-  color:
-    #9da5b4;
+      border-radius: 10px;
 
-  font-size:
-    11px;
+      object-fit: contain;
+    }
 
-  cursor:
-    pointer;
+    .close-fullscreen {
+      position: absolute;
 
-}
+      top: 18px;
+      right: 20px;
 
+      width: 40px;
+      height: 40px;
 
-.prompt-chip:hover {
+      border-radius: 50%;
 
-  color:
-    white;
+      border: 1px solid rgba(255, 255, 255, 0.15);
 
-  border-color:
-    rgba(139,92,246,.5);
+      background: rgba(255, 255, 255, 0.08);
 
-}
+      color: white;
 
+      font-size: 20px;
+    }
 
-/* =====================================================
-   OPTIONS
-===================================================== */
+    /* =========================
+       VIDEO ONLY
+    ========================= */
 
-.options {
+    .video-only {
+      display: none;
+    }
 
-  display:
-    grid;
+    .video-upload {
+      margin-top: 15px;
+    }
 
-  grid-template-columns:
-    repeat(3, 1fr);
+    .video-preview {
+      display: none;
 
-  gap:
-    10px;
+      margin-top: 10px;
 
-  margin-top:
-    15px;
+      position: relative;
 
-}
+      width: 100%;
 
+      max-height: 180px;
 
-.option {
+      border-radius: 14px;
 
-  padding:
-    11px;
+      overflow: hidden;
 
-  border:
-    1px solid
-    rgba(255,255,255,.09);
+      border: 1px solid var(--border);
+    }
 
-  border-radius:
-    12px;
+    .video-preview img {
+      width: 100%;
 
-  background:
-    rgba(0,0,0,.20);
+      max-height: 180px;
 
-}
+      object-fit: cover;
 
+      display: block;
+    }
 
-.option label {
+    .remove-video-image {
+      position: absolute;
 
-  display:
-    block;
+      right: 8px;
+      top: 8px;
 
-  margin-bottom:
-    7px;
+      width: 28px;
+      height: 28px;
 
-  color:
-    #727b8b;
+      border: 0;
 
-  font-size:
-    10px;
+      border-radius: 50%;
 
-  text-transform:
-    uppercase;
+      background: rgba(0, 0, 0, 0.75);
 
-  letter-spacing:
-    .4px;
+      color: white;
+    }
 
-}
+    .video-mode {
+      display: grid;
 
+      grid-template-columns:
+        repeat(3, 1fr);
 
-.option select {
+      gap: 7px;
 
-  width:
-    100%;
+      margin-top: 10px;
+    }
 
-  padding:
-    5px 2px;
+    .mode-btn {
+      padding: 9px;
 
-  border:
-    none;
+      border-radius: 10px;
 
-  outline:
-    none;
+      border: 1px solid var(--border);
 
-  background:
-    transparent;
+      background: rgba(255, 255, 255, 0.03);
 
-  color:
-    white;
+      color: var(--muted);
 
-  font-size:
-    13px;
+      font-size: 11px;
 
-}
+      font-weight: 700;
+    }
 
+    .mode-btn.active {
+      background: rgba(124, 92, 255, 0.13);
 
-.option select option {
+      color: white;
 
-  background:
-    #111722;
+      border-color: rgba(124, 92, 255, 0.4);
+    }
 
-  color:
-    white;
+    .animate-btn {
+      width: 100%;
 
-}
+      margin-top: 10px;
 
+      padding: 12px;
 
-/* =====================================================
-   GENERATE BUTTON
-===================================================== */
+      border-radius: 13px;
 
-.generate {
+      border: 1px solid rgba(124, 92, 255, 0.25);
 
-  width:
-    100%;
+      background: rgba(124, 92, 255, 0.08);
 
-  min-height:
-    52px;
+      color: #c9bdff;
 
-  margin-top:
-    17px;
+      font-size: 12px;
 
-  border:
-    none;
+      font-weight: 750;
+    }
 
-  border-radius:
-    14px;
+    .animate-btn:hover {
+      background: rgba(124, 92, 255, 0.14);
+    }
 
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #4f46e5
-    );
+    /* =========================
+       FOOTER
+    ========================= */
 
-  color:
-    white;
+    footer {
+      text-align: center;
 
-  font-size:
-    15px;
+      color: #606674;
 
-  font-weight:
-    750;
+      font-size: 10px;
 
-  cursor:
-    pointer;
+      margin-top: 25px;
+      padding-bottom: 10px;
+    }
 
-  box-shadow:
-    0 10px 30px
-    rgba(79,70,229,.22);
+    /* =========================
+       RESPONSIVE
+    ========================= */
 
-  transition:
-    .2s;
+    @media (max-width: 900px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
 
-}
+      .result-panel {
+        min-height: 500px;
+      }
 
+      .result-area {
+        min-height: 420px;
+      }
 
-.generate:hover:not(:disabled) {
+      .history-grid {
+        grid-template-columns:
+          repeat(4, 1fr);
+      }
+    }
 
-  transform:
-    translateY(-1px);
+    @media (max-width: 600px) {
+      .app {
+        padding: 13px;
+      }
 
-  box-shadow:
-    0 14px 35px
-    rgba(79,70,229,.30);
+      header {
+        margin-bottom: 17px;
+      }
 
-}
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+      }
 
+      .brand h1 {
+        font-size: 17px;
+      }
 
-.generate:disabled {
+      .status {
+        padding: 7px 9px;
+        font-size: 10px;
+      }
 
-  opacity:
-    .55;
+      .panel {
+        padding: 15px;
+        border-radius: 17px;
+      }
 
-  cursor:
-    not-allowed;
+      .result-panel {
+        min-height: 430px;
+      }
 
-  transform:
-    none;
+      .result-area {
+        min-height: 350px;
+      }
 
-}
+      .history-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
 
+      .result-actions {
+        grid-template-columns: 1fr 1fr;
+      }
 
-/* =====================================================
-   LOADING
-===================================================== */
+      .result-actions button:last-child {
+        grid-column: 1 / -1;
+      }
 
-.loading {
-
-  display:
-    none;
-
-  text-align:
-    center;
-
-  padding:
-    28px 10px 8px;
-
-}
-
-
-.spinner {
-
-  width:
-    40px;
-
-  height:
-    40px;
-
-  margin:
-    auto;
-
-  border:
-    4px solid
-    rgba(255,255,255,.10);
-
-  border-top-color:
-    #8b5cf6;
-
-  border-radius:
-    50%;
-
-  animation:
-    spin 0.8s linear infinite;
-
-}
-
-
-@keyframes spin {
-
-  to {
-    transform:
-      rotate(360deg);
-  }
-
-}
-
-
-.loading-title {
-
-  margin-top:
-    12px;
-
-  font-size:
-    14px;
-
-  font-weight:
-    600;
-
-}
-
-
-.loading-subtitle {
-
-  margin-top:
-    5px;
-
-  color:
-    #666f80;
-
-  font-size:
-    11px;
-
-}
-
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-.error {
-
-  display:
-    none;
-
-  margin-top:
-    14px;
-
-  padding:
-    13px 14px;
-
-  border:
-    1px solid
-    rgba(239,68,68,.28);
-
-  border-radius:
-    12px;
-
-  background:
-    rgba(239,68,68,.10);
-
-  color:
-    #ff9999;
-
-  font-size:
-    13px;
-
-  line-height:
-    1.5;
-
-}
-
-
-/* =====================================================
-   RESULT
-===================================================== */
-
-.result {
-
-  display:
-    none;
-
-  margin-top:
-    25px;
-
-}
-
-
-.result-title {
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  gap:
-    8px;
-
-  margin-bottom:
-    12px;
-
-  font-size:
-    18px;
-
-  font-weight:
-    700;
-
-}
-
-
-.result-image-wrapper {
-
-  overflow:
-    hidden;
-
-  border:
-    1px solid
-    rgba(255,255,255,.08);
-
-  border-radius:
-    17px;
-
-  background:
-    #05070b;
-
-}
-
-
-.result img {
-
-  display:
-    block;
-
-  width:
-    100%;
-
-  max-height:
-    800px;
-
-  object-fit:
-    contain;
-
-  cursor:
-    pointer;
-
-}
-
-
-.result video {
-
-  display:
-    block;
-
-  width:
-    100%;
-
-  max-height:
-    750px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.08);
-
-  border-radius:
-    17px;
-
-  background:
-    #000;
-
-}
-
-
-/* =====================================================
-   ACTIONS
-===================================================== */
-
-.actions {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:
-    9px;
-
-  margin-top:
-    11px;
-
-}
-
-
-.action {
-
-  min-height:
-    45px;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  border:
-    none;
-
-  border-radius:
-    11px;
-
-  background:
-    #16a34a;
-
-  color:
-    #fff;
-
-  text-decoration:
-    none;
-
-  font-size:
-    13px;
-
-  font-weight:
-    700;
-
-  cursor:
-    pointer;
-
-}
-
-
-.action.secondary {
-
-  background:
-    #30343c;
-
-}
-
-
-.action.animate {
-
-  grid-column:
-    1 / -1;
-
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #2563eb
-    );
-
-}
-
-
-.action:hover {
-
-  filter:
-    brightness(1.08);
-
-}
-
-
-/* =====================================================
-   VIDEO IMAGE PREVIEW
-===================================================== */
-
-.video-input {
-
-  display:
-    none;
-
-  position:
-    relative;
-
-  margin-top:
-    13px;
-
-  padding:
-    8px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  border-radius:
-    15px;
-
-  background:
-    rgba(0,0,0,.25);
-
-}
-
-
-.video-input img {
-
-  display:
-    block;
-
-  width:
-    100%;
-
-  max-height:
-    320px;
-
-  object-fit:
-    contain;
-
-  border-radius:
-    10px;
-
-}
-
-
-.video-input-remove {
-
-  position:
-    absolute;
-
-  top:
-    15px;
-
-  right:
-    15px;
-
-  width:
-    30px;
-
-  height:
-    30px;
-
-  border:
-    none;
-
-  border-radius:
-    50%;
-
-  background:
-    #ef4444;
-
-  color:
-    white;
-
-  cursor:
-    pointer;
-
-}
-
-
-/* =====================================================
-   FREE NOTICE
-===================================================== */
-
-.free-notice {
-
-  margin-top:
-    13px;
-
-  padding:
-    11px 13px;
-
-  border:
-    1px solid
-    rgba(34,197,94,.18);
-
-  border-radius:
-    11px;
-
-  background:
-    rgba(34,197,94,.06);
-
-  color:
-    #7bd99b;
-
-  font-size:
-    11px;
-
-  line-height:
-    1.5;
-
-}
-
-
-/* =====================================================
-   HISTORY
-===================================================== */
-
-.history {
-
-  display:
-    none;
-
-  margin-top:
-    28px;
-
-}
-
-
-.history-header {
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  margin-bottom:
-    12px;
-
-}
-
-
-.history-header h3 {
-
-  font-size:
-    17px;
-
-}
-
-
-.clear-history {
-
-  padding:
-    6px 9px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  border-radius:
-    8px;
-
-  background:
-    transparent;
-
-  color:
-    #777f8e;
-
-  font-size:
-    10px;
-
-  cursor:
-    pointer;
-
-}
-
-
-.history-grid {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap:
-    9px;
-
-}
-
-
-.history-item {
-
-  position:
-    relative;
-
-  overflow:
-    hidden;
-
-  border-radius:
-    11px;
-
-  background:
-    #111722;
-
-  border:
-    1px solid
-    rgba(255,255,255,.08);
-
-  cursor:
-    pointer;
-
-}
-
-
-.history-item img {
-
-  display:
-    block;
-
-  width:
-    100%;
-
-  aspect-ratio:
-    1 / 1;
-
-  object-fit:
-    cover;
-
-  transition:
-    .2s;
-
-}
-
-
-.history-item:hover img {
-
-  transform:
-    scale(1.04);
-
-}
-
-
-.history-number {
-
-  position:
-    absolute;
-
-  left:
-    5px;
-
-  bottom:
-    5px;
-
-  padding:
-    3px 6px;
-
-  border-radius:
-    6px;
-
-  background:
-    rgba(0,0,0,.7);
-
-  font-size:
-    9px;
-
-}
-
-
-/* =====================================================
-   FULLSCREEN MODAL
-===================================================== */
-
-.modal {
-
-  display:
-    none;
-
-  position:
-    fixed;
-
-  inset:
-    0;
-
-  z-index:
-    99999;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  padding:
-    20px;
-
-  background:
-    rgba(0,0,0,.94);
-
-  backdrop-filter:
-    blur(15px);
-
-}
-
-
-.modal img {
-
-  max-width:
-    96vw;
-
-  max-height:
-    92vh;
-
-  object-fit:
-    contain;
-
-  border-radius:
-    8px;
-
-}
-
-
-.close-modal {
-
-  position:
-    absolute;
-
-  top:
-    10px;
-
-  right:
-    18px;
-
-  width:
-    45px;
-
-  height:
-    45px;
-
-  border:
-    none;
-
-  background:
-    transparent;
-
-  color:
-    white;
-
-  font-size:
-    38px;
-
-  cursor:
-    pointer;
-
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-.footer {
-
-  padding:
-    22px 0 5px;
-
-  text-align:
-    center;
-
-  color:
-    #444d5c;
-
-  font-size:
-    10px;
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 700px) {
-
-  body {
-
-    padding:
-      10px 7px 35px;
-
-  }
-
-
-  .header {
-
-    padding:
-      15px 0 19px;
-
-  }
-
-
-  .header h1 {
-
-    font-size:
-      29px;
-
-  }
-
-
-  .header p {
-
-    font-size:
-      12px;
-
-  }
-
-
-  .card {
-
-    padding:
-      14px;
-
-    border-radius:
-      19px;
-
-  }
-
-
-  .tabs {
-
-    margin-bottom:
-      12px;
-
-  }
-
-
-  .tab {
-
-    min-height:
-      43px;
-
-    font-size:
-      13px;
-
-  }
-
-
-  .image-grid {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
-  }
-
-
-  .options {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .history-grid {
-
-    grid-template-columns:
-      repeat(3, 1fr);
-
-  }
-
-
-  textarea {
-
-    min-height:
-      135px;
-
-  }
-
-
-  .actions {
-
-    grid-template-columns:
-      1fr 1fr;
-
-  }
-
-}
-
-
-@media (max-width: 400px) {
-
-  .header h1 {
-
-    font-size:
-      26px;
-
-  }
-
-
-  .action {
-
-    font-size:
-      11px;
-
-  }
-
-}
-
-</style>
-
+      .options {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+<div class="app">
 
-<div class="container">
+  <!-- =========================
+       HEADER
+  ========================== -->
 
+  <header>
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+    <div class="brand">
 
-<header class="header">
+      <div class="brand-logo">
+        ✦
+      </div>
 
-  <h1>
-    ✨ Rashid AI Studio
-  </h1>
+      <div>
+        <h1>Rashid AI Studio</h1>
+        <p>Image & Video Generator</p>
+      </div>
 
-  <p>
-    Create realistic images & cinematic videos
-  </p>
+    </div>
 
-</header>
+    <div class="status">
+      <div class="status-dot"></div>
+      AI Online
+    </div>
 
+  </header>
 
-<!-- =====================================================
-     TABS
-===================================================== -->
 
-<div class="tabs">
+  <!-- =========================
+       TABS
+  ========================== -->
 
-  <button
-    class="tab active"
-    data-mode="imageMode"
-  >
-    🖼️ Image
-  </button>
-
-
-  <button
-    class="tab"
-    data-mode="videoMode"
-  >
-    🎬 Video
-  </button>
-
-</div>
-
-
-<!-- =====================================================
-     MAIN CARD
-===================================================== -->
-
-<div class="card">
-
-
-<!-- =====================================================
-     IMAGE MODE
-===================================================== -->
-
-<section
-  class="mode active"
-  id="imageMode"
->
-
-
-<div class="section-title">
-
-  <h2>
-    🖼️ AI Image Editor
-  </h2>
-
-  <span class="badge">
-    FLUX 9B
-  </span>
-
-</div>
-
-
-<!-- UPLOAD -->
-
-<label
-  class="upload"
-  for="imageInput"
->
-
-  <div class="upload-icon">
-    📷
-  </div>
-
-  <b>
-    Add reference images
-  </b>
-
-  <small>
-    Up to 4 JPG, PNG or WEBP images
-  </small>
-
-</label>
-
-
-<input
-  type="file"
-  id="imageInput"
-  accept="image/png,image/jpeg,image/webp"
-  multiple
->
-
-
-<!-- IMAGE GRID -->
-
-<div
-  class="image-grid"
-  id="imageGrid"
-></div>
-
-
-<div
-  class="image-count"
-  id="imageCount"
->
-  0 / 4 images
-</div>
-
-
-<!-- PROMPT -->
-
-<textarea
-  id="imagePrompt"
-  placeholder="Describe exactly what you want...
-
-Example:
-
-Take the person from image 1 and place them beside the person from image 2. Use the clothing style from image 3. Keep the environment from image 1. Make everything look like one real photograph with matching lighting, shadows, perspective and camera quality."
-></textarea>
-
-
-<!-- PROMPT SHORTCUTS -->
-
-<div class="prompt-tools">
-
-  <button
-    class="prompt-chip"
-    data-prompt="Make everything look like one realistic photograph with natural lighting, realistic shadows and correct perspective."
-  >
-    📸 Photorealistic
-  </button>
-
-
-  <button
-    class="prompt-chip"
-    data-prompt="Preserve the person's face, identity, hairstyle and body proportions. Do not change their facial appearance."
-  >
-    👤 Preserve Face
-  </button>
-
-
-  <button
-    class="prompt-chip"
-    data-prompt="Natural golden-hour lighting, realistic skin texture, cinematic depth of field and professional camera quality."
-  >
-    🌅 Cinematic
-  </button>
-
-
-  <button
-    class="prompt-chip"
-    data-prompt="Make the final image look like an authentic smartphone photograph, not CGI or an illustration."
-  >
-    📱 Smartphone
-  </button>
-
-</div>
-
-
-<!-- GENERATE -->
-
-<button
-  class="generate"
-  id="imageGenerate"
->
-  ✨ Generate Image
-</button>
-
-
-<!-- LOADING -->
-
-<div
-  class="loading"
-  id="imageLoading"
->
-
-  <div class="spinner"></div>
-
-  <div class="loading-title">
-    Creating your image...
-  </div>
-
-  <div class="loading-subtitle">
-    FLUX 2 Klein 9B is processing your references
-  </div>
-
-</div>
-
-
-<!-- ERROR -->
-
-<div
-  class="error"
-  id="imageError"
-></div>
-
-
-<!-- RESULT -->
-
-<div
-  class="result"
-  id="imageResult"
->
-
-  <div class="result-title">
-    ✨ Generated Result
-  </div>
-
-
-  <div class="result-image-wrapper">
-
-    <img
-      id="generatedImage"
-      alt="Generated AI image"
-    >
-
-  </div>
-
-
-  <div class="actions">
-
-    <a
-      class="action"
-      id="imageDownload"
-      download="rashid-ai-image.png"
-    >
-      ⬇️ Download
-    </a>
-
+  <div class="tabs">
 
     <button
-      class="action secondary"
-      id="editAgain"
+      class="tab active"
+      id="imageTab"
+      type="button"
     >
-      🔄 Edit Again
+      🖼️ Image
     </button>
 
-
     <button
-      class="action animate"
-      id="animateImage"
+      class="tab"
+      id="videoTab"
+      type="button"
     >
-      🎬 Animate This Image — FREE
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- HISTORY -->
-
-<div
-  class="history"
-  id="historySection"
->
-
-  <div class="history-header">
-
-    <h3>
-      🕘 History
-    </h3>
-
-    <button
-      class="clear-history"
-      id="clearHistory"
-    >
-      Clear
+      🎬 Video
     </button>
 
   </div>
 
 
-  <div
-    class="history-grid"
-    id="historyGrid"
-  ></div>
+  <!-- =========================
+       WORKSPACE
+  ========================== -->
 
-</div>
+  <div class="workspace">
 
+    <!-- =====================
+         LEFT PANEL
+    ====================== -->
 
-</section>
+    <div class="panel">
 
+      <!-- =====================
+           IMAGE MODE
+      ====================== -->
 
-<!-- =====================================================
-     VIDEO MODE
-===================================================== -->
+      <div id="imageMode">
 
-<section
-  class="mode"
-  id="videoMode"
->
+        <div class="section-title">
 
+          <h2>Create Image</h2>
 
-<div class="section-title">
+          <span>FLUX 2 Klein</span>
 
-  <h2>
-    🎬 AI Video Generator
-  </h2>
-
-  <span class="badge">
-    FREE
-  </span>
-
-</div>
+        </div>
 
 
-<div class="free-notice">
+        <!-- Prompt -->
 
-  🆓 Free video generation uses Hugging Face
-  ZeroGPU. Availability and daily GPU quota
-  depend on Hugging Face.
+        <textarea
+          id="imagePrompt"
+          placeholder="Describe the image you want to create..."
+        ></textarea>
 
-</div>
+
+        <!-- Prompt Chips -->
+
+        <div class="chips">
+
+          <button
+            class="chip"
+            data-prompt="cinematic lighting, photorealistic, highly detailed"
+          >
+            🎬 Cinematic
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="professional portrait photography, natural skin texture"
+          >
+            👤 Portrait
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="luxury product photography, studio lighting"
+          >
+            💎 Product
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="realistic Kerala village environment, natural lighting"
+          >
+            🌴 Kerala
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="fashion editorial photography, premium styling"
+          >
+            👕 Fashion
+          </button>
+
+        </div>
 
 
-<!-- OPTIONAL IMAGE -->
+        <!-- Reference Images -->
 
-<label
-  class="upload"
-  for="videoImageInput"
-  style="margin-top:15px;"
->
+        <div style="margin-top:18px;">
 
-  <div class="upload-icon">
-    🖼️
+          <div class="section-title">
+
+            <h2>Reference Images</h2>
+
+            <span id="imageCount">
+              0 / 4
+            </span>
+
+          </div>
+
+
+          <div class="upload-box">
+
+            <label
+              class="upload-main"
+              for="imageInput"
+            >
+
+              <div class="upload-icon">
+                ＋
+              </div>
+
+              <strong>
+                Add reference images
+              </strong>
+
+              <span>
+                Up to 4 images
+              </span>
+
+            </label>
+
+            <input
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              multiple
+            />
+
+
+            <div
+              id="referenceGrid"
+              class="reference-grid"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="imageGenerate"
+          class="generate-btn"
+          type="button"
+        >
+          ✨ Generate Image
+        </button>
+
+
+        <button
+          id="editAgain"
+          class="secondary-btn"
+          type="button"
+          style="display:none;"
+        >
+          ✏️ Edit Again
+        </button>
+
+
+        <div class="notice">
+
+          💡 <strong>Tip:</strong>
+          Use detailed prompts and reference images to
+          guide the composition, appearance and style.
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================
+           VIDEO MODE
+      ====================== -->
+
+      <div
+        id="videoMode"
+        class="video-only"
+      >
+
+        <div class="section-title">
+
+          <h2>Create Video</h2>
+
+          <span>FREE • ZeroGPU</span>
+
+        </div>
+
+
+        <!-- Video Mode -->
+
+        <div class="video-mode">
+
+          <button
+            class="mode-btn active"
+            data-mode="auto"
+            type="button"
+          >
+            Auto
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="image"
+            type="button"
+          >
+            Image → Video
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="text"
+            type="button"
+          >
+            Text → Video
+          </button>
+
+        </div>
+
+
+        <!-- Video Image -->
+
+        <div
+          class="video-upload"
+          id="videoInputContainer"
+        >
+
+          <div class="section-title">
+
+            <h2>Starting Image</h2>
+
+            <span>Optional</span>
+
+          </div>
+
+
+          <div class="upload-box">
+
+            <label
+              class="upload-main"
+              for="videoImageInput"
+            >
+
+              <div class="upload-icon">
+                🎞️
+              </div>
+
+              <strong>
+                Add image for animation
+              </strong>
+
+              <span>
+                One image • JPG / PNG
+              </span>
+
+            </label>
+
+            <input
+              id="videoImageInput"
+              type="file"
+              accept="image/*"
+            />
+
+            <div
+              class="video-preview"
+              id="videoInputPreview"
+            >
+
+              <img
+                id="videoInputPreviewImage"
+                alt="Video input"
+              />
+
+              <button
+                id="removeVideoImage"
+                class="remove-video-image"
+                type="button"
+              >
+                ×
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Animate button -->
+
+        <button
+          id="animateThisImage"
+          class="animate-btn"
+          type="button"
+        >
+          ✨ Animate This Image — FREE
+        </button>
+
+
+        <!-- Video Prompt -->
+
+        <div style="margin-top:16px;">
+
+          <div class="section-title">
+
+            <h2>Video Prompt</h2>
+
+            <span>Describe motion</span>
+
+          </div>
+
+          <textarea
+            id="videoPrompt"
+            placeholder="Describe how you want the scene to move..."
+          ></textarea>
+
+        </div>
+
+
+        <!-- Options -->
+
+        <div class="options">
+
+          <div class="option">
+
+            <label>
+              Aspect Ratio
+            </label>
+
+            <select id="videoRatio">
+
+              <option value="9:16">
+                9:16 Portrait
+              </option>
+
+              <option value="16:9">
+                16:9 Landscape
+              </option>
+
+              <option value="1:1">
+                1:1 Square
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="option">
+
+            <label>
+              Duration
+            </label>
+
+            <select id="videoDuration">
+
+              <option value="2">
+                2 seconds
+              </option>
+
+              <option value="3" selected>
+                3 seconds
+              </option>
+
+              <option value="4">
+                4 seconds
+              </option>
+
+              <option value="5">
+                5 seconds
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="videoGenerate"
+          class="generate-btn"
+          type="button"
+        >
+          🎬 Generate FREE Video
+        </button>
+
+
+        <div class="notice">
+
+          🆓 <strong>Free generation:</strong>
+          Video generation uses Hugging Face ZeroGPU.
+          Availability and generation limits depend on
+          the service's current quota.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================
+         RIGHT RESULT PANEL
+    ====================== -->
+
+    <div class="panel result-panel">
+
+      <div class="result-header">
+
+        <h2 id="resultTitle">
+          Result
+        </h2>
+
+        <span id="resultStatus">
+          Ready
+        </span>
+
+      </div>
+
+
+      <div class="result-area">
+
+        <!-- Empty -->
+
+        <div
+          class="empty-state"
+          id="emptyState"
+        >
+
+          <div class="icon">
+            ✨
+          </div>
+
+          <h3>
+            Your creation will appear here
+          </h3>
+
+          <p>
+            Write a prompt and generate your first
+            AI image or video.
+          </p>
+
+        </div>
+
+
+        <!-- Image -->
+
+        <img
+          id="generatedImage"
+          alt="Generated image"
+        />
+
+
+        <!-- Video -->
+
+        <video
+          id="generatedVideo"
+          controls
+          playsinline
+        ></video>
+
+
+        <!-- Loading -->
+
+        <div
+          class="loading"
+          id="loading"
+        >
+
+          <div class="spinner"></div>
+
+          <strong id="loadingTitle">
+            Generating...
+          </strong>
+
+          <span id="loadingText">
+            Please wait while the AI creates your result.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Error -->
+
+      <div
+        class="error"
+        id="error"
+      ></div>
+
+
+      <!-- Actions -->
+
+      <div
+        class="result-actions"
+        id="resultActions"
+      >
+
+        <button
+          id="downloadResult"
+          type="button"
+        >
+          ⬇️ Download
+        </button>
+
+        <button
+          id="fullscreenResult"
+          type="button"
+        >
+          ⛶ Fullscreen
+        </button>
+
+        <button
+          id="useAsVideo"
+          type="button"
+        >
+          🎬 Animate
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <b>
-    Add an image to animate
-  </b>
 
-  <small>
-    Optional — leave empty for text-to-video
-  </small>
+  <!-- =========================
+       HISTORY
+  ========================== -->
 
-</label>
+  <div class="panel history-section">
+
+    <div class="history-header">
+
+      <h2>
+        🗂️ Recent Creations
+      </h2>
+
+      <button
+        class="clear-history"
+        id="clearHistory"
+        type="button"
+      >
+        Clear history
+      </button>
+
+    </div>
 
 
-<input
-  type="file"
-  id="videoImageInput"
-  accept="image/png,image/jpeg,image/webp"
->
+    <div
+      class="history-grid"
+      id="historyGrid"
+    ></div>
+
+  </div>
 
 
-<!-- VIDEO IMAGE PREVIEW -->
+  <footer>
+    Rashid AI Studio • Powered by Cloudflare AI & Hugging Face
+  </footer>
+
+</div>
+
+
+<!-- =========================
+     FULLSCREEN
+========================== -->
 
 <div
-  class="video-input"
-  id="videoInputContainer"
+  class="fullscreen"
+  id="fullscreen"
 >
 
-  <img
-    id="videoInputPreview"
-    alt="Video input"
-  >
-
-
   <button
-    class="video-input-remove"
-    id="removeVideoImage"
+    class="close-fullscreen"
+    id="closeFullscreen"
+    type="button"
   >
     ×
   </button>
 
-</div>
-
-
-<!-- VIDEO PROMPT -->
-
-<textarea
-  id="videoPrompt"
-  placeholder="Describe your video...
-
-Example:
-
-A young man looks naturally at the camera and slowly smiles. A gentle breeze moves his hair and shirt. The camera slowly moves forward. Natural daylight, realistic skin texture, cinematic smartphone footage, subtle handheld movement, photorealistic."
-></textarea>
-
-
-<!-- VIDEO PROMPT SHORTCUTS -->
-
-<div class="prompt-tools">
-
-  <button
-    class="prompt-chip video-chip"
-    data-prompt="Photorealistic cinematic video, natural movement, realistic lighting, realistic skin texture, authentic camera footage."
-  >
-    📸 Realistic
-  </button>
-
-
-  <button
-    class="prompt-chip video-chip"
-    data-prompt="The camera slowly moves forward toward the subject with smooth cinematic movement and natural depth of field."
-  >
-    🎥 Camera Push
-  </button>
-
-
-  <button
-    class="prompt-chip video-chip"
-    data-prompt="A gentle breeze naturally moves the subject's hair and clothing while the subject remains realistic and consistent."
-  >
-    🌬️ Wind
-  </button>
-
-
-  <button
-    class="prompt-chip video-chip"
-    data-prompt="Subtle natural facial movement, realistic blinking and a gentle natural smile."
-  >
-    😊 Face Motion
-  </button>
-
-</div>
-
-
-<!-- VIDEO OPTIONS -->
-
-<div class="options">
-
-
-  <div class="option">
-
-    <label>
-      Aspect Ratio
-    </label>
-
-    <select id="videoRatio">
-
-      <option value="480x832">
-        9:16 Portrait
-      </option>
-
-      <option value="832x480">
-        16:9 Landscape
-      </option>
-
-      <option value="640x640">
-        1:1 Square
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="option">
-
-    <label>
-      Duration
-    </label>
-
-    <select id="videoDuration">
-
-      <option value="3">
-        3 seconds
-      </option>
-
-      <option value="2">
-        2 seconds
-      </option>
-
-      <option value="4">
-        4 seconds
-      </option>
-
-      <option value="5">
-        5 seconds
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="option">
-
-    <label>
-      Mode
-    </label>
-
-    <select id="videoModeType">
-
-      <option value="auto">
-        Auto
-      </option>
-
-      <option value="image">
-        Image → Video
-      </option>
-
-      <option value="text">
-        Text → Video
-      </option>
-
-    </select>
-
-  </div>
-
-</div>
-
-
-<!-- GENERATE VIDEO -->
-
-<button
-  class="generate"
-  id="videoGenerate"
->
-  🎬 Generate FREE Video
-</button>
-
-
-<!-- LOADING -->
-
-<div
-  class="loading"
-  id="videoLoading"
->
-
-  <div class="spinner"></div>
-
-  <div class="loading-title">
-    Creating your video...
-  </div>
-
-  <div class="loading-subtitle">
-    Free ZeroGPU can take some time. Please wait.
-  </div>
-
-</div>
-
-
-<!-- ERROR -->
-
-<div
-  class="error"
-  id="videoError"
-></div>
-
-
-<!-- VIDEO RESULT -->
-
-<div
-  class="result"
-  id="videoResult"
->
-
-  <div class="result-title">
-    🎬 Generated Video
-  </div>
-
+  <img
+    id="fullscreenImage"
+    alt="Fullscreen result"
+  />
 
   <video
-    id="generatedVideo"
+    id="fullscreenVideo"
     controls
     playsinline
   ></video>
-
-
-  <div class="actions">
-
-    <a
-      class="action"
-      id="videoDownload"
-      target="_blank"
-      rel="noopener"
-      download
-    >
-      ⬇️ Download Video
-    </a>
-
-
-    <button
-      class="action secondary"
-      id="videoNew"
-    >
-      🔄 New Video
-    </button>
-
-  </div>
-
-</div>
-
-
-</section>
-
-
-</div>
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<div class="footer">
-
-  Rashid AI Studio • AI generated content
-
-</div>
-
-
-</div>
-
-
-<!-- =====================================================
-     FULLSCREEN MODAL
-===================================================== -->
-
-<div
-  class="modal"
-  id="imageModal"
->
-
-  <button
-    class="close-modal"
-    id="closeModal"
-  >
-    ×
-  </button>
-
-
-  <img
-    id="modalImage"
-    alt="Fullscreen generated image"
-  >
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   CONFIG
-===================================================== */
+  /* =====================================================
+     CONFIG
+  ===================================================== */
 
-const API =
-  "https://image-api.itsmerashidkp.workers.dev";
-
-
-/* =====================================================
-   TABS
-===================================================== */
-
-const tabs =
-  document.querySelectorAll(
-    ".tab"
-  );
+  const API =
+    "https://image-api.itsmerashidkp.workers.dev";
 
 
-const modes =
-  document.querySelectorAll(
-    ".mode"
-  );
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
+  const imageTab =
+    document.getElementById("imageTab");
+
+  const videoTab =
+    document.getElementById("videoTab");
+
+  const imageMode =
+    document.getElementById("imageMode");
+
+  const videoMode =
+    document.getElementById("videoMode");
 
 
-tabs.forEach(tab => {
+  const imagePrompt =
+    document.getElementById("imagePrompt");
 
-  tab.addEventListener(
+  const videoPrompt =
+    document.getElementById("videoPrompt");
+
+
+  const imageInput =
+    document.getElementById("imageInput");
+
+  const referenceGrid =
+    document.getElementById("referenceGrid");
+
+  const imageCount =
+    document.getElementById("imageCount");
+
+
+  const imageGenerate =
+    document.getElementById("imageGenerate");
+
+  const editAgain =
+    document.getElementById("editAgain");
+
+
+  const videoImageInput =
+    document.getElementById("videoImageInput");
+
+  const videoInputPreview =
+    document.getElementById("videoInputPreview");
+
+  const videoInputPreviewImage =
+    document.getElementById(
+      "videoInputPreviewImage"
+    );
+
+  const removeVideoImage =
+    document.getElementById(
+      "removeVideoImage"
+    );
+
+
+  const videoGenerate =
+    document.getElementById("videoGenerate");
+
+  const videoRatio =
+    document.getElementById("videoRatio");
+
+  const videoDuration =
+    document.getElementById("videoDuration");
+
+
+  const animateThisImage =
+    document.getElementById(
+      "animateThisImage"
+    );
+
+
+  const emptyState =
+    document.getElementById("emptyState");
+
+  const generatedImage =
+    document.getElementById(
+      "generatedImage"
+    );
+
+  const generatedVideo =
+    document.getElementById(
+      "generatedVideo"
+    );
+
+
+  const loading =
+    document.getElementById("loading");
+
+  const loadingTitle =
+    document.getElementById("loadingTitle");
+
+  const loadingText =
+    document.getElementById("loadingText");
+
+
+  const errorBox =
+    document.getElementById("error");
+
+  const resultActions =
+    document.getElementById(
+      "resultActions"
+    );
+
+  const downloadResult =
+    document.getElementById(
+      "downloadResult"
+    );
+
+  const fullscreenResult =
+    document.getElementById(
+      "fullscreenResult"
+    );
+
+  const useAsVideo =
+    document.getElementById(
+      "useAsVideo"
+    );
+
+
+  const resultTitle =
+    document.getElementById(
+      "resultTitle"
+    );
+
+  const resultStatus =
+    document.getElementById(
+      "resultStatus"
+    );
+
+
+  const historyGrid =
+    document.getElementById(
+      "historyGrid"
+    );
+
+  const clearHistory =
+    document.getElementById(
+      "clearHistory"
+    );
+
+
+  const fullscreen =
+    document.getElementById(
+      "fullscreen"
+    );
+
+  const fullscreenImage =
+    document.getElementById(
+      "fullscreenImage"
+    );
+
+  const fullscreenVideo =
+    document.getElementById(
+      "fullscreenVideo"
+    );
+
+  const closeFullscreen =
+    document.getElementById(
+      "closeFullscreen"
+    );
+
+
+  /* =====================================================
+     STATE
+  ===================================================== */
+
+  let references = [];
+
+  let currentResult = null;
+
+  let currentType = null;
+
+  let videoImageFile = null;
+
+  let videoModeType = "auto";
+
+
+  /* =====================================================
+     TAB SWITCHING
+  ===================================================== */
+
+  imageTab.addEventListener(
     "click",
     () => {
 
-      const modeId =
-        tab.dataset.mode;
+      imageTab.classList.add("active");
+      videoTab.classList.remove("active");
 
+      imageMode.style.display = "block";
+      videoMode.style.display = "none";
 
-      tabs.forEach(t => {
-
-        t.classList.remove(
-          "active"
-        );
-
-      });
-
-
-      modes.forEach(mode => {
-
-        mode.classList.remove(
-          "active"
-        );
-
-      });
-
-
-      tab.classList.add(
-        "active"
-      );
-
-
-      document
-        .getElementById(
-          modeId
-        )
-        .classList.add(
-          "active"
-        );
+      resultTitle.textContent =
+        "Image Result";
 
     }
   );
 
-});
 
+  videoTab.addEventListener(
+    "click",
+    () => {
 
-/* =====================================================
-   IMAGE ELEMENTS
-===================================================== */
+      videoTab.classList.add("active");
+      imageTab.classList.remove("active");
 
-const imageInput =
-  document.getElementById(
-    "imageInput"
-  );
+      imageMode.style.display = "none";
+      videoMode.style.display = "block";
 
-
-const imageGrid =
-  document.getElementById(
-    "imageGrid"
-  );
-
-
-const imageCount =
-  document.getElementById(
-    "imageCount"
-  );
-
-
-const imagePrompt =
-  document.getElementById(
-    "imagePrompt"
-  );
-
-
-const imageGenerate =
-  document.getElementById(
-    "imageGenerate"
-  );
-
-
-const imageLoading =
-  document.getElementById(
-    "imageLoading"
-  );
-
-
-const imageError =
-  document.getElementById(
-    "imageError"
-  );
-
-
-const imageResult =
-  document.getElementById(
-    "imageResult"
-  );
-
-
-const generatedImage =
-  document.getElementById(
-    "generatedImage"
-  );
-
-
-const imageDownload =
-  document.getElementById(
-    "imageDownload"
-  );
-
-
-const editAgain =
-  document.getElementById(
-    "editAgain"
-  );
-
-
-const animateImage =
-  document.getElementById(
-    "animateImage"
-  );
-
-
-const historySection =
-  document.getElementById(
-    "historySection"
-  );
-
-
-const historyGrid =
-  document.getElementById(
-    "historyGrid"
-  );
-
-
-const clearHistory =
-  document.getElementById(
-    "clearHistory"
-  );
-
-
-let selectedFiles = [];
-
-let generatedImageURL = null;
-
-let imageHistory = [];
-
-
-/* =====================================================
-   IMAGE SELECT
-===================================================== */
-
-imageInput.addEventListener(
-  "change",
-  () => {
-
-    const files =
-      Array.from(
-        imageInput.files
-      );
-
-
-    addImages(
-      files
-    );
-
-
-    imageInput.value = "";
-
-  }
-);
-
-
-/* =====================================================
-   ADD IMAGES
-===================================================== */
-
-function addImages(
-  files
-) {
-
-  for (
-    const file of files
-  ) {
-
-    if (
-      selectedFiles.length >= 4
-    ) {
-
-      showImageError(
-        "Maximum 4 reference images allowed."
-      );
-
-      break;
+      resultTitle.textContent =
+        "Video Result";
 
     }
+  );
 
 
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
+  /* =====================================================
+     PROMPT CHIPS
+  ===================================================== */
 
-      continue;
+  document
+    .querySelectorAll(".chip")
+    .forEach(chip => {
 
-    }
-
-
-    selectedFiles.push(
-      file
-    );
-
-  }
-
-
-  renderImages();
-
-}
-
-
-/* =====================================================
-   RENDER IMAGES
-===================================================== */
-
-function renderImages() {
-
-  imageGrid.innerHTML =
-    "";
-
-
-  selectedFiles.forEach(
-    (file, index) => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-
-      card.className =
-        "image-card";
-
-
-      const img =
-        document.createElement(
-          "img"
-        );
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
+      chip.addEventListener(
+        "click",
         () => {
 
-          img.src =
-            reader.result;
+          const text =
+            chip.dataset.prompt;
 
-        };
+          if (!imagePrompt.value.trim()) {
 
+            imagePrompt.value = text;
 
-      reader.readAsDataURL(
-        file
+          } else {
+
+            imagePrompt.value +=
+              ", " + text;
+
+          }
+
+          imagePrompt.focus();
+
+        }
       );
 
+    });
 
-      const label =
-        document.createElement(
-          "div"
+
+  /* =====================================================
+     IMAGE UPLOAD
+  ===================================================== */
+
+  imageInput.addEventListener(
+    "change",
+    async () => {
+
+      const files =
+        Array.from(
+          imageInput.files || []
         );
 
+      for (const file of files) {
 
-      label.className =
-        "image-label";
+        if (references.length >= 4) {
+          break;
+        }
 
+        if (!file.type.startsWith("image/")) {
+          continue;
+        }
 
-      label.textContent =
-        `Image ${index + 1}`;
+        try {
 
+          const resized =
+            await resizeImage(
+              file,
+              511,
+              511
+            );
 
-      const remove =
-        document.createElement(
-          "button"
-        );
+          references.push(resized);
 
+        } catch (err) {
 
-      remove.className =
-        "remove";
-
-
-      remove.textContent =
-        "×";
-
-
-      remove.onclick =
-        event => {
-
-          event.preventDefault();
-
-          event.stopPropagation();
-
-
-          selectedFiles.splice(
-            index,
-            1
+          console.error(
+            "Image resize error:",
+            err
           );
 
+        }
 
-          renderImages();
+      }
 
-        };
+      imageInput.value = "";
 
-
-      card.appendChild(
-        img
-      );
-
-
-      card.appendChild(
-        label
-      );
-
-
-      card.appendChild(
-        remove
-      );
-
-
-      imageGrid.appendChild(
-        card
-      );
+      renderReferences();
 
     }
   );
 
 
-  imageCount.textContent =
-    `${selectedFiles.length} / 4 images`;
+  /* =====================================================
+     RESIZE REFERENCE IMAGE
+  ===================================================== */
 
-}
+  function resizeImage(
+    file,
+    maxWidth,
+    maxHeight
+  ) {
 
+    return new Promise(
+      (resolve, reject) => {
 
-/* =====================================================
-   RESIZE IMAGE
-===================================================== */
+        const img =
+          new Image();
 
-function resizeImage(
-  file
-) {
+        const reader =
+          new FileReader();
 
-  return new Promise(
-    (
-      resolve,
-      reject
-    ) => {
+        reader.onload = () => {
 
-      const reader =
-        new FileReader();
+          img.onload = () => {
 
+            let width =
+              img.naturalWidth;
 
-      reader.onload =
-        () => {
-
-          const img =
-            new Image();
-
-
-          img.onload =
-            () => {
-
-              const max =
-                511;
+            let height =
+              img.naturalHeight;
 
 
-              let width =
-                img.naturalWidth;
-
-
-              let height =
-                img.naturalHeight;
-
-
-              if (
-                width > max ||
-                height > max
-              ) {
-
-                const scale =
-                  Math.min(
-                    max / width,
-                    max / height
-                  );
-
-
-                width =
-                  Math.round(
-                    width * scale
-                  );
-
-
-                height =
-                  Math.round(
-                    height * scale
-                  );
-
-              }
-
-
-              const canvas =
-                document.createElement(
-                  "canvas"
-                );
-
-
-              canvas.width =
-                width;
-
-
-              canvas.height =
-                height;
-
-
-              const ctx =
-                canvas.getContext(
-                  "2d"
-                );
-
-
-              ctx.drawImage(
-                img,
-                0,
-                0,
-                width,
-                height
+            const scale =
+              Math.min(
+                maxWidth / width,
+                maxHeight / height,
+                1
               );
 
 
-              canvas.toBlob(
-                blob => {
-
-                  if (!blob) {
-
-                    reject(
-                      new Error(
-                        "Could not convert image."
-                      )
-                    );
-
-                    return;
-
-                  }
-
-
-                  resolve(
-                    blob
-                  );
-
-                },
-
-                "image/jpeg",
-
-                .90
-
+            width =
+              Math.round(
+                width * scale
               );
 
-            };
+            height =
+              Math.round(
+                height * scale
+              );
+
+
+            const canvas =
+              document.createElement(
+                "canvas"
+              );
+
+            canvas.width =
+              width;
+
+            canvas.height =
+              height;
+
+
+            const ctx =
+              canvas.getContext(
+                "2d"
+              );
+
+            ctx.drawImage(
+              img,
+              0,
+              0,
+              width,
+              height
+            );
+
+
+            canvas.toBlob(
+              blob => {
+
+                if (!blob) {
+
+                  reject(
+                    new Error(
+                      "Could not resize image."
+                    )
+                  );
+
+                  return;
+
+                }
+
+                const output =
+                  new File(
+                    [
+                      blob
+                    ],
+                    "reference.jpg",
+                    {
+                      type:
+                        "image/jpeg"
+                    }
+                  );
+
+                resolve(output);
+
+              },
+              "image/jpeg",
+              0.88
+            );
+
+          };
 
 
           img.onerror =
-            () => {
-
-              reject(
-                new Error(
-                  "Invalid image."
-                )
-              );
-
-            };
-
+            reject;
 
           img.src =
             reader.result;
@@ -2881,43 +2237,340 @@ function resizeImage(
         };
 
 
-      reader.onerror =
-        () => {
+        reader.onerror =
+          reject;
 
-          reject(
-            new Error(
-              "Could not read image."
-            )
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     RENDER REFERENCES
+  ===================================================== */
+
+  function renderReferences() {
+
+    referenceGrid.innerHTML = "";
+
+    imageCount.textContent =
+      `${references.length} / 4`;
+
+
+    references.forEach(
+      (file, index) => {
+
+        const item =
+          document.createElement(
+            "div"
           );
 
-        };
+        item.className =
+          "reference-item";
 
 
-      reader.readAsDataURL(
-        file
-      );
+        const img =
+          document.createElement(
+            "img"
+          );
+
+
+        img.src =
+          URL.createObjectURL(
+            file
+          );
+
+
+        const remove =
+          document.createElement(
+            "button"
+          );
+
+        remove.className =
+          "remove-reference";
+
+        remove.type =
+          "button";
+
+        remove.textContent =
+          "×";
+
+
+        remove.addEventListener(
+          "click",
+          () => {
+
+            references.splice(
+              index,
+              1
+            );
+
+            renderReferences();
+
+          }
+        );
+
+
+        item.appendChild(img);
+
+        item.appendChild(remove);
+
+        referenceGrid.appendChild(
+          item
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     VIDEO IMAGE UPLOAD
+  ===================================================== */
+
+  videoImageInput.addEventListener(
+    "change",
+    () => {
+
+      const file =
+        videoImageInput.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+
+        showError(
+          "Please select an image."
+        );
+
+        return;
+
+      }
+
+      videoImageFile =
+        file;
+
+      const url =
+        URL.createObjectURL(
+          file
+        );
+
+      videoInputPreviewImage.src =
+        url;
+
+      videoInputPreview.style.display =
+        "block";
 
     }
   );
 
-}
+
+  /* =====================================================
+     REMOVE VIDEO IMAGE
+  ===================================================== */
+
+  removeVideoImage.addEventListener(
+    "click",
+    () => {
+
+      videoImageFile = null;
+
+      videoImageInput.value = "";
+
+      videoInputPreview.style.display =
+        "none";
+
+      videoInputPreviewImage.src =
+        "";
+
+    }
+  );
 
 
-/* =====================================================
-   IMAGE GENERATION
-===================================================== */
+  /* =====================================================
+     VIDEO MODES
+  ===================================================== */
 
-imageGenerate.onclick =
-  async () => {
+  document
+    .querySelectorAll(".mode-btn")
+    .forEach(button => {
 
-    hideImageError();
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(
+              ".mode-btn"
+            )
+            .forEach(btn => {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            });
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          videoModeType =
+            button.dataset.mode;
+
+
+          const hasImage =
+            videoModeType === "image";
+
+
+          if (
+            videoModeType === "text"
+          ) {
+
+            document
+              .getElementById(
+                "videoInputContainer"
+              )
+              .style.display =
+              "none";
+
+            animateThisImage.style.display =
+              "none";
+
+          } else {
+
+            document
+              .getElementById(
+                "videoInputContainer"
+              )
+              .style.display =
+              "block";
+
+            animateThisImage.style.display =
+              "block";
+
+          }
+
+        }
+      );
+
+    });
+
+
+  /* =====================================================
+     ANIMATE CURRENT IMAGE
+  ===================================================== */
+
+  animateThisImage.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !generatedImage.src ||
+        generatedImage.style.display === "none"
+      ) {
+
+        showError(
+          "Generate an image first, then animate it."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            generatedImage.src
+          );
+
+        const blob =
+          await response.blob();
+
+
+        videoImageFile =
+          new File(
+            [blob],
+            "generated-image.jpg",
+            {
+              type:
+                blob.type ||
+                "image/jpeg"
+            }
+          );
+
+
+        videoInputPreviewImage.src =
+          generatedImage.src;
+
+        videoInputPreview.style.display =
+          "block";
+
+
+        videoTab.click();
+
+
+        videoPrompt.value =
+          "Animate this image naturally. Keep the person's identity, face, hairstyle, clothing, environment and composition consistent. Add subtle realistic movement. Natural blinking and facial movement. Gentle movement in the hair and clothing caused by a light breeze. Slow cinematic camera movement. Realistic lighting and shadows. Photorealistic video, natural motion, authentic camera footage, no CGI appearance.";
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Could not prepare the image for video."
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     IMAGE GENERATION
+  ===================================================== */
+
+  imageGenerate.addEventListener(
+    "click",
+    generateImage
+  );
+
+
+  async function generateImage() {
+
+    const prompt =
+      imagePrompt.value.trim();
+
+
+    if (!prompt) {
+
+      showError(
+        "Please enter an image prompt."
+      );
+
+      imagePrompt.focus();
+
+      return;
+
+    }
 
 
     if (
-      selectedFiles.length === 0
+      references.length === 0
     ) {
 
-      showImageError(
+      showError(
         "Add at least one reference image."
       );
 
@@ -2926,101 +2579,69 @@ imageGenerate.onclick =
     }
 
 
-    const prompt =
-      imagePrompt.value.trim();
+    hideError();
 
-
-    if (!prompt) {
-
-      showImageError(
-        "Enter an image prompt."
-      );
-
-      return;
-
-    }
+    startLoading(
+      "Creating image...",
+      "FLUX 2 Klein is generating your image."
+    );
 
 
     imageGenerate.disabled =
       true;
 
 
-    imageLoading.style.display =
-      "block";
-
-
-    imageResult.style.display =
-      "none";
-
-
     try {
 
-      const form =
+      const formData =
         new FormData();
 
 
-      form.append(
+      formData.append(
         "prompt",
         prompt
       );
 
 
-      for (
-        let i = 0;
-        i < selectedFiles.length;
-        i++
-      ) {
+      references.forEach(
+        file => {
 
-        const resized =
-          await resizeImage(
-            selectedFiles[i]
+          formData.append(
+            "image",
+            file,
+            file.name
           );
 
-
-        form.append(
-          "image",
-          resized,
-          `image_${i + 1}.jpg`
-        );
-
-      }
+        }
+      );
 
 
       const response =
         await fetch(
           `${API}/image`,
           {
-            method:
-              "POST",
-
-            body:
-              form
-
+            method: "POST",
+            body: formData
           }
         );
 
 
-      if (
-        !response.ok
-      ) {
+      if (!response.ok) {
 
         let message =
           "Image generation failed.";
-
 
         try {
 
           const data =
             await response.json();
 
+          if (data.error) {
+            message =
+              data.error;
+          }
 
-          message =
-            data.error ||
-            message;
-
-        }
-        catch (_) {}
-
+        } catch (_) {}
 
         throw new Error(
           message
@@ -3033,755 +2654,61 @@ imageGenerate.onclick =
         await response.blob();
 
 
-      if (
-        !blob.type.startsWith(
-          "image/"
-        )
-      ) {
-
-        throw new Error(
-          "Server did not return an image."
-        );
-
-      }
-
-
-      if (
-        generatedImageURL
-      ) {
-
-        URL.revokeObjectURL(
-          generatedImageURL
-        );
-
-      }
-
-
-      generatedImageURL =
+      const url =
         URL.createObjectURL(
           blob
         );
 
 
-      generatedImage.src =
-        generatedImageURL;
-
-
-      imageDownload.href =
-        generatedImageURL;
-
-
-      imageResult.style.display =
-        "block";
-
-
-      addImageHistory(
-        generatedImageURL,
-        prompt
+      showImageResult(
+        url
       );
 
 
-      imageResult.scrollIntoView({
-        behavior:
-          "smooth",
-        block:
-          "start"
+      saveHistory({
+        type: "image",
+        url: url,
+        prompt: prompt,
+        createdAt:
+          new Date().toISOString()
       });
 
-    }
-    catch (error) {
+
+    } catch (err) {
 
       console.error(
-        error
+        "IMAGE ERROR:",
+        err
       );
 
-
-      showImageError(
-        error.message
+      showError(
+        err.message ||
+        "Image generation failed."
       );
 
-    }
-    finally {
+    } finally {
+
+      stopLoading();
 
       imageGenerate.disabled =
         false;
 
-
-      imageLoading.style.display =
-        "none";
-
     }
-
-  };
-
-
-/* =====================================================
-   EDIT AGAIN
-===================================================== */
-
-editAgain.onclick =
-  async () => {
-
-    if (
-      !generatedImage.src
-    ) {
-
-      return;
-
-    }
-
-
-    try {
-
-      const response =
-        await fetch(
-          generatedImage.src
-        );
-
-
-      const blob =
-        await response.blob();
-
-
-      const file =
-        new File(
-          [
-            blob
-          ],
-          "previous-result.jpg",
-          {
-            type:
-              "image/jpeg"
-          }
-        );
-
-
-      selectedFiles =
-        [file];
-
-
-      renderImages();
-
-
-      imagePrompt.value =
-        "Edit this image again. Keep the subject, face, identity, composition and environment consistent. Make the requested changes while preserving realistic lighting, shadows, perspective, skin texture and photographic detail.";
-
-
-      window.scrollTo({
-        top:
-          0,
-        behavior:
-          "smooth"
-      });
-
-    }
-    catch (error) {
-
-      showImageError(
-        "Could not reuse the generated image."
-      );
-
-    }
-
-  };
-
-
-/* =====================================================
-   ANIMATE GENERATED IMAGE
-===================================================== */
-
-animateImage.onclick =
-  async () => {
-
-    if (
-      !generatedImage.src
-    ) {
-
-      return;
-
-    }
-
-
-    try {
-
-      animateImage.disabled =
-        true;
-
-
-      const response =
-        await fetch(
-          generatedImage.src
-        );
-
-
-      const blob =
-        await response.blob();
-
-
-      videoImageFile =
-        new File(
-          [
-            blob
-          ],
-          "generated-image.jpg",
-          {
-            type:
-              "image/jpeg"
-          }
-        );
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        () => {
-
-          videoInputPreview.src =
-            reader.result;
-
-
-          videoInputContainer.style.display =
-            "block";
-
-        };
-
-
-      reader.readAsDataURL(
-        videoImageFile
-      );
-
-
-      videoPrompt.value =
-        `Animate this image naturally.
-
-Keep the person's identity, face, hairstyle, clothing, environment and composition consistent.
-
-Add subtle realistic movement.
-
-Natural blinking and facial movement.
-
-Gentle movement in the hair and clothing caused by a light breeze.
-
-Slow cinematic camera movement.
-
-Realistic lighting and shadows.
-
-Photorealistic video, natural motion, authentic camera footage, no CGI appearance.`;
-
-
-      document
-        .querySelector(
-          '[data-mode="videoMode"]'
-        )
-        .click();
-
-
-      window.scrollTo({
-        top:
-          0,
-        behavior:
-          "smooth"
-      });
-
-    }
-    catch (error) {
-
-      showImageError(
-        "Could not prepare the image for video."
-      );
-
-    }
-    finally {
-
-      animateImage.disabled =
-        false;
-
-    }
-
-  };
-
-
-/* =====================================================
-   IMAGE HISTORY
-===================================================== */
-
-function addImageHistory(
-  url,
-  prompt
-) {
-
-  imageHistory.unshift({
-
-    url:
-      url,
-
-    prompt:
-      prompt
-
-  });
-
-
-  if (
-    imageHistory.length > 8
-  ) {
-
-    imageHistory.pop();
 
   }
 
 
-  renderHistory();
+  /* =====================================================
+     VIDEO GENERATION
+  ===================================================== */
 
-}
-
-
-function renderHistory() {
-
-  historyGrid.innerHTML =
-    "";
-
-
-  if (
-    imageHistory.length === 0
-  ) {
-
-    historySection.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  imageHistory.forEach(
-    (
-      item,
-      index
-    ) => {
-
-      const div =
-        document.createElement(
-          "div"
-        );
-
-
-      div.className =
-        "history-item";
-
-
-      div.title =
-        item.prompt;
-
-
-      const img =
-        document.createElement(
-          "img"
-        );
-
-
-      img.src =
-        item.url;
-
-
-      const number =
-        document.createElement(
-          "div"
-        );
-
-
-      number.className =
-        "history-number";
-
-
-      number.textContent =
-        `#${index + 1}`;
-
-
-      div.appendChild(
-        img
-      );
-
-
-      div.appendChild(
-        number
-      );
-
-
-      div.onclick =
-        () => {
-
-          generatedImage.src =
-            item.url;
-
-
-          imageDownload.href =
-            item.url;
-
-
-          imagePrompt.value =
-            item.prompt;
-
-
-          imageResult.style.display =
-            "block";
-
-
-          imageResult.scrollIntoView({
-            behavior:
-              "smooth"
-          });
-
-        };
-
-
-      historyGrid.appendChild(
-        div
-      );
-
-    }
+  videoGenerate.addEventListener(
+    "click",
+    generateVideo
   );
 
 
-  historySection.style.display =
-    "block";
-
-}
-
-
-/* =====================================================
-   CLEAR HISTORY
-===================================================== */
-
-clearHistory.onclick =
-  () => {
-
-    imageHistory =
-      [];
-
-
-    historyGrid.innerHTML =
-      "";
-
-
-    historySection.style.display =
-      "none";
-
-  };
-
-
-/* =====================================================
-   IMAGE ERRORS
-===================================================== */
-
-function showImageError(
-  message
-) {
-
-  imageError.textContent =
-    "❌ " + message;
-
-
-  imageError.style.display =
-    "block";
-
-}
-
-
-function hideImageError() {
-
-  imageError.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   PROMPT CHIPS
-===================================================== */
-
-document
-  .querySelectorAll(
-    ".prompt-chip:not(.video-chip)"
-  )
-  .forEach(
-    chip => {
-
-      chip.addEventListener(
-        "click",
-        () => {
-
-          const text =
-            chip.dataset.prompt;
-
-
-          if (
-            imagePrompt.value.trim()
-          ) {
-
-            imagePrompt.value +=
-              "\n\n" +
-              text;
-
-          }
-          else {
-
-            imagePrompt.value =
-              text;
-
-          }
-
-
-          imagePrompt.focus();
-
-        }
-      );
-
-    }
-  );
-
-
-/* =====================================================
-   VIDEO ELEMENTS
-===================================================== */
-
-const videoPrompt =
-  document.getElementById(
-    "videoPrompt"
-  );
-
-
-const videoRatio =
-  document.getElementById(
-    "videoRatio"
-  );
-
-
-const videoDuration =
-  document.getElementById(
-    "videoDuration"
-  );
-
-
-const videoModeType =
-  document.getElementById(
-    "videoModeType"
-  );
-
-
-const videoGenerate =
-  document.getElementById(
-    "videoGenerate"
-  );
-
-
-const videoLoading =
-  document.getElementById(
-    "videoLoading"
-  );
-
-
-const videoError =
-  document.getElementById(
-    "videoError"
-  );
-
-
-const videoResult =
-  document.getElementById(
-    "videoResult"
-  );
-
-
-const generatedVideo =
-  document.getElementById(
-    "generatedVideo"
-  );
-
-
-const videoDownload =
-  document.getElementById(
-    "videoDownload"
-  );
-
-
-const videoImageInput =
-  document.getElementById(
-    "videoImageInput"
-  );
-
-
-const videoInputContainer =
-  document.getElementById(
-    "videoInputContainer"
-  );
-
-
-const videoInputPreview =
-  document.getElementById(
-    "videoInputPreview"
-  );
-
-
-const removeVideoImage =
-  document.getElementById(
-    "removeVideoImage"
-  );
-
-
-const videoNew =
-  document.getElementById(
-    "videoNew"
-  );
-
-
-let videoImageFile =
-  null;
-
-
-/* =====================================================
-   VIDEO IMAGE INPUT
-===================================================== */
-
-videoImageInput.addEventListener(
-  "change",
-  () => {
-
-    const file =
-      videoImageInput.files[0];
-
-
-    if (!file) {
-
-      return;
-
-    }
-
-
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
-
-      showVideoError(
-        "Please select an image."
-      );
-
-      return;
-
-    }
-
-
-    videoImageFile =
-      file;
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      () => {
-
-        videoInputPreview.src =
-          reader.result;
-
-
-        videoInputContainer.style.display =
-          "block";
-
-      };
-
-
-    reader.readAsDataURL(
-      file
-    );
-
-  }
-);
-
-
-/* =====================================================
-   REMOVE VIDEO IMAGE
-===================================================== */
-
-removeVideoImage.onclick =
-  () => {
-
-    videoImageFile =
-      null;
-
-
-    videoImageInput.value =
-      "";
-
-
-    videoInputPreview.src =
-      "";
-
-
-    videoInputContainer.style.display =
-      "none";
-
-  };
-
-
-/* =====================================================
-   VIDEO PROMPT CHIPS
-===================================================== */
-
-document
-  .querySelectorAll(
-    ".video-chip"
-  )
-  .forEach(
-    chip => {
-
-      chip.addEventListener(
-        "click",
-        () => {
-
-          const text =
-            chip.dataset.prompt;
-
-
-          if (
-            videoPrompt.value.trim()
-          ) {
-
-            videoPrompt.value +=
-              "\n\n" +
-              text;
-
-          }
-          else {
-
-            videoPrompt.value =
-              text;
-
-          }
-
-
-          videoPrompt.focus();
-
-        }
-      );
-
-    }
-  );
-
-
-/* =====================================================
-   VIDEO GENERATION
-===================================================== */
-
-videoGenerate.onclick =
-  async () => {
-
-    hideVideoError();
-
+  async function generateVideo() {
 
     const prompt =
       videoPrompt.value.trim();
@@ -3789,9 +2716,11 @@ videoGenerate.onclick =
 
     if (!prompt) {
 
-      showVideoError(
-        "Enter a video prompt."
+      showError(
+        "Please enter a video prompt."
       );
+
+      videoPrompt.focus();
 
       return;
 
@@ -3799,13 +2728,12 @@ videoGenerate.onclick =
 
 
     if (
-      videoModeType.value ===
-        "image" &&
+      videoModeType === "image" &&
       !videoImageFile
     ) {
 
-      showVideoError(
-        "Image → Video mode requires an image."
+      showError(
+        "Image → Video mode requires a starting image."
       );
 
       return;
@@ -3813,69 +2741,67 @@ videoGenerate.onclick =
     }
 
 
-    if (
-      videoModeType.value ===
-        "text" &&
-      videoImageFile
-    ) {
+    hideError();
 
-      // Allow text mode to ignore image
-
-    }
+    startLoading(
+      "Generating video...",
+      "Hugging Face ZeroGPU is creating your video. This can take some time."
+    );
 
 
     videoGenerate.disabled =
       true;
 
 
-    videoLoading.style.display =
-      "block";
-
-
-    videoResult.style.display =
-      "none";
-
-
     try {
 
-      const form =
+      const formData =
         new FormData();
 
 
-      form.append(
+      formData.append(
         "prompt",
         prompt
       );
 
 
-      form.append(
+      formData.append(
         "ratio",
         videoRatio.value
       );
 
 
-      form.append(
+      formData.append(
         "duration",
         videoDuration.value
       );
 
 
-      /*
-       * Auto:
-       * Image exists → Image to Video
-       * No image → Text to Video
-       */
+      const useImage =
+        videoModeType === "image" ||
+        (
+          videoModeType === "auto" &&
+          videoImageFile
+        );
+
 
       if (
-        videoImageFile &&
-        videoModeType.value !==
-          "text"
+        useImage &&
+        videoImageFile
       ) {
 
-        form.append(
+        const resized =
+          await resizeImage(
+            videoImageFile,
+            511,
+            511
+          );
+
+
+        formData.append(
           "image",
-          videoImageFile,
-          videoImageFile.name
+          resized,
+          "video_input.jpg"
         );
 
       }
@@ -3885,37 +2811,52 @@ videoGenerate.onclick =
         await fetch(
           `${API}/video`,
           {
-            method:
-              "POST",
-
-            body:
-              form
-
+            method: "POST",
+            body: formData
           }
         );
 
 
-      if (
-        !response.ok
-      ) {
+      const contentType =
+        response.headers.get(
+          "content-type"
+        ) || "";
+
+
+      if (!response.ok) {
 
         let message =
           "Video generation failed.";
 
+        if (
+          contentType.includes(
+            "application/json"
+          )
+        ) {
 
-        try {
+          try {
 
-          const data =
-            await response.json();
+            const data =
+              await response.json();
 
+            if (data.error) {
+              message =
+                data.error;
+            }
 
-          message =
-            data.error ||
-            message;
+          } catch (_) {}
+
+        } else {
+
+          const text =
+            await response.text();
+
+          if (text) {
+            message =
+              text;
+          }
 
         }
-        catch (_) {}
-
 
         throw new Error(
           message
@@ -3928,252 +2869,921 @@ videoGenerate.onclick =
         await response.json();
 
 
-      if (
-        !data.video
-      ) {
+      if (!data.video) {
+
+        console.error(
+          "VIDEO RESPONSE:",
+          data
+        );
 
         throw new Error(
-          "No video was returned."
+          "Video generation completed but no video was returned."
         );
 
       }
 
 
-      generatedVideo.src =
-        data.video;
+      showVideoResult(
+        data.video
+      );
 
 
-      videoDownload.href =
-        data.video;
-
-
-      videoDownload.download =
-        "rashid-ai-video.mp4";
-
-
-      videoResult.style.display =
-        "block";
-
-
-      generatedVideo.load();
-
-
-      videoResult.scrollIntoView({
-        behavior:
-          "smooth",
-        block:
-          "start"
+      saveHistory({
+        type: "video",
+        url: data.video,
+        prompt: prompt,
+        createdAt:
+          new Date().toISOString()
       });
 
-    }
-    catch (error) {
+
+    } catch (err) {
 
       console.error(
-        error
+        "VIDEO ERROR:",
+        err
       );
 
-
-      showVideoError(
-        error.message
+      showError(
+        err.message ||
+        "Video generation failed."
       );
 
-    }
-    finally {
+    } finally {
+
+      stopLoading();
 
       videoGenerate.disabled =
         false;
 
-
-      videoLoading.style.display =
-        "none";
-
     }
 
-  };
+  }
 
 
-/* =====================================================
-   VIDEO ERROR
-===================================================== */
+  /* =====================================================
+     SHOW IMAGE
+  ===================================================== */
 
-function showVideoError(
-  message
-) {
+  function showImageResult(
+    url
+  ) {
 
-  videoError.textContent =
-    "❌ " + message;
+    currentResult =
+      url;
 
-
-  videoError.style.display =
-    "block";
-
-}
-
-
-function hideVideoError() {
-
-  videoError.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   NEW VIDEO
-===================================================== */
-
-videoNew.onclick =
-  () => {
-
-    videoResult.style.display =
-      "none";
+    currentType =
+      "image";
 
 
     generatedVideo.pause();
-
 
     generatedVideo.removeAttribute(
       "src"
     );
 
+    generatedVideo.style.display =
+      "none";
+
+
+    generatedImage.src =
+      url;
+
+    generatedImage.style.display =
+      "block";
+
+
+    emptyState.style.display =
+      "none";
+
+
+    resultActions.style.display =
+      "grid";
+
+
+    useAsVideo.style.display =
+      "block";
+
+
+    resultTitle.textContent =
+      "Image Result";
+
+    resultStatus.textContent =
+      "Completed";
+
+    editAgain.style.display =
+      "block";
+
+  }
+
+
+  /* =====================================================
+     SHOW VIDEO
+  ===================================================== */
+
+  function showVideoResult(
+    url
+  ) {
+
+    currentResult =
+      url;
+
+    currentType =
+      "video";
+
+
+    generatedImage.style.display =
+      "none";
+
+    generatedImage.src =
+      "";
+
+
+    generatedVideo.src =
+      url;
+
+    generatedVideo.style.display =
+      "block";
+
+
+    emptyState.style.display =
+      "none";
+
+
+    resultActions.style.display =
+      "grid";
+
+
+    useAsVideo.style.display =
+      "none";
+
+
+    resultTitle.textContent =
+      "Video Result";
+
+    resultStatus.textContent =
+      "Completed";
+
 
     generatedVideo.load();
 
-
-    videoPrompt.focus();
-
-  };
+  }
 
 
-/* =====================================================
-   FULLSCREEN IMAGE
-===================================================== */
+  /* =====================================================
+     DOWNLOAD
+  ===================================================== */
 
-const imageModal =
-  document.getElementById(
-    "imageModal"
+  downloadResult.addEventListener(
+    "click",
+    async () => {
+
+      if (!currentResult) {
+        return;
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            currentResult
+          );
+
+
+        const blob =
+          await response.blob();
+
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+
+        const a =
+          document.createElement(
+            "a"
+          );
+
+
+        a.href =
+          url;
+
+
+        a.download =
+          currentType === "video"
+            ? `rashid-ai-${Date.now()}.mp4`
+            : `rashid-ai-${Date.now()}.png`;
+
+
+        document.body.appendChild(
+          a
+        );
+
+        a.click();
+
+        a.remove();
+
+
+        setTimeout(
+          () =>
+            URL.revokeObjectURL(
+              url
+            ),
+          1000
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Download failed."
+        );
+
+      }
+
+    }
   );
 
 
-const modalImage =
-  document.getElementById(
-    "modalImage"
+  /* =====================================================
+     USE IMAGE AS VIDEO
+  ===================================================== */
+
+  useAsVideo.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        currentType !== "image" ||
+        !currentResult
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            currentResult
+          );
+
+        const blob =
+          await response.blob();
+
+
+        videoImageFile =
+          new File(
+            [blob],
+            "generated-image.jpg",
+            {
+              type:
+                "image/jpeg"
+            }
+          );
+
+
+        videoInputPreviewImage.src =
+          currentResult;
+
+        videoInputPreview.style.display =
+          "block";
+
+
+        videoTab.click();
+
+
+        videoPrompt.value =
+          "Animate this image naturally. Keep the person's identity, face, hairstyle, clothing, environment and composition consistent. Add subtle realistic movement. Natural blinking and facial movement. Gentle movement in the hair and clothing caused by a light breeze. Slow cinematic camera movement. Realistic lighting and shadows. Photorealistic video, natural motion, authentic camera footage, no CGI appearance.";
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Could not use this image."
+        );
+
+      }
+
+    }
   );
 
 
-const closeModal =
-  document.getElementById(
-    "closeModal"
+  /* =====================================================
+     EDIT AGAIN
+  ===================================================== */
+
+  editAgain.addEventListener(
+    "click",
+    () => {
+
+      if (
+        currentType !== "image" ||
+        !currentResult
+      ) {
+
+        return;
+
+      }
+
+
+      imagePrompt.value =
+        imagePrompt.value.trim() +
+        "\n\nEdit the previous image while keeping the subject and overall composition consistent.";
+
+
+      imagePrompt.focus();
+
+    }
   );
 
 
-generatedImage.onclick =
-  () => {
+  /* =====================================================
+     FULLSCREEN
+  ===================================================== */
 
-    if (
-      !generatedImage.src
-    ) {
+  fullscreenResult.addEventListener(
+    "click",
+    () => {
+
+      if (!currentResult) {
+        return;
+      }
+
+
+      fullscreen.style.display =
+        "flex";
+
+
+      if (
+        currentType === "image"
+      ) {
+
+        fullscreenVideo.pause();
+
+        fullscreenVideo.style.display =
+          "none";
+
+
+        fullscreenImage.src =
+          currentResult;
+
+        fullscreenImage.style.display =
+          "block";
+
+      } else {
+
+        fullscreenImage.style.display =
+          "none";
+
+
+        fullscreenVideo.src =
+          currentResult;
+
+        fullscreenVideo.style.display =
+          "block";
+
+        fullscreenVideo.load();
+
+      }
+
+    }
+  );
+
+
+  closeFullscreen.addEventListener(
+    "click",
+    closeFullscreenView
+  );
+
+
+  fullscreen.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        fullscreen
+      ) {
+
+        closeFullscreenView();
+
+      }
+
+    }
+  );
+
+
+  function closeFullscreenView() {
+
+    fullscreen.style.display =
+      "none";
+
+    fullscreenVideo.pause();
+
+  }
+
+
+  /* =====================================================
+     HISTORY
+     
+     NOTE:
+     This currently stores history in browser localStorage.
+     Later we can replace this with Cloudflare R2/server history.
+  ===================================================== */
+
+  const HISTORY_KEY =
+    "rashid_ai_studio_history";
+
+
+  function getHistory() {
+
+    try {
+
+      return JSON.parse(
+        localStorage.getItem(
+          HISTORY_KEY
+        ) || "[]"
+      );
+
+    } catch (_) {
+
+      return [];
+
+    }
+
+  }
+
+
+  function saveHistory(
+    item
+  ) {
+
+    try {
+
+      let history =
+        getHistory();
+
+
+      /*
+       * Browser blob URLs do not survive page refresh.
+       *
+       * Therefore we don't rely on them for permanent
+       * storage.
+       *
+       * Video URLs from the server can survive.
+       */
+
+      history.unshift(
+        item
+      );
+
+
+      history =
+        history.slice(
+          0,
+          30
+        );
+
+
+      /*
+       * Only save history entries that have
+       * a normal HTTP URL.
+       */
+
+      history =
+        history.filter(
+          item =>
+            item.url &&
+            (
+              item.url.startsWith(
+                "http://"
+              ) ||
+              item.url.startsWith(
+                "https://"
+              )
+            )
+        );
+
+
+      localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(
+          history
+        )
+      );
+
+
+      renderHistory();
+
+    } catch (err) {
+
+      console.warn(
+        "History save failed:",
+        err
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RENDER HISTORY
+  ===================================================== */
+
+  function renderHistory() {
+
+    const history =
+      getHistory();
+
+
+    historyGrid.innerHTML =
+      "";
+
+
+    if (!history.length) {
+
+      historyGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          padding:30px;
+          text-align:center;
+          color:#777d8c;
+          font-size:11px;
+        ">
+          No saved server results yet.
+        </div>
+      `;
 
       return;
 
     }
 
 
-    modalImage.src =
-      generatedImage.src;
+    history.forEach(
+      (item, index) => {
 
-
-    imageModal.style.display =
-      "flex";
-
-  };
-
-
-closeModal.onclick =
-  () => {
-
-    imageModal.style.display =
-      "none";
-
-  };
-
-
-imageModal.onclick =
-  event => {
-
-    if (
-      event.target ===
-      imageModal
-    ) {
-
-      imageModal.style.display =
-        "none";
-
-    }
-
-  };
-
-
-/* =====================================================
-   KEYBOARD
-===================================================== */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-
-      imageModal.style.display =
-        "none";
-
-    }
-
-
-    /*
-     * Ctrl + Enter
-     */
-
-    if (
-      event.ctrlKey &&
-      event.key ===
-        "Enter"
-    ) {
-
-      const imageActive =
-        document
-          .getElementById(
-            "imageMode"
-          )
-          .classList
-          .contains(
-            "active"
+        const card =
+          document.createElement(
+            "div"
           );
 
 
-      if (
-        imageActive
-      ) {
+        card.className =
+          "history-item";
 
-        imageGenerate.click();
+
+        const media =
+          document.createElement(
+            "div"
+          );
+
+
+        media.className =
+          "history-media";
+
+
+        if (
+          item.type === "image"
+        ) {
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src =
+            item.url;
+
+          img.loading =
+            "lazy";
+
+          media.appendChild(
+            img
+          );
+
+        } else {
+
+          const video =
+            document.createElement(
+              "video"
+            );
+
+
+          video.src =
+            item.url;
+
+          video.muted =
+            true;
+
+          video.preload =
+            "metadata";
+
+
+          media.appendChild(
+            video
+          );
+
+
+          const badge =
+            document.createElement(
+              "div"
+            );
+
+
+          badge.className =
+            "video-badge";
+
+          badge.textContent =
+            "▶ VIDEO";
+
+
+          media.appendChild(
+            badge
+          );
+
+        }
+
+
+        const info =
+          document.createElement(
+            "div"
+          );
+
+
+        info.className =
+          "history-info";
+
+
+        const prompt =
+          document.createElement(
+            "p"
+          );
+
+
+        prompt.textContent =
+          item.prompt ||
+          "No prompt";
+
+
+        const date =
+          document.createElement(
+            "span"
+          );
+
+
+        date.textContent =
+          formatDate(
+            item.createdAt
+          );
+
+
+        info.appendChild(
+          prompt
+        );
+
+        info.appendChild(
+          date
+        );
+
+
+        card.appendChild(
+          media
+        );
+
+        card.appendChild(
+          info
+        );
+
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            if (
+              item.type === "image"
+            ) {
+
+              showImageResult(
+                item.url
+              );
+
+            } else {
+
+              showVideoResult(
+                item.url
+              );
+
+            }
+
+          }
+        );
+
+
+        historyGrid.appendChild(
+          card
+        );
 
       }
-      else {
+    );
 
-        videoGenerate.click();
+  }
 
+
+  /* =====================================================
+     CLEAR HISTORY
+  ===================================================== */
+
+  clearHistory.addEventListener(
+    "click",
+    () => {
+
+      const confirmed =
+        confirm(
+          "Clear browser history?"
+        );
+
+
+      if (!confirmed) {
+        return;
       }
+
+
+      localStorage.removeItem(
+        HISTORY_KEY
+      );
+
+
+      renderHistory();
+
+    }
+  );
+
+
+  /* =====================================================
+     DATE
+  ===================================================== */
+
+  function formatDate(
+    value
+  ) {
+
+    if (!value) {
+      return "";
+    }
+
+
+    try {
+
+      return new Date(
+        value
+      ).toLocaleString(
+        undefined,
+        {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+    } catch (_) {
+
+      return "";
 
     }
 
   }
-);
+
+
+  /* =====================================================
+     LOADING
+  ===================================================== */
+
+  function startLoading(
+    title,
+    message
+  ) {
+
+    loadingTitle.textContent =
+      title;
+
+    loadingText.textContent =
+      message;
+
+    loading.style.display =
+      "flex";
+
+    resultStatus.textContent =
+      "Generating...";
+
+    resultActions.style.display =
+      "none";
+
+    hideError();
+
+  }
+
+
+  function stopLoading() {
+
+    loading.style.display =
+      "none";
+
+    resultStatus.textContent =
+      "Ready";
+
+  }
+
+
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  function showError(
+    message
+  ) {
+
+    errorBox.textContent =
+      "❌ " + message;
+
+    errorBox.style.display =
+      "block";
+
+  }
+
+
+  function hideError() {
+
+    errorBox.style.display =
+      "none";
+
+    errorBox.textContent =
+      "";
+
+  }
+
+
+  /* =====================================================
+     KEYBOARD SHORTCUT
+  ===================================================== */
+
+  imagePrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.ctrlKey &&
+        event.key === "Enter"
+      ) {
+
+        generateImage();
+
+      }
+
+    }
+  );
+
+
+  videoPrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.ctrlKey &&
+        event.key === "Enter"
+      ) {
+
+        generateVideo();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     INITIALIZE
+  ===================================================== */
+
+  renderReferences();
+
+  renderHistory();
+
+
+  console.log(
+    "Rashid AI Studio initialized."
+  );
 
 </script>
 
 </body>
-
 </html>
