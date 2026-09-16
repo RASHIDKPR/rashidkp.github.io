@@ -3,688 +3,843 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <title>AI Image Editor</title>
+<title>Rashid AI Studio</title>
 
 
-  <style>
+<style>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 
-    body {
+body {
 
-      min-height: 100vh;
+  min-height: 100vh;
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-      color: white;
+  color: white;
 
-      background:
-        radial-gradient(
-          circle at 10% 10%,
-          #243b55,
-          transparent 40%
-        ),
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      #243b55,
+      transparent 40%
+    ),
 
-        radial-gradient(
-          circle at 90% 90%,
-          #141e30,
-          #05070b
-        );
+    radial-gradient(
+      circle at 90% 90%,
+      #141e30,
+      #05070b
+    );
 
-      padding: 30px 15px;
-    }
+  padding: 20px 12px;
+}
 
 
-    .container {
+.container {
 
-      width: 100%;
+  width: 100%;
 
-      max-width: 950px;
+  max-width: 950px;
 
-      margin: auto;
-    }
+  margin: auto;
+}
 
 
-    h1 {
+.header {
 
-      text-align: center;
+  text-align: center;
 
-      font-size: 38px;
+  padding: 20px 0 25px;
+}
 
-      margin-bottom: 10px;
-    }
 
+.header h1 {
 
-    .subtitle {
+  font-size: 38px;
 
-      text-align: center;
+  margin-bottom: 8px;
+}
 
-      color: #aaa;
 
-      margin-bottom: 30px;
-    }
+.header p {
 
+  color: #888;
 
-    .card {
+  font-size: 14px;
+}
 
-      background:
-        rgba(
-          255,
-          255,
-          255,
-          0.07
-        );
 
-      border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.12
-        );
+/* ==========================================
+   TABS
+========================================== */
 
-      border-radius: 22px;
+.tabs {
 
-      padding: 25px;
+  display: flex;
 
-      backdrop-filter:
-        blur(20px);
+  gap: 8px;
 
-      -webkit-backdrop-filter:
-        blur(20px);
-    }
+  padding: 6px;
 
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.06
+    );
 
-    /* ==========================
-       UPLOAD
-    ========================== */
+  border-radius: 15px;
 
-    .upload-box {
+  margin-bottom: 20px;
+}
 
-      display: block;
 
-      border:
-        2px dashed
-        #555;
+.tab {
 
-      border-radius: 18px;
+  flex: 1;
 
-      padding: 35px 20px;
+  padding: 13px;
 
-      text-align: center;
+  border: none;
 
-      cursor: pointer;
+  border-radius: 11px;
 
-      transition: 0.2s;
-    }
+  background: transparent;
 
+  color: #888;
 
-    .upload-box:hover {
+  font-size: 15px;
 
-      border-color:
-        #8b5cf6;
+  font-weight: bold;
 
-      background:
-        rgba(
-          139,
-          92,
-          246,
-          0.08
-        );
-    }
+  cursor: pointer;
+}
 
 
-    .upload-icon {
+.tab.active {
 
-      font-size: 45px;
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #4f46e5
+    );
 
-      margin-bottom: 10px;
-    }
+  color: white;
+}
 
 
-    .upload-text {
+/* ==========================================
+   CARD
+========================================== */
 
-      color: #aaa;
+.card {
 
-      margin-top: 8px;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.07
+    );
 
-      font-size: 14px;
-    }
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
 
+  border-radius: 22px;
 
-    #imageInput {
+  padding: 22px;
 
-      display: none;
-    }
+  backdrop-filter:
+    blur(20px);
+}
 
 
-    /* ==========================
-       IMAGE GRID
-    ========================== */
+/* ==========================================
+   MODE
+========================================== */
 
-    .image-grid {
+.mode {
 
-      display: grid;
+  display: none;
+}
 
-      grid-template-columns:
-        repeat(
-          4,
-          1fr
-        );
 
-      gap: 12px;
+.mode.active {
 
-      margin-top: 20px;
-    }
+  display: block;
+}
 
 
-    .image-card {
+/* ==========================================
+   UPLOAD
+========================================== */
 
-      position: relative;
+.upload {
 
-      overflow: hidden;
+  display: block;
 
-      border-radius: 14px;
+  border:
+    2px dashed
+    #555;
 
-      background: #111;
+  border-radius: 18px;
 
-      border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.12
-        );
-    }
+  padding: 32px 15px;
 
+  text-align: center;
 
-    .image-card img {
+  cursor: pointer;
 
-      display: block;
+  transition: .2s;
+}
 
-      width: 100%;
 
-      aspect-ratio: 1 / 1;
+.upload:hover {
 
-      object-fit: cover;
-    }
+  border-color:
+    #8b5cf6;
 
+  background:
+    rgba(
+      139,
+      92,
+      246,
+      .08
+    );
+}
 
-    .image-number {
 
-      position: absolute;
+.upload-icon {
 
-      top: 7px;
+  font-size: 42px;
 
-      left: 7px;
+  margin-bottom: 8px;
+}
 
-      padding:
-        5px 8px;
 
-      border-radius: 8px;
+.upload small {
 
-      background:
-        rgba(
-          0,
-          0,
-          0,
-          0.7
-        );
+  display: block;
 
-      font-size: 12px;
+  color: #777;
 
-      font-weight: bold;
-    }
+  margin-top: 7px;
+}
 
 
-    .remove-image {
+#imageInput {
 
-      position: absolute;
+  display: none;
+}
 
-      top: 7px;
 
-      right: 7px;
+/* ==========================================
+   IMAGE GRID
+========================================== */
 
-      width: 28px;
+.image-grid {
 
-      height: 28px;
+  display: grid;
 
-      border: none;
+  grid-template-columns:
+    repeat(4, 1fr);
 
-      border-radius: 50%;
+  gap: 10px;
 
-      background:
-        rgba(
-          255,
-          50,
-          50,
-          0.9
-        );
+  margin-top: 18px;
+}
 
-      color: white;
 
-      cursor: pointer;
+.image-card {
 
-      font-size: 16px;
+  position: relative;
 
-      font-weight: bold;
-    }
+  overflow: hidden;
 
+  border-radius: 13px;
 
-    .image-name {
+  background: #111;
 
-      padding:
-        7px;
+  border:
+    1px solid
+    #333;
+}
 
-      font-size: 10px;
 
-      color: #aaa;
+.image-card img {
 
-      text-align: center;
+  display: block;
 
-      white-space: nowrap;
+  width: 100%;
 
-      overflow: hidden;
+  aspect-ratio: 1;
 
-      text-overflow: ellipsis;
-    }
+  object-fit: cover;
+}
 
 
-    .image-count {
+.image-label {
 
-      margin-top: 12px;
+  position: absolute;
 
-      color: #888;
+  top: 6px;
 
-      font-size: 13px;
+  left: 6px;
 
-      text-align: center;
-    }
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .7
+    );
 
+  padding:
+    4px 7px;
 
-    /* ==========================
-       PROMPT
-    ========================== */
+  border-radius: 7px;
 
-    textarea {
+  font-size: 10px;
+}
 
-      width: 100%;
 
-      min-height: 150px;
+.remove {
 
-      resize: vertical;
+  position: absolute;
 
-      margin-top: 25px;
+  top: 5px;
 
-      padding: 18px;
+  right: 5px;
 
-      border-radius: 15px;
+  width: 27px;
 
-      border:
-        1px solid
-        #444;
+  height: 27px;
 
-      background:
-        rgba(
-          0,
-          0,
-          0,
-          0.35
-        );
+  border: none;
 
-      color: white;
+  border-radius: 50%;
 
-      font-size: 16px;
+  background:
+    #ef4444;
 
-      line-height: 1.5;
+  color: white;
 
-      outline: none;
-    }
+  cursor: pointer;
+}
 
 
-    textarea:focus {
+.image-count {
 
-      border-color:
-        #8b5cf6;
-    }
+  text-align: center;
 
+  color: #777;
 
-    textarea::placeholder {
+  font-size: 12px;
 
-      color: #777;
-    }
+  margin-top: 10px;
+}
 
 
-    /* ==========================
-       GENERATE BUTTON
-    ========================== */
+/* ==========================================
+   TEXTAREA
+========================================== */
 
-    .generate-btn {
+textarea {
 
-      width: 100%;
+  width: 100%;
 
-      margin-top: 18px;
+  min-height: 150px;
 
-      padding: 16px;
+  margin-top: 20px;
 
-      border: none;
+  padding: 16px;
 
-      border-radius: 14px;
+  resize: vertical;
 
-      background:
-        linear-gradient(
-          135deg,
-          #7c3aed,
-          #4f46e5
-        );
+  border-radius: 15px;
 
-      color: white;
+  border:
+    1px solid
+    #444;
 
-      font-size: 17px;
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
 
-      font-weight: bold;
+  color: white;
 
-      cursor: pointer;
+  font-size: 15px;
 
-      transition: 0.2s;
-    }
+  line-height: 1.5;
 
+  outline: none;
+}
 
-    .generate-btn:hover {
 
-      opacity: 0.9;
+textarea:focus {
 
-      transform:
-        translateY(-1px);
-    }
+  border-color:
+    #8b5cf6;
+}
 
 
-    .generate-btn:disabled {
+/* ==========================================
+   OPTIONS
+========================================== */
 
-      opacity: 0.5;
+.options {
 
-      cursor: not-allowed;
+  display: grid;
 
-      transform: none;
-    }
+  grid-template-columns:
+    repeat(3, 1fr);
 
+  gap: 10px;
 
-    /* ==========================
-       LOADING
-    ========================== */
+  margin-top: 15px;
+}
 
-    .loading {
 
-      display: none;
+.option {
 
-      text-align: center;
+  padding: 10px;
 
-      margin-top: 25px;
-    }
+  border-radius: 10px;
 
+  border:
+    1px solid
+    #333;
 
-    .spinner {
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .3
+    );
 
-      width: 40px;
+  color: #aaa;
+}
 
-      height: 40px;
 
-      border:
-        4px solid
-        #444;
+.option label {
 
-      border-top-color:
-        #8b5cf6;
+  display: block;
 
-      border-radius: 50%;
+  font-size: 11px;
 
-      animation:
-        spin 1s linear infinite;
+  margin-bottom: 6px;
+}
 
-      margin: auto;
-    }
 
+.option select {
 
-    @keyframes spin {
+  width: 100%;
 
-      to {
+  background: #111;
 
-        transform:
-          rotate(360deg);
-      }
-    }
+  color: white;
 
+  border: none;
 
-    /* ==========================
-       ERROR
-    ========================== */
+  outline: none;
+}
 
-    .error {
 
-      display: none;
+/* ==========================================
+   BUTTON
+========================================== */
 
-      margin-top: 20px;
+.generate {
 
-      padding: 14px;
+  width: 100%;
 
-      border-radius: 12px;
+  margin-top: 18px;
 
-      background:
-        rgba(
-          255,
-          0,
-          0,
-          0.15
-        );
+  padding: 16px;
 
-      border:
-        1px solid
-        rgba(
-          255,
-          0,
-          0,
-          0.3
-        );
+  border: none;
 
-      color: #ff8a8a;
+  border-radius: 14px;
 
-      line-height: 1.5;
-    }
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #4f46e5
+    );
 
+  color: white;
 
-    /* ==========================
-       RESULT
-    ========================== */
+  font-size: 16px;
 
-    .result {
+  font-weight: bold;
 
-      display: none;
+  cursor: pointer;
+}
 
-      margin-top: 30px;
-    }
 
+.generate:disabled {
 
-    .result h2 {
+  opacity: .5;
 
-      margin-bottom: 15px;
-    }
+  cursor: not-allowed;
+}
 
 
-    .result img {
+/* ==========================================
+   LOADING
+========================================== */
 
-      display: block;
+.loading {
 
-      width: 100%;
+  display: none;
 
-      max-height: 750px;
+  text-align: center;
 
-      object-fit: contain;
+  padding: 25px;
+}
 
-      border-radius: 18px;
 
-      cursor: pointer;
+.spinner {
 
-      background: #111;
-    }
+  width: 40px;
 
+  height: 40px;
 
-    /* ==========================
-       DOWNLOAD
-    ========================== */
+  border:
+    4px solid
+    #333;
 
-    .download-btn {
+  border-top-color:
+    #8b5cf6;
 
-      display: block;
+  border-radius: 50%;
 
-      text-align: center;
+  animation:
+    spin 1s linear infinite;
 
-      text-decoration: none;
+  margin: auto;
+}
 
-      margin-top: 15px;
 
-      padding: 14px;
+@keyframes spin {
 
-      border-radius: 13px;
+  to {
+    transform:
+      rotate(360deg);
+  }
 
-      background:
-        #16a34a;
+}
 
-      color: white;
 
-      font-weight: bold;
-    }
+/* ==========================================
+   ERROR
+========================================== */
 
+.error {
 
-    /* ==========================
-       HINT
-    ========================== */
+  display: none;
 
-    .hint {
+  margin-top: 15px;
 
-      margin-top: 15px;
+  padding: 13px;
 
-      color: #777;
+  border-radius: 11px;
 
-      font-size: 12px;
+  color: #ff8a8a;
 
-      line-height: 1.5;
+  background:
+    rgba(
+      255,
+      0,
+      0,
+      .13
+    );
 
-      text-align: center;
-    }
+  border:
+    1px solid
+    rgba(
+      255,
+      0,
+      0,
+      .3
+    );
+}
 
 
-    /* ==========================
-       MODAL
-    ========================== */
+/* ==========================================
+   RESULT
+========================================== */
 
-    .modal {
+.result {
 
-      display: none;
+  display: none;
 
-      position: fixed;
+  margin-top: 25px;
+}
 
-      inset: 0;
 
-      background:
-        rgba(
-          0,
-          0,
-          0,
-          0.92
-        );
+.result-title {
 
-      z-index: 9999;
+  font-size: 20px;
 
-      align-items: center;
+  margin-bottom: 12px;
+}
 
-      justify-content: center;
 
-      padding: 20px;
-    }
+.result img {
 
+  display: block;
 
-    .modal img {
+  width: 100%;
 
-      max-width: 95%;
+  max-height: 750px;
 
-      max-height: 95%;
+  object-fit: contain;
 
-      object-fit: contain;
-    }
+  border-radius: 17px;
 
+  background: #111;
 
-    .close {
+  cursor: pointer;
+}
 
-      position: absolute;
 
-      top: 15px;
+.result video {
 
-      right: 25px;
+  width: 100%;
 
-      font-size: 45px;
+  border-radius: 17px;
 
-      cursor: pointer;
+  background: black;
+}
 
-      color: white;
-    }
 
+/* ==========================================
+   ACTIONS
+========================================== */
 
-    /* ==========================
-       MOBILE
-    ========================== */
+.actions {
 
-    @media (
-      max-width: 700px
-    ) {
+  display: grid;
 
-      body {
+  grid-template-columns:
+    1fr 1fr;
 
-        padding:
-          15px 10px;
-      }
+  gap: 10px;
 
+  margin-top: 12px;
+}
 
-      h1 {
 
-        font-size: 28px;
-      }
+.action {
 
+  display: block;
 
-      .card {
+  padding: 13px;
 
-        padding: 18px;
-      }
+  border: none;
 
+  border-radius: 11px;
 
-      .image-grid {
+  text-align: center;
 
-        grid-template-columns:
-          repeat(
-            2,
-            1fr
-          );
-      }
+  text-decoration: none;
 
-    }
+  cursor: pointer;
 
-  </style>
+  color: white;
+
+  background: #16a34a;
+
+  font-weight: bold;
+}
+
+
+.action.secondary {
+
+  background:
+    #333;
+}
+
+
+/* ==========================================
+   HISTORY
+========================================== */
+
+.history {
+
+  margin-top: 25px;
+}
+
+
+.history h3 {
+
+  margin-bottom: 12px;
+}
+
+
+.history-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 8px;
+}
+
+
+.history-item {
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  background: #111;
+}
+
+
+.history-item img {
+
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  object-fit: cover;
+}
+
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.modal {
+
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .94
+    );
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+}
+
+
+.modal img {
+
+  max-width: 96%;
+
+  max-height: 94%;
+}
+
+
+.close {
+
+  position: absolute;
+
+  top: 12px;
+
+  right: 20px;
+
+  font-size: 42px;
+
+  cursor: pointer;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:700px) {
+
+  body {
+
+    padding:
+      10px 8px;
+  }
+
+
+  .header h1 {
+
+    font-size: 28px;
+  }
+
+
+  .card {
+
+    padding: 16px;
+  }
+
+
+  .image-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+
+  .history-grid {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+
+  .options {
+
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -695,193 +850,388 @@
 <div class="container">
 
 
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<div class="header">
+
   <h1>
-    ✨ AI Image Editor
+    ✨ Rashid AI Studio
   </h1>
 
-
-  <p class="subtitle">
-    Add up to 4 reference images and tell AI what to create.
+  <p>
+    Create realistic images and cinematic videos
   </p>
 
-
-  <div class="card">
-
-
-    <!-- ==========================
-         UPLOAD
-    ========================== -->
-
-    <label
-      class="upload-box"
-      for="imageInput"
-    >
-
-      <div class="upload-icon">
-        📷
-      </div>
+</div>
 
 
-      <div>
-        Click to upload images
-      </div>
+<!-- ==========================================
+     TABS
+========================================== -->
+
+<div class="tabs">
+
+  <button
+    class="tab active"
+    data-mode="imageMode"
+  >
+    🖼️ Image
+  </button>
 
 
-      <div class="upload-text">
+  <button
+    class="tab"
+    data-mode="videoMode"
+  >
+    🎬 Video
+  </button>
 
-        Select up to 4 JPG,
-        PNG or WEBP images
-
-      </div>
-
-    </label>
-
-
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/png,image/jpeg,image/webp"
-      multiple
-    >
+</div>
 
 
-    <!-- ==========================
-         IMAGE GRID
-    ========================== -->
+<!-- ==========================================
+     CARD
+========================================== -->
 
-    <div
-      class="image-grid"
-      id="imageGrid"
-    ></div>
+<div class="card">
 
 
-    <div
-      class="image-count"
-      id="imageCount"
-    >
-      0 / 4 images
-    </div>
+<!-- =================================================
+     IMAGE MODE
+================================================= -->
+
+<div
+  class="mode active"
+  id="imageMode"
+>
 
 
-    <!-- ==========================
-         PROMPT
-    ========================== -->
+<label
+  class="upload"
+  for="imageInput"
+>
 
-    <textarea
-      id="prompt"
-      placeholder="Tell AI what to create...
+  <div class="upload-icon">
+    📷
+  </div>
+
+  <b>
+    Add reference images
+  </b>
+
+  <small>
+    Up to 4 JPG, PNG or WEBP images
+  </small>
+
+</label>
+
+
+<input
+  type="file"
+  id="imageInput"
+  accept="image/png,image/jpeg,image/webp"
+  multiple
+>
+
+
+<div
+  class="image-grid"
+  id="imageGrid"
+></div>
+
+
+<div
+  class="image-count"
+  id="imageCount"
+>
+  0 / 4 images
+</div>
+
+
+<textarea
+  id="imagePrompt"
+  placeholder="Describe what you want...
 
 Example:
-
-Take the person from image 1 and place them beside the person from image 2. Keep both people realistic. Match the lighting, shadows, perspective and camera quality of the original image.
-
-You can reference images as:
-image 1
-image 2
-image 3
-image 4"
-    ></textarea>
+Take the person from image 1 and place them beside the person from image 2. Keep the environment from image 1. Use the clothing from image 3. Make everything look like one authentic photograph with natural lighting, realistic shadows, correct perspective and realistic skin texture."
+></textarea>
 
 
-    <!-- ==========================
-         GENERATE
-    ========================== -->
+<button
+  class="generate"
+  id="imageGenerate"
+>
+  ✨ Generate Image
+</button>
+
+
+<div
+  class="loading"
+  id="imageLoading"
+>
+
+  <div class="spinner"></div>
+
+  <p style="margin-top:12px;color:#888;">
+    Creating your image...
+  </p>
+
+</div>
+
+
+<div
+  class="error"
+  id="imageError"
+></div>
+
+
+<div
+  class="result"
+  id="imageResult"
+>
+
+  <div class="result-title">
+    ✨ Result
+  </div>
+
+
+  <img
+    id="generatedImage"
+    alt="Generated image"
+  >
+
+
+  <div class="actions">
+
+    <a
+      class="action"
+      id="imageDownload"
+      download="rashid-ai.png"
+    >
+      ⬇️ Download
+    </a>
+
 
     <button
-      class="generate-btn"
-      id="generateBtn"
+      class="action secondary"
+      id="editAgain"
     >
-
-      ✨ Generate / Edit Image
-
+      🔄 Edit Again
     </button>
-
-
-    <!-- ==========================
-         LOADING
-    ========================== -->
-
-    <div
-      class="loading"
-      id="loading"
-    >
-
-      <div class="spinner"></div>
-
-
-      <p
-        style="
-          margin-top:12px;
-          color:#aaa;
-        "
-      >
-
-        AI is creating your image...
-
-      </p>
-
-    </div>
-
-
-    <!-- ==========================
-         ERROR
-    ========================== -->
-
-    <div
-      class="error"
-      id="error"
-    ></div>
-
-
-    <!-- ==========================
-         RESULT
-    ========================== -->
-
-    <div
-      class="result"
-      id="result"
-    >
-
-      <h2>
-        ✨ Result
-      </h2>
-
-
-      <img
-        id="resultImage"
-        alt="AI generated image"
-      >
-
-
-      <a
-        id="downloadBtn"
-        class="download-btn"
-        download="ai-edited-image.png"
-      >
-
-        ⬇️ Download Image
-
-      </a>
-
-
-      <p class="hint">
-
-        Click the generated image
-        to view fullscreen.
-
-      </p>
-
-    </div>
-
 
   </div>
 
 </div>
 
 
-<!-- ==========================
-     FULLSCREEN MODAL
-========================== -->
+<div
+  class="history"
+  id="historySection"
+  style="display:none;"
+>
+
+  <h3>
+    🕘 History
+  </h3>
+
+  <div
+    class="history-grid"
+    id="historyGrid"
+  ></div>
+
+</div>
+
+</div>
+
+
+<!-- =================================================
+     VIDEO MODE
+================================================= -->
+
+<div
+  class="mode"
+  id="videoMode"
+>
+
+
+<textarea
+  id="videoPrompt"
+  placeholder="Describe your video...
+
+Example:
+A young man standing in a beautiful garden smiles naturally at the camera. His hair moves gently in the breeze. The camera slowly pushes forward. Natural sunlight, realistic skin texture, cinematic smartphone footage, subtle handheld movement."
+></textarea>
+
+
+<div class="options">
+
+
+  <div class="option">
+
+    <label>
+      Resolution
+    </label>
+
+    <select id="videoResolution">
+
+      <option value="480P">
+        480P
+      </option>
+
+      <option value="720P">
+        720P
+      </option>
+
+      <option value="1080P">
+        1080P
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="option">
+
+    <label>
+      Aspect Ratio
+    </label>
+
+    <select id="videoRatio">
+
+      <option value="9:16">
+        9:16
+      </option>
+
+      <option value="16:9">
+        16:9
+      </option>
+
+      <option value="1:1">
+        1:1
+      </option>
+
+      <option value="4:3">
+        4:3
+      </option>
+
+      <option value="3:4">
+        3:4
+      </option>
+
+      <option value="adaptive">
+        Adaptive
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="option">
+
+    <label>
+      Duration
+    </label>
+
+    <select id="videoDuration">
+
+      <option value="5">
+        5 seconds
+      </option>
+
+      <option value="8">
+        8 seconds
+      </option>
+
+      <option value="10">
+        10 seconds
+      </option>
+
+      <option value="15">
+        15 seconds
+      </option>
+
+    </select>
+
+  </div>
+
+</div>
+
+
+<button
+  class="generate"
+  id="videoGenerate"
+>
+  🎬 Generate Video
+</button>
+
+
+<div
+  class="loading"
+  id="videoLoading"
+>
+
+  <div class="spinner"></div>
+
+  <p style="margin-top:12px;color:#888;">
+    Creating your video...
+  </p>
+
+</div>
+
+
+<div
+  class="error"
+  id="videoError"
+></div>
+
+
+<div
+  class="result"
+  id="videoResult"
+>
+
+  <div class="result-title">
+    🎬 Result
+  </div>
+
+
+  <video
+    id="generatedVideo"
+    controls
+    playsinline
+  ></video>
+
+
+  <div class="actions">
+
+    <a
+      class="action"
+      id="videoDownload"
+      target="_blank"
+      rel="noopener"
+    >
+      ⬇️ Open / Download
+    </a>
+
+  </div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- ==========================================
+     MODAL
+========================================== -->
 
 <div
   class="modal"
@@ -892,15 +1242,11 @@ image 4"
     class="close"
     id="closeModal"
   >
-
     ×
-
   </div>
-
 
   <img
     id="modalImage"
-    alt="Fullscreen result"
   >
 
 </div>
@@ -909,124 +1255,164 @@ image 4"
 <script>
 
 
-// ======================================================
-// CLOUDFLARE WORKER
-// ======================================================
+// =================================================
+// CONFIG
+// =================================================
 
-const API_URL =
+const API =
   "https://image-api.itsmerashidkp.workers.dev";
 
 
-// ======================================================
+// =================================================
 // ELEMENTS
-// ======================================================
+// =================================================
+
+const tabs =
+  document.querySelectorAll(
+    ".tab"
+  );
+
+const modes =
+  document.querySelectorAll(
+    ".mode"
+  );
+
+
+// =================================================
+// TAB SWITCH
+// =================================================
+
+tabs.forEach(tab => {
+
+  tab.addEventListener(
+    "click",
+    () => {
+
+      const mode =
+        tab.dataset.mode;
+
+
+      tabs.forEach(t =>
+        t.classList.remove(
+          "active"
+        )
+      );
+
+
+      modes.forEach(m =>
+        m.classList.remove(
+          "active"
+        )
+      );
+
+
+      tab.classList.add(
+        "active"
+      );
+
+
+      document
+        .getElementById(mode)
+        .classList.add(
+          "active"
+        );
+
+    }
+  );
+
+});
+
+
+// =================================================
+// IMAGE VARIABLES
+// =================================================
 
 const imageInput =
   document.getElementById(
     "imageInput"
   );
 
-
 const imageGrid =
   document.getElementById(
     "imageGrid"
   );
-
 
 const imageCount =
   document.getElementById(
     "imageCount"
   );
 
-
-const promptInput =
+const imagePrompt =
   document.getElementById(
-    "prompt"
+    "imagePrompt"
   );
 
-
-const generateBtn =
+const imageGenerate =
   document.getElementById(
-    "generateBtn"
+    "imageGenerate"
   );
 
-
-const loading =
+const imageLoading =
   document.getElementById(
-    "loading"
+    "imageLoading"
   );
 
-
-const errorBox =
+const imageError =
   document.getElementById(
-    "error"
+    "imageError"
   );
 
-
-const result =
+const imageResult =
   document.getElementById(
-    "result"
+    "imageResult"
   );
 
-
-const resultImage =
+const generatedImage =
   document.getElementById(
-    "resultImage"
+    "generatedImage"
   );
 
-
-const downloadBtn =
+const imageDownload =
   document.getElementById(
-    "downloadBtn"
+    "imageDownload"
   );
 
-
-const modal =
+const editAgain =
   document.getElementById(
-    "modal"
+    "editAgain"
   );
 
-
-const modalImage =
+const historySection =
   document.getElementById(
-    "modalImage"
+    "historySection"
   );
 
-
-const closeModal =
+const historyGrid =
   document.getElementById(
-    "closeModal"
+    "historyGrid"
   );
 
-
-// ======================================================
-// STATE
-// ======================================================
 
 let selectedFiles = [];
 
-let resultURL = null;
+let generatedImageURL = null;
+
+let history = [];
 
 
-// ======================================================
+// =================================================
 // IMAGE SELECT
-// ======================================================
+// =================================================
 
 imageInput.addEventListener(
   "change",
   () => {
 
-    const files =
+    addImages(
       Array.from(
         imageInput.files
-      );
-
-
-    addImages(files);
-
-
-    // Allows selecting the same
-    // file again later
+      )
+    );
 
     imageInput.value = "";
 
@@ -1034,9 +1420,9 @@ imageInput.addEventListener(
 );
 
 
-// ======================================================
+// =================================================
 // ADD IMAGES
-// ======================================================
+// =================================================
 
 function addImages(files) {
 
@@ -1044,13 +1430,11 @@ function addImages(files) {
     const file of files
   ) {
 
-    // Maximum 4
-
     if (
       selectedFiles.length >= 4
     ) {
 
-      showError(
+      showImageError(
         "Maximum 4 images allowed."
       );
 
@@ -1058,17 +1442,11 @@ function addImages(files) {
     }
 
 
-    // Check image
-
     if (
       !file.type.startsWith(
         "image/"
       )
     ) {
-
-      showError(
-        `${file.name} is not a valid image.`
-      );
 
       continue;
     }
@@ -1086,9 +1464,9 @@ function addImages(files) {
 }
 
 
-// ======================================================
-// RENDER IMAGE GRID
-// ======================================================
+// =================================================
+// RENDER REFERENCES
+// =================================================
 
 function renderImages() {
 
@@ -1102,7 +1480,6 @@ function renderImages() {
         document.createElement(
           "div"
         );
-
 
       card.className =
         "image-card";
@@ -1118,12 +1495,13 @@ function renderImages() {
         new FileReader();
 
 
-      reader.onload = () => {
+      reader.onload =
+        () => {
 
-        img.src =
-          reader.result;
+          img.src =
+            reader.result;
 
-      };
+        };
 
 
       reader.readAsDataURL(
@@ -1131,23 +1509,19 @@ function renderImages() {
       );
 
 
-      // Image number
-
-      const number =
+      const label =
         document.createElement(
           "div"
         );
 
 
-      number.className =
-        "image-number";
+      label.className =
+        "image-label";
 
 
-      number.textContent =
+      label.textContent =
         `Image ${index + 1}`;
 
-
-      // Remove
 
       const remove =
         document.createElement(
@@ -1156,19 +1530,14 @@ function renderImages() {
 
 
       remove.className =
-        "remove-image";
+        "remove";
 
 
       remove.textContent =
         "×";
 
 
-      remove.title =
-        "Remove image";
-
-
-      remove.addEventListener(
-        "click",
+      remove.onclick =
         () => {
 
           selectedFiles.splice(
@@ -1176,46 +1545,21 @@ function renderImages() {
             1
           );
 
-
           renderImages();
 
-        }
-      );
-
-
-      // Filename
-
-      const name =
-        document.createElement(
-          "div"
-        );
-
-
-      name.className =
-        "image-name";
-
-
-      name.textContent =
-        file.name;
+        };
 
 
       card.appendChild(
         img
       );
 
-
       card.appendChild(
-        number
+        label
       );
-
 
       card.appendChild(
         remove
-      );
-
-
-      card.appendChild(
-        name
       );
 
 
@@ -1233,9 +1577,9 @@ function renderImages() {
 }
 
 
-// ======================================================
-// RESIZE IMAGE
-// ======================================================
+// =================================================
+// RESIZE
+// =================================================
 
 function resizeImage(file) {
 
@@ -1246,171 +1590,136 @@ function resizeImage(file) {
         new FileReader();
 
 
-      reader.onload = () => {
+      reader.onload =
+        () => {
 
-        const img =
-          new Image();
-
-
-        img.onload = () => {
-
-          // Must be BELOW 512 x 512
-
-          const maxSize =
-            511;
+          const img =
+            new Image();
 
 
-          let width =
-            img.naturalWidth;
+          img.onload =
+            () => {
+
+              const max =
+                511;
 
 
-          let height =
-            img.naturalHeight;
+              let width =
+                img.naturalWidth;
+
+              let height =
+                img.naturalHeight;
 
 
-          if (
-            !width ||
-            !height
-          ) {
+              if (
+                width > max ||
+                height > max
+              ) {
 
-            reject(
-              new Error(
-                "Could not read image dimensions."
-              )
-            );
-
-            return;
-          }
+                const scale =
+                  Math.min(
+                    max / width,
+                    max / height
+                  );
 
 
-          // Keep aspect ratio
-
-          if (
-            width > maxSize ||
-            height > maxSize
-          ) {
-
-            const scale =
-              Math.min(
-                maxSize / width,
-                maxSize / height
-              );
+                width =
+                  Math.round(
+                    width * scale
+                  );
 
 
-            width =
-              Math.max(
-                1,
-                Math.round(
-                  width * scale
-                )
-              );
+                height =
+                  Math.round(
+                    height * scale
+                  );
 
-
-            height =
-              Math.max(
-                1,
-                Math.round(
-                  height * scale
-                )
-              );
-
-          }
-
-
-          const canvas =
-            document.createElement(
-              "canvas"
-            );
-
-
-          canvas.width =
-            width;
-
-
-          canvas.height =
-            height;
-
-
-          const ctx =
-            canvas.getContext(
-              "2d"
-            );
-
-
-          if (!ctx) {
-
-            reject(
-              new Error(
-                "Could not create canvas."
-              )
-            );
-
-            return;
-          }
-
-
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            width,
-            height
-          );
-
-
-          canvas.toBlob(
-            (blob) => {
-
-              if (!blob) {
-
-                reject(
-                  new Error(
-                    "Could not convert image."
-                  )
-                );
-
-                return;
               }
 
 
-              resolve(
-                blob
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+
+              canvas.width =
+                width;
+
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
+                );
+
+
+              ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
               );
 
-            },
-            "image/jpeg",
-            0.90
-          );
+
+              canvas.toBlob(
+                blob => {
+
+                  if (!blob) {
+
+                    reject(
+                      new Error(
+                        "Image conversion failed."
+                      )
+                    );
+
+                    return;
+                  }
+
+
+                  resolve(
+                    blob
+                  );
+
+                },
+                "image/jpeg",
+                .9
+              );
+
+            };
+
+
+          img.onerror =
+            () => {
+
+              reject(
+                new Error(
+                  "Invalid image."
+                )
+              );
+
+            };
+
+
+          img.src =
+            reader.result;
 
         };
 
 
-        img.onerror = () => {
+      reader.onerror =
+        () => {
 
           reject(
             new Error(
-              `Invalid image: ${file.name}`
+              "Could not read image."
             )
           );
 
         };
-
-
-        img.src =
-          reader.result;
-
-      };
-
-
-      reader.onerror = () => {
-
-        reject(
-          new Error(
-            `Could not read ${file.name}`
-          )
-        );
-
-      };
 
 
       reader.readAsDataURL(
@@ -1423,83 +1732,63 @@ function resizeImage(file) {
 }
 
 
-// ======================================================
-// GENERATE
-// ======================================================
+// =================================================
+// IMAGE GENERATE
+// =================================================
 
-generateBtn.addEventListener(
-  "click",
+imageGenerate.onclick =
   async () => {
 
-    hideError();
+    hideImageError();
 
-
-    result.style.display =
-      "none";
-
-
-    // Check images
 
     if (
       selectedFiles.length === 0
     ) {
 
-      showError(
-        "Please select at least one image."
+      showImageError(
+        "Add at least one reference image."
       );
 
       return;
     }
 
 
-    // Check prompt
-
     const prompt =
-      promptInput.value.trim();
+      imagePrompt.value.trim();
 
 
     if (!prompt) {
 
-      showError(
-        "Please enter a prompt."
+      showImageError(
+        "Enter an image prompt."
       );
 
       return;
     }
 
 
-    // Loading
-
-    generateBtn.disabled =
+    imageGenerate.disabled =
       true;
 
-
-    loading.style.display =
+    imageLoading.style.display =
       "block";
+
+    imageResult.style.display =
+      "none";
 
 
     try {
 
-
-      // ===============================================
-      // CREATE FORM DATA
-      // ===============================================
-
-      const formData =
+      const form =
         new FormData();
 
 
-      // Prompt
-
-      formData.append(
+      form.append(
         "prompt",
         prompt
       );
 
-
-      // ===============================================
-      // RESIZE + ADD ALL IMAGES
-      // ===============================================
 
       for (
         let i = 0;
@@ -1507,44 +1796,13 @@ generateBtn.addEventListener(
         i++
       ) {
 
-        const file =
-          selectedFiles[i];
-
-
-        console.log(
-          `Resizing image ${i + 1}...`
-        );
-
-
         const resized =
           await resizeImage(
-            file
+            selectedFiles[i]
           );
 
 
-        console.log(
-          `Image ${i + 1}:`,
-          resized.size,
-          "bytes"
-        );
-
-
-        /*
-          IMPORTANT:
-
-          Every image is sent
-          with the same "image"
-          field.
-
-          Worker converts them to:
-
-          input_image_0
-          input_image_1
-          input_image_2
-          input_image_3
-        */
-
-        formData.append(
+        form.append(
           "image",
           resized,
           `image_${i + 1}.jpg`
@@ -1553,35 +1811,20 @@ generateBtn.addEventListener(
       }
 
 
-      // ===============================================
-      // SEND TO CLOUDFLARE
-      // ===============================================
-
-      console.log(
-        "Sending",
-        selectedFiles.length,
-        "reference images..."
-      );
-
-
       const response =
         await fetch(
-          API_URL,
+          `${API}/image`,
           {
-            method: "POST",
+            method:
+              "POST",
 
-            body: formData
+            body:
+              form
           }
         );
 
 
-      // ===============================================
-      // ERROR
-      // ===============================================
-
-      if (
-        !response.ok
-      ) {
+      if (!response.ok) {
 
         let message =
           "Image generation failed.";
@@ -1593,14 +1836,12 @@ generateBtn.addEventListener(
             await response.json();
 
 
-          if (data.error) {
+          message =
+            data.error ||
+            message;
 
-            message =
-              data.error;
-
-          }
-
-        } catch (_) {}
+        }
+        catch (_) {}
 
 
         throw new Error(
@@ -1610,19 +1851,8 @@ generateBtn.addEventListener(
       }
 
 
-      // ===============================================
-      // IMAGE RESULT
-      // ===============================================
-
       const blob =
         await response.blob();
-
-
-      console.log(
-        "Result:",
-        blob.type,
-        blob.size
-      );
 
 
       if (
@@ -1638,161 +1868,561 @@ generateBtn.addEventListener(
       }
 
 
-      // ===============================================
-      // DISPLAY
-      // ===============================================
-
-      if (resultURL) {
+      if (
+        generatedImageURL
+      ) {
 
         URL.revokeObjectURL(
-          resultURL
+          generatedImageURL
         );
 
       }
 
 
-      resultURL =
+      generatedImageURL =
         URL.createObjectURL(
           blob
         );
 
 
-      resultImage.src =
-        resultURL;
+      generatedImage.src =
+        generatedImageURL;
 
 
-      downloadBtn.href =
-        resultURL;
+      imageDownload.href =
+        generatedImageURL;
 
 
-      result.style.display =
+      imageResult.style.display =
         "block";
 
 
-      // Scroll
+      // Add history
 
-      setTimeout(
-        () => {
-
-          result.scrollIntoView({
-            behavior:
-              "smooth",
-
-            block:
-              "start"
-          });
-
-        },
-        100
+      addHistory(
+        generatedImageURL,
+        prompt
       );
 
 
-    } catch (error) {
+      imageResult.scrollIntoView({
+        behavior:
+          "smooth"
+      });
+
+
+    }
+    catch (error) {
 
       console.error(
         error
       );
 
 
-      showError(
-        error.message ||
-        "Something went wrong."
+      showImageError(
+        error.message
       );
 
+    }
+    finally {
 
-    } finally {
-
-      generateBtn.disabled =
+      imageGenerate.disabled =
         false;
 
-
-      loading.style.display =
+      imageLoading.style.display =
         "none";
 
     }
 
-  }
-);
+  };
 
 
-// ======================================================
-// ERROR
-// ======================================================
+// =================================================
+// EDIT AGAIN
+// =================================================
 
-function showError(
-  message
-) {
-
-  errorBox.textContent =
-    "❌ " + message;
-
-
-  errorBox.style.display =
-    "block";
-
-}
-
-
-function hideError() {
-
-  errorBox.style.display =
-    "none";
-
-
-  errorBox.textContent =
-    "";
-
-}
-
-
-// ======================================================
-// FULLSCREEN
-// ======================================================
-
-resultImage.addEventListener(
-  "click",
-  () => {
+editAgain.onclick =
+  async () => {
 
     if (
-      !resultImage.src
+      !generatedImage.src
     ) {
       return;
     }
 
 
-    modalImage.src =
-      resultImage.src;
+    try {
 
+      const response =
+        await fetch(
+          generatedImage.src
+        );
+
+
+      const blob =
+        await response.blob();
+
+
+      const file =
+        new File(
+          [
+            blob
+          ],
+          "previous-result.jpg",
+          {
+            type:
+              "image/jpeg"
+          }
+        );
+
+
+      // Use generated result
+      // as Image 1
+
+      selectedFiles =
+        [file];
+
+
+      renderImages();
+
+
+      imagePrompt.value =
+        "Edit this image again. Keep the subject and composition realistic. " +
+        "Make the requested changes while preserving natural lighting, " +
+        "realistic skin texture, perspective and photographic detail.";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior:
+          "smooth"
+      });
+
+    }
+    catch (error) {
+
+      showImageError(
+        "Could not reuse the generated image."
+      );
+
+    }
+
+  };
+
+
+// =================================================
+// HISTORY
+// =================================================
+
+function addHistory(
+  url,
+  prompt
+) {
+
+  history.unshift({
+    url,
+    prompt
+  });
+
+
+  // Maximum 8
+
+  if (
+    history.length > 8
+  ) {
+
+    history.pop();
+
+  }
+
+
+  renderHistory();
+
+}
+
+
+function renderHistory() {
+
+  historyGrid.innerHTML = "";
+
+
+  history.forEach(
+    item => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.className =
+        "history-item";
+
+
+      const img =
+        document.createElement(
+          "img"
+        );
+
+
+      img.src =
+        item.url;
+
+
+      img.title =
+        item.prompt;
+
+
+      img.onclick =
+        () => {
+
+          generatedImage.src =
+            item.url;
+
+          imageDownload.href =
+            item.url;
+
+          imageResult.style.display =
+            "block";
+
+        };
+
+
+      div.appendChild(
+        img
+      );
+
+
+      historyGrid.appendChild(
+        div
+      );
+
+    }
+  );
+
+
+  historySection.style.display =
+    history.length
+      ? "block"
+      : "none";
+
+}
+
+
+// =================================================
+// IMAGE ERRORS
+// =================================================
+
+function showImageError(
+  message
+) {
+
+  imageError.textContent =
+    "❌ " + message;
+
+  imageError.style.display =
+    "block";
+
+}
+
+
+function hideImageError() {
+
+  imageError.style.display =
+    "none";
+
+}
+
+
+// =================================================
+// VIDEO VARIABLES
+// =================================================
+
+const videoPrompt =
+  document.getElementById(
+    "videoPrompt"
+  );
+
+const videoResolution =
+  document.getElementById(
+    "videoResolution"
+  );
+
+const videoRatio =
+  document.getElementById(
+    "videoRatio"
+  );
+
+const videoDuration =
+  document.getElementById(
+    "videoDuration"
+  );
+
+const videoGenerate =
+  document.getElementById(
+    "videoGenerate"
+  );
+
+const videoLoading =
+  document.getElementById(
+    "videoLoading"
+  );
+
+const videoError =
+  document.getElementById(
+    "videoError"
+  );
+
+const videoResult =
+  document.getElementById(
+    "videoResult"
+  );
+
+const generatedVideo =
+  document.getElementById(
+    "generatedVideo"
+  );
+
+const videoDownload =
+  document.getElementById(
+    "videoDownload"
+  );
+
+
+// =================================================
+// VIDEO GENERATE
+// =================================================
+
+videoGenerate.onclick =
+  async () => {
+
+    hideVideoError();
+
+
+    const prompt =
+      videoPrompt.value.trim();
+
+
+    if (!prompt) {
+
+      showVideoError(
+        "Enter a video prompt."
+      );
+
+      return;
+    }
+
+
+    videoGenerate.disabled =
+      true;
+
+    videoLoading.style.display =
+      "block";
+
+    videoResult.style.display =
+      "none";
+
+
+    try {
+
+      const response =
+        await fetch(
+          `${API}/video`,
+          {
+            method:
+              "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                prompt:
+
+                  prompt,
+
+                resolution:
+
+                  videoResolution.value,
+
+                ratio:
+
+                  videoRatio.value,
+
+                duration:
+
+                  Number(
+                    videoDuration.value
+                  )
+
+              })
+          }
+        );
+
+
+      if (!response.ok) {
+
+        let message =
+          "Video generation failed.";
+
+
+        try {
+
+          const data =
+            await response.json();
+
+
+          message =
+            data.error ||
+            message;
+
+        }
+        catch (_) {}
+
+
+        throw new Error(
+          message
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.video
+      ) {
+
+        throw new Error(
+          "No video URL returned."
+        );
+
+      }
+
+
+      generatedVideo.src =
+        data.video;
+
+
+      videoDownload.href =
+        data.video;
+
+
+      videoResult.style.display =
+        "block";
+
+
+      generatedVideo.load();
+
+
+      videoResult.scrollIntoView({
+        behavior:
+          "smooth"
+      });
+
+
+    }
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      showVideoError(
+        error.message
+      );
+
+    }
+    finally {
+
+      videoGenerate.disabled =
+        false;
+
+      videoLoading.style.display =
+        "none";
+
+    }
+
+  };
+
+
+// =================================================
+// VIDEO ERROR
+// =================================================
+
+function showVideoError(
+  message
+) {
+
+  videoError.textContent =
+    "❌ " + message;
+
+  videoError.style.display =
+    "block";
+
+}
+
+
+function hideVideoError() {
+
+  videoError.style.display =
+    "none";
+
+}
+
+
+// =================================================
+// IMAGE FULLSCREEN
+// =================================================
+
+const modal =
+  document.getElementById(
+    "modal"
+  );
+
+const modalImage =
+  document.getElementById(
+    "modalImage"
+  );
+
+const closeModal =
+  document.getElementById(
+    "closeModal"
+  );
+
+
+generatedImage.onclick =
+  () => {
+
+    modalImage.src =
+      generatedImage.src;
 
     modal.style.display =
       "flex";
 
-  }
-);
+  };
 
 
-// ======================================================
-// CLOSE MODAL
-// ======================================================
-
-closeModal.addEventListener(
-  "click",
+closeModal.onclick =
   () => {
 
     modal.style.display =
       "none";
 
-  }
-);
+  };
 
 
-modal.addEventListener(
-  "click",
-  (event) => {
+modal.onclick =
+  event => {
 
     if (
-      event.target ===
-      modal
+      event.target === modal
     ) {
 
       modal.style.display =
@@ -1800,46 +2430,19 @@ modal.addEventListener(
 
     }
 
-  }
-);
+  };
 
-
-// ======================================================
-// ESC
-// ======================================================
 
 document.addEventListener(
   "keydown",
-  (event) => {
+  event => {
 
     if (
-      event.key ===
-      "Escape"
+      event.key === "Escape"
     ) {
 
       modal.style.display =
         "none";
-
-    }
-
-  }
-);
-
-
-// ======================================================
-// CTRL + ENTER
-// ======================================================
-
-promptInput.addEventListener(
-  "keydown",
-  (event) => {
-
-    if (
-      event.ctrlKey &&
-      event.key === "Enter"
-    ) {
-
-      generateBtn.click();
 
     }
 
@@ -1849,6 +2452,4 @@ promptInput.addEventListener(
 </script>
 
 </body>
-
 </html>
-
