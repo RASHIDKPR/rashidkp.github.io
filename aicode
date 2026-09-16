@@ -1,0 +1,3789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+
+  <title>Rashid AI Studio</title>
+
+  <meta
+    name="description"
+    content="AI image and video generation studio"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #08090d;
+      --bg2: #0e1017;
+      --card: rgba(20, 22, 31, 0.82);
+      --card2: rgba(27, 29, 40, 0.9);
+      --border: rgba(255, 255, 255, 0.09);
+      --border2: rgba(255, 255, 255, 0.15);
+      --text: #f5f7fb;
+      --muted: #9da3b1;
+      --primary: #7c5cff;
+      --primary2: #9b82ff;
+      --danger: #ff5f6d;
+      --success: #43d17a;
+      --radius: 20px;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 15% 0%,
+          rgba(124, 92, 255, 0.16),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 85% 10%,
+          rgba(0, 200, 255, 0.08),
+          transparent 28%
+        ),
+        var(--bg);
+
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    .app {
+      width: min(1180px, 100%);
+      margin: auto;
+      padding: 24px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 22px;
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7c5cff,
+          #b16cff
+        );
+
+      box-shadow:
+        0 10px 35px rgba(124, 92, 255, 0.3);
+    }
+
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+    }
+
+    .brand p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 9px 13px;
+      border-radius: 999px;
+
+      background: rgba(67, 209, 122, 0.08);
+      border: 1px solid rgba(67, 209, 122, 0.16);
+
+      color: #7deca5;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+    }
+
+    /* =========================
+       TABS
+    ========================= */
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      padding: 5px;
+
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--border);
+
+      border-radius: 15px;
+
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 11px;
+
+      padding: 13px;
+
+      background: transparent;
+      color: var(--muted);
+
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .tab.active {
+      background: var(--card2);
+      color: white;
+
+      box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* =========================
+       MAIN GRID
+    ========================= */
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+
+      backdrop-filter: blur(20px);
+
+      padding: 20px;
+    }
+
+    /* =========================
+       SECTION
+    ========================= */
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+    }
+
+    .section-title h2 {
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .section-title span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       PROMPT
+    ========================= */
+
+    textarea {
+      width: 100%;
+      min-height: 135px;
+
+      resize: vertical;
+
+      padding: 15px;
+
+      border-radius: 15px;
+
+      border: 1px solid var(--border2);
+      outline: none;
+
+      background: rgba(0, 0, 0, 0.23);
+      color: white;
+
+      line-height: 1.55;
+
+      transition: 0.2s;
+    }
+
+    textarea::placeholder {
+      color: #686e7d;
+    }
+
+    textarea:focus {
+      border-color: rgba(124, 92, 255, 0.65);
+
+      box-shadow:
+        0 0 0 3px rgba(124, 92, 255, 0.1);
+    }
+
+    /* =========================
+       CHIPS
+    ========================= */
+
+    .chips {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+
+      margin-top: 10px;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+
+      background: rgba(255, 255, 255, 0.035);
+
+      color: #bfc4d0;
+
+      border-radius: 999px;
+
+      padding: 7px 10px;
+
+      font-size: 11px;
+
+      transition: 0.2s;
+    }
+
+    .chip:hover {
+      border-color: rgba(124, 92, 255, 0.5);
+      color: white;
+      background: rgba(124, 92, 255, 0.1);
+    }
+
+    /* =========================
+       IMAGE UPLOAD
+    ========================= */
+
+    .upload-box {
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+
+      border-radius: 17px;
+
+      padding: 16px;
+
+      background: rgba(255, 255, 255, 0.025);
+
+      transition: 0.2s;
+    }
+
+    .upload-box:hover {
+      border-color: rgba(124, 92, 255, 0.6);
+    }
+
+    .upload-main {
+      min-height: 100px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .upload-main strong {
+      font-size: 13px;
+    }
+
+    .upload-main span {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .reference-grid {
+      display: grid;
+
+      grid-template-columns: repeat(4, 1fr);
+
+      gap: 8px;
+
+      margin-top: 12px;
+    }
+
+    .reference-item {
+      position: relative;
+
+      aspect-ratio: 1;
+
+      border-radius: 11px;
+
+      overflow: hidden;
+
+      background: #11131a;
+
+      border: 1px solid var(--border);
+    }
+
+    .reference-item img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .remove-reference {
+      position: absolute;
+
+      top: 5px;
+      right: 5px;
+
+      width: 23px;
+      height: 23px;
+
+      border: 0;
+
+      border-radius: 50%;
+
+      background: rgba(0, 0, 0, 0.72);
+
+      color: white;
+
+      font-size: 13px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* =========================
+       OPTIONS
+    ========================= */
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+
+      margin-top: 15px;
+    }
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .option label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+
+      padding: 11px 12px;
+
+      border-radius: 12px;
+
+      border: 1px solid var(--border);
+
+      outline: none;
+
+      background: #141620;
+      color: white;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .generate-btn {
+      width: 100%;
+
+      margin-top: 16px;
+
+      padding: 14px 18px;
+
+      border: 0;
+      border-radius: 14px;
+
+      color: white;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          #a16eff
+        );
+
+      box-shadow:
+        0 10px 30px rgba(124, 92, 255, 0.25);
+
+      transition: 0.2s;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 14px 35px rgba(124, 92, 255, 0.34);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .secondary-btn {
+      width: 100%;
+
+      padding: 12px;
+
+      border-radius: 13px;
+
+      border: 1px solid var(--border2);
+
+      background: rgba(255, 255, 255, 0.04);
+
+      color: white;
+
+      font-weight: 700;
+
+      margin-top: 9px;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    /* =========================
+       NOTICE
+    ========================= */
+
+    .notice {
+      margin-top: 12px;
+
+      padding: 11px 13px;
+
+      border-radius: 12px;
+
+      background: rgba(255, 255, 255, 0.035);
+
+      border: 1px solid var(--border);
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      line-height: 1.5;
+    }
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    .result-panel {
+      min-height: 610px;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 14px;
+    }
+
+    .result-header h2 {
+      font-size: 14px;
+    }
+
+    .result-header span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .result-area {
+      flex: 1;
+
+      min-height: 520px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(124, 92, 255, 0.06),
+          transparent 50%
+        ),
+        rgba(0, 0, 0, 0.18);
+
+      border: 1px solid var(--border);
+
+      overflow: hidden;
+
+      position: relative;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px;
+    }
+
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 13px;
+      opacity: 0.7;
+    }
+
+    .empty-state h3 {
+      color: #dfe2e9;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .empty-state p {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    #generatedImage {
+      display: none;
+
+      max-width: 100%;
+      max-height: 520px;
+
+      object-fit: contain;
+
+      border-radius: 12px;
+
+      cursor: pointer;
+    }
+
+    #generatedVideo {
+      display: none;
+
+      width: 100%;
+      max-height: 520px;
+
+      object-fit: contain;
+
+      border-radius: 12px;
+
+      background: black;
+    }
+
+    /* =========================
+       RESULT ACTIONS
+    ========================= */
+
+    .result-actions {
+      display: none;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 9px;
+
+      margin-top: 12px;
+    }
+
+    .result-actions button {
+      padding: 11px 8px;
+
+      border-radius: 12px;
+
+      border: 1px solid var(--border);
+
+      background: rgba(255, 255, 255, 0.04);
+
+      color: white;
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .result-actions button:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      display: none;
+
+      position: absolute;
+
+      inset: 0;
+
+      background: rgba(7, 8, 12, 0.78);
+
+      backdrop-filter: blur(8px);
+
+      align-items: center;
+      justify-content: center;
+
+      flex-direction: column;
+
+      z-index: 5;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 50%;
+
+      border: 3px solid rgba(255, 255, 255, 0.1);
+
+      border-top-color: var(--primary);
+
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading strong {
+      margin-top: 15px;
+
+      font-size: 14px;
+    }
+
+    .loading span {
+      margin-top: 5px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      text-align: center;
+
+      max-width: 300px;
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error {
+      display: none;
+
+      margin-top: 12px;
+
+      padding: 12px 14px;
+
+      border-radius: 13px;
+
+      border: 1px solid rgba(255, 95, 109, 0.2);
+
+      background: rgba(255, 95, 109, 0.08);
+
+      color: #ff929c;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+    }
+
+    /* =========================
+       HISTORY
+    ========================= */
+
+    .history-section {
+      margin-top: 20px;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+    }
+
+    .history-header h2 {
+      font-size: 15px;
+    }
+
+    .clear-history {
+      border: 0;
+
+      background: transparent;
+
+      color: #ff7883;
+
+      font-size: 11px;
+
+      font-weight: 700;
+    }
+
+    .history-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+      gap: 10px;
+    }
+
+    .history-item {
+      background: var(--card);
+
+      border: 1px solid var(--border);
+
+      border-radius: 15px;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .history-item:hover {
+      transform: translateY(-2px);
+
+      border-color: rgba(124, 92, 255, 0.35);
+    }
+
+    .history-media {
+      aspect-ratio: 1;
+
+      background: #11131a;
+
+      position: relative;
+
+      overflow: hidden;
+    }
+
+    .history-media img,
+    .history-media video {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .video-badge {
+      position: absolute;
+
+      left: 7px;
+      bottom: 7px;
+
+      padding: 4px 7px;
+
+      border-radius: 7px;
+
+      background: rgba(0, 0, 0, 0.72);
+
+      font-size: 9px;
+
+      font-weight: 700;
+    }
+
+    .history-info {
+      padding: 9px;
+    }
+
+    .history-info p {
+      color: #dfe2e9;
+
+      font-size: 10px;
+
+      display: -webkit-box;
+
+      -webkit-line-clamp: 2;
+
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+
+      line-height: 1.4;
+    }
+
+    .history-info span {
+      display: block;
+
+      margin-top: 5px;
+
+      color: #777d8c;
+
+      font-size: 9px;
+    }
+
+    /* =========================
+       FULLSCREEN
+    ========================= */
+
+    .fullscreen {
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 100;
+
+      background: rgba(0, 0, 0, 0.94);
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 25px;
+    }
+
+    .fullscreen img,
+    .fullscreen video {
+      max-width: 95vw;
+      max-height: 90vh;
+
+      border-radius: 10px;
+
+      object-fit: contain;
+    }
+
+    .close-fullscreen {
+      position: absolute;
+
+      top: 18px;
+      right: 20px;
+
+      width: 40px;
+      height: 40px;
+
+      border-radius: 50%;
+
+      border: 1px solid rgba(255, 255, 255, 0.15);
+
+      background: rgba(255, 255, 255, 0.08);
+
+      color: white;
+
+      font-size: 20px;
+    }
+
+    /* =========================
+       VIDEO ONLY
+    ========================= */
+
+    .video-only {
+      display: none;
+    }
+
+    .video-upload {
+      margin-top: 15px;
+    }
+
+    .video-preview {
+      display: none;
+
+      margin-top: 10px;
+
+      position: relative;
+
+      width: 100%;
+
+      max-height: 180px;
+
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      border: 1px solid var(--border);
+    }
+
+    .video-preview img {
+      width: 100%;
+
+      max-height: 180px;
+
+      object-fit: cover;
+
+      display: block;
+    }
+
+    .remove-video-image {
+      position: absolute;
+
+      right: 8px;
+      top: 8px;
+
+      width: 28px;
+      height: 28px;
+
+      border: 0;
+
+      border-radius: 50%;
+
+      background: rgba(0, 0, 0, 0.75);
+
+      color: white;
+    }
+
+    .video-mode {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 7px;
+
+      margin-top: 10px;
+    }
+
+    .mode-btn {
+      padding: 9px;
+
+      border-radius: 10px;
+
+      border: 1px solid var(--border);
+
+      background: rgba(255, 255, 255, 0.03);
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      font-weight: 700;
+    }
+
+    .mode-btn.active {
+      background: rgba(124, 92, 255, 0.13);
+
+      color: white;
+
+      border-color: rgba(124, 92, 255, 0.4);
+    }
+
+    .animate-btn {
+      width: 100%;
+
+      margin-top: 10px;
+
+      padding: 12px;
+
+      border-radius: 13px;
+
+      border: 1px solid rgba(124, 92, 255, 0.25);
+
+      background: rgba(124, 92, 255, 0.08);
+
+      color: #c9bdff;
+
+      font-size: 12px;
+
+      font-weight: 750;
+    }
+
+    .animate-btn:hover {
+      background: rgba(124, 92, 255, 0.14);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      text-align: center;
+
+      color: #606674;
+
+      font-size: 10px;
+
+      margin-top: 25px;
+      padding-bottom: 10px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .result-panel {
+        min-height: 500px;
+      }
+
+      .result-area {
+        min-height: 420px;
+      }
+
+      .history-grid {
+        grid-template-columns:
+          repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        padding: 13px;
+      }
+
+      header {
+        margin-bottom: 17px;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+      }
+
+      .brand h1 {
+        font-size: 17px;
+      }
+
+      .status {
+        padding: 7px 9px;
+        font-size: 10px;
+      }
+
+      .panel {
+        padding: 15px;
+        border-radius: 17px;
+      }
+
+      .result-panel {
+        min-height: 430px;
+      }
+
+      .result-area {
+        min-height: 350px;
+      }
+
+      .history-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .result-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .result-actions button:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .options {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header>
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        ✦
+      </div>
+
+      <div>
+        <h1>Rashid AI Studio</h1>
+        <p>Image & Video Generator</p>
+      </div>
+
+    </div>
+
+    <div class="status">
+      <div class="status-dot"></div>
+      AI Online
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       TABS
+  ========================== -->
+
+  <div class="tabs">
+
+    <button
+      class="tab active"
+      id="imageTab"
+      type="button"
+    >
+      🖼️ Image
+    </button>
+
+    <button
+      class="tab"
+      id="videoTab"
+      type="button"
+    >
+      🎬 Video
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       WORKSPACE
+  ========================== -->
+
+  <div class="workspace">
+
+    <!-- =====================
+         LEFT PANEL
+    ====================== -->
+
+    <div class="panel">
+
+      <!-- =====================
+           IMAGE MODE
+      ====================== -->
+
+      <div id="imageMode">
+
+        <div class="section-title">
+
+          <h2>Create Image</h2>
+
+          <span>FLUX 2 Klein</span>
+
+        </div>
+
+
+        <!-- Prompt -->
+
+        <textarea
+          id="imagePrompt"
+          placeholder="Describe the image you want to create..."
+        ></textarea>
+
+
+        <!-- Prompt Chips -->
+
+        <div class="chips">
+
+          <button
+            class="chip"
+            data-prompt="cinematic lighting, photorealistic, highly detailed"
+          >
+            🎬 Cinematic
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="professional portrait photography, natural skin texture"
+          >
+            👤 Portrait
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="luxury product photography, studio lighting"
+          >
+            💎 Product
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="realistic Kerala village environment, natural lighting"
+          >
+            🌴 Kerala
+          </button>
+
+          <button
+            class="chip"
+            data-prompt="fashion editorial photography, premium styling"
+          >
+            👕 Fashion
+          </button>
+
+        </div>
+
+
+        <!-- Reference Images -->
+
+        <div style="margin-top:18px;">
+
+          <div class="section-title">
+
+            <h2>Reference Images</h2>
+
+            <span id="imageCount">
+              0 / 4
+            </span>
+
+          </div>
+
+
+          <div class="upload-box">
+
+            <label
+              class="upload-main"
+              for="imageInput"
+            >
+
+              <div class="upload-icon">
+                ＋
+              </div>
+
+              <strong>
+                Add reference images
+              </strong>
+
+              <span>
+                Up to 4 images
+              </span>
+
+            </label>
+
+            <input
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              multiple
+            />
+
+
+            <div
+              id="referenceGrid"
+              class="reference-grid"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="imageGenerate"
+          class="generate-btn"
+          type="button"
+        >
+          ✨ Generate Image
+        </button>
+
+
+        <button
+          id="editAgain"
+          class="secondary-btn"
+          type="button"
+          style="display:none;"
+        >
+          ✏️ Edit Again
+        </button>
+
+
+        <div class="notice">
+
+          💡 <strong>Tip:</strong>
+          Use detailed prompts and reference images to
+          guide the composition, appearance and style.
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================
+           VIDEO MODE
+      ====================== -->
+
+      <div
+        id="videoMode"
+        class="video-only"
+      >
+
+        <div class="section-title">
+
+          <h2>Create Video</h2>
+
+          <span>FREE • ZeroGPU</span>
+
+        </div>
+
+
+        <!-- Video Mode -->
+
+        <div class="video-mode">
+
+          <button
+            class="mode-btn active"
+            data-mode="auto"
+            type="button"
+          >
+            Auto
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="image"
+            type="button"
+          >
+            Image → Video
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="text"
+            type="button"
+          >
+            Text → Video
+          </button>
+
+        </div>
+
+
+        <!-- Video Image -->
+
+        <div
+          class="video-upload"
+          id="videoInputContainer"
+        >
+
+          <div class="section-title">
+
+            <h2>Starting Image</h2>
+
+            <span>Optional</span>
+
+          </div>
+
+
+          <div class="upload-box">
+
+            <label
+              class="upload-main"
+              for="videoImageInput"
+            >
+
+              <div class="upload-icon">
+                🎞️
+              </div>
+
+              <strong>
+                Add image for animation
+              </strong>
+
+              <span>
+                One image • JPG / PNG
+              </span>
+
+            </label>
+
+            <input
+              id="videoImageInput"
+              type="file"
+              accept="image/*"
+            />
+
+            <div
+              class="video-preview"
+              id="videoInputPreview"
+            >
+
+              <img
+                id="videoInputPreviewImage"
+                alt="Video input"
+              />
+
+              <button
+                id="removeVideoImage"
+                class="remove-video-image"
+                type="button"
+              >
+                ×
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Animate button -->
+
+        <button
+          id="animateThisImage"
+          class="animate-btn"
+          type="button"
+        >
+          ✨ Animate This Image — FREE
+        </button>
+
+
+        <!-- Video Prompt -->
+
+        <div style="margin-top:16px;">
+
+          <div class="section-title">
+
+            <h2>Video Prompt</h2>
+
+            <span>Describe motion</span>
+
+          </div>
+
+          <textarea
+            id="videoPrompt"
+            placeholder="Describe how you want the scene to move..."
+          ></textarea>
+
+        </div>
+
+
+        <!-- Options -->
+
+        <div class="options">
+
+          <div class="option">
+
+            <label>
+              Aspect Ratio
+            </label>
+
+            <select id="videoRatio">
+
+              <option value="9:16">
+                9:16 Portrait
+              </option>
+
+              <option value="16:9">
+                16:9 Landscape
+              </option>
+
+              <option value="1:1">
+                1:1 Square
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="option">
+
+            <label>
+              Duration
+            </label>
+
+            <select id="videoDuration">
+
+              <option value="2">
+                2 seconds
+              </option>
+
+              <option value="3" selected>
+                3 seconds
+              </option>
+
+              <option value="4">
+                4 seconds
+              </option>
+
+              <option value="5">
+                5 seconds
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="videoGenerate"
+          class="generate-btn"
+          type="button"
+        >
+          🎬 Generate FREE Video
+        </button>
+
+
+        <div class="notice">
+
+          🆓 <strong>Free generation:</strong>
+          Video generation uses Hugging Face ZeroGPU.
+          Availability and generation limits depend on
+          the service's current quota.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================
+         RIGHT RESULT PANEL
+    ====================== -->
+
+    <div class="panel result-panel">
+
+      <div class="result-header">
+
+        <h2 id="resultTitle">
+          Result
+        </h2>
+
+        <span id="resultStatus">
+          Ready
+        </span>
+
+      </div>
+
+
+      <div class="result-area">
+
+        <!-- Empty -->
+
+        <div
+          class="empty-state"
+          id="emptyState"
+        >
+
+          <div class="icon">
+            ✨
+          </div>
+
+          <h3>
+            Your creation will appear here
+          </h3>
+
+          <p>
+            Write a prompt and generate your first
+            AI image or video.
+          </p>
+
+        </div>
+
+
+        <!-- Image -->
+
+        <img
+          id="generatedImage"
+          alt="Generated image"
+        />
+
+
+        <!-- Video -->
+
+        <video
+          id="generatedVideo"
+          controls
+          playsinline
+        ></video>
+
+
+        <!-- Loading -->
+
+        <div
+          class="loading"
+          id="loading"
+        >
+
+          <div class="spinner"></div>
+
+          <strong id="loadingTitle">
+            Generating...
+          </strong>
+
+          <span id="loadingText">
+            Please wait while the AI creates your result.
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Error -->
+
+      <div
+        class="error"
+        id="error"
+      ></div>
+
+
+      <!-- Actions -->
+
+      <div
+        class="result-actions"
+        id="resultActions"
+      >
+
+        <button
+          id="downloadResult"
+          type="button"
+        >
+          ⬇️ Download
+        </button>
+
+        <button
+          id="fullscreenResult"
+          type="button"
+        >
+          ⛶ Fullscreen
+        </button>
+
+        <button
+          id="useAsVideo"
+          type="button"
+        >
+          🎬 Animate
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       HISTORY
+  ========================== -->
+
+  <div class="panel history-section">
+
+    <div class="history-header">
+
+      <h2>
+        🗂️ Recent Creations
+      </h2>
+
+      <button
+        class="clear-history"
+        id="clearHistory"
+        type="button"
+      >
+        Clear history
+      </button>
+
+    </div>
+
+
+    <div
+      class="history-grid"
+      id="historyGrid"
+    ></div>
+
+  </div>
+
+
+  <footer>
+    Rashid AI Studio • Powered by Cloudflare AI & Hugging Face
+  </footer>
+
+</div>
+
+
+<!-- =========================
+     FULLSCREEN
+========================== -->
+
+<div
+  class="fullscreen"
+  id="fullscreen"
+>
+
+  <button
+    class="close-fullscreen"
+    id="closeFullscreen"
+    type="button"
+  >
+    ×
+  </button>
+
+  <img
+    id="fullscreenImage"
+    alt="Fullscreen result"
+  />
+
+  <video
+    id="fullscreenVideo"
+    controls
+    playsinline
+  ></video>
+
+</div>
+
+
+<script>
+
+  /* =====================================================
+     CONFIG
+  ===================================================== */
+
+  const API =
+    "https://image-api.itsmerashidkp.workers.dev";
+
+
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
+  const imageTab =
+    document.getElementById("imageTab");
+
+  const videoTab =
+    document.getElementById("videoTab");
+
+  const imageMode =
+    document.getElementById("imageMode");
+
+  const videoMode =
+    document.getElementById("videoMode");
+
+
+  const imagePrompt =
+    document.getElementById("imagePrompt");
+
+  const videoPrompt =
+    document.getElementById("videoPrompt");
+
+
+  const imageInput =
+    document.getElementById("imageInput");
+
+  const referenceGrid =
+    document.getElementById("referenceGrid");
+
+  const imageCount =
+    document.getElementById("imageCount");
+
+
+  const imageGenerate =
+    document.getElementById("imageGenerate");
+
+  const editAgain =
+    document.getElementById("editAgain");
+
+
+  const videoImageInput =
+    document.getElementById("videoImageInput");
+
+  const videoInputPreview =
+    document.getElementById("videoInputPreview");
+
+  const videoInputPreviewImage =
+    document.getElementById(
+      "videoInputPreviewImage"
+    );
+
+  const removeVideoImage =
+    document.getElementById(
+      "removeVideoImage"
+    );
+
+
+  const videoGenerate =
+    document.getElementById("videoGenerate");
+
+  const videoRatio =
+    document.getElementById("videoRatio");
+
+  const videoDuration =
+    document.getElementById("videoDuration");
+
+
+  const animateThisImage =
+    document.getElementById(
+      "animateThisImage"
+    );
+
+
+  const emptyState =
+    document.getElementById("emptyState");
+
+  const generatedImage =
+    document.getElementById(
+      "generatedImage"
+    );
+
+  const generatedVideo =
+    document.getElementById(
+      "generatedVideo"
+    );
+
+
+  const loading =
+    document.getElementById("loading");
+
+  const loadingTitle =
+    document.getElementById("loadingTitle");
+
+  const loadingText =
+    document.getElementById("loadingText");
+
+
+  const errorBox =
+    document.getElementById("error");
+
+  const resultActions =
+    document.getElementById(
+      "resultActions"
+    );
+
+  const downloadResult =
+    document.getElementById(
+      "downloadResult"
+    );
+
+  const fullscreenResult =
+    document.getElementById(
+      "fullscreenResult"
+    );
+
+  const useAsVideo =
+    document.getElementById(
+      "useAsVideo"
+    );
+
+
+  const resultTitle =
+    document.getElementById(
+      "resultTitle"
+    );
+
+  const resultStatus =
+    document.getElementById(
+      "resultStatus"
+    );
+
+
+  const historyGrid =
+    document.getElementById(
+      "historyGrid"
+    );
+
+  const clearHistory =
+    document.getElementById(
+      "clearHistory"
+    );
+
+
+  const fullscreen =
+    document.getElementById(
+      "fullscreen"
+    );
+
+  const fullscreenImage =
+    document.getElementById(
+      "fullscreenImage"
+    );
+
+  const fullscreenVideo =
+    document.getElementById(
+      "fullscreenVideo"
+    );
+
+  const closeFullscreen =
+    document.getElementById(
+      "closeFullscreen"
+    );
+
+
+  /* =====================================================
+     STATE
+  ===================================================== */
+
+  let references = [];
+
+  let currentResult = null;
+
+  let currentType = null;
+
+  let videoImageFile = null;
+
+  let videoModeType = "auto";
+
+
+  /* =====================================================
+     TAB SWITCHING
+  ===================================================== */
+
+  imageTab.addEventListener(
+    "click",
+    () => {
+
+      imageTab.classList.add("active");
+      videoTab.classList.remove("active");
+
+      imageMode.style.display = "block";
+      videoMode.style.display = "none";
+
+      resultTitle.textContent =
+        "Image Result";
+
+    }
+  );
+
+
+  videoTab.addEventListener(
+    "click",
+    () => {
+
+      videoTab.classList.add("active");
+      imageTab.classList.remove("active");
+
+      imageMode.style.display = "none";
+      videoMode.style.display = "block";
+
+      resultTitle.textContent =
+        "Video Result";
+
+    }
+  );
+
+
+  /* =====================================================
+     PROMPT CHIPS
+  ===================================================== */
+
+  document
+    .querySelectorAll(".chip")
+    .forEach(chip => {
+
+      chip.addEventListener(
+        "click",
+        () => {
+
+          const text =
+            chip.dataset.prompt;
+
+          if (!imagePrompt.value.trim()) {
+
+            imagePrompt.value = text;
+
+          } else {
+
+            imagePrompt.value +=
+              ", " + text;
+
+          }
+
+          imagePrompt.focus();
+
+        }
+      );
+
+    });
+
+
+  /* =====================================================
+     IMAGE UPLOAD
+  ===================================================== */
+
+  imageInput.addEventListener(
+    "change",
+    async () => {
+
+      const files =
+        Array.from(
+          imageInput.files || []
+        );
+
+      for (const file of files) {
+
+        if (references.length >= 4) {
+          break;
+        }
+
+        if (!file.type.startsWith("image/")) {
+          continue;
+        }
+
+        try {
+
+          const resized =
+            await resizeImage(
+              file,
+              511,
+              511
+            );
+
+          references.push(resized);
+
+        } catch (err) {
+
+          console.error(
+            "Image resize error:",
+            err
+          );
+
+        }
+
+      }
+
+      imageInput.value = "";
+
+      renderReferences();
+
+    }
+  );
+
+
+  /* =====================================================
+     RESIZE REFERENCE IMAGE
+  ===================================================== */
+
+  function resizeImage(
+    file,
+    maxWidth,
+    maxHeight
+  ) {
+
+    return new Promise(
+      (resolve, reject) => {
+
+        const img =
+          new Image();
+
+        const reader =
+          new FileReader();
+
+        reader.onload = () => {
+
+          img.onload = () => {
+
+            let width =
+              img.naturalWidth;
+
+            let height =
+              img.naturalHeight;
+
+
+            const scale =
+              Math.min(
+                maxWidth / width,
+                maxHeight / height,
+                1
+              );
+
+
+            width =
+              Math.round(
+                width * scale
+              );
+
+            height =
+              Math.round(
+                height * scale
+              );
+
+
+            const canvas =
+              document.createElement(
+                "canvas"
+              );
+
+            canvas.width =
+              width;
+
+            canvas.height =
+              height;
+
+
+            const ctx =
+              canvas.getContext(
+                "2d"
+              );
+
+            ctx.drawImage(
+              img,
+              0,
+              0,
+              width,
+              height
+            );
+
+
+            canvas.toBlob(
+              blob => {
+
+                if (!blob) {
+
+                  reject(
+                    new Error(
+                      "Could not resize image."
+                    )
+                  );
+
+                  return;
+
+                }
+
+                const output =
+                  new File(
+                    [
+                      blob
+                    ],
+                    "reference.jpg",
+                    {
+                      type:
+                        "image/jpeg"
+                    }
+                  );
+
+                resolve(output);
+
+              },
+              "image/jpeg",
+              0.88
+            );
+
+          };
+
+
+          img.onerror =
+            reject;
+
+          img.src =
+            reader.result;
+
+        };
+
+
+        reader.onerror =
+          reject;
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     RENDER REFERENCES
+  ===================================================== */
+
+  function renderReferences() {
+
+    referenceGrid.innerHTML = "";
+
+    imageCount.textContent =
+      `${references.length} / 4`;
+
+
+    references.forEach(
+      (file, index) => {
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "reference-item";
+
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+
+        img.src =
+          URL.createObjectURL(
+            file
+          );
+
+
+        const remove =
+          document.createElement(
+            "button"
+          );
+
+        remove.className =
+          "remove-reference";
+
+        remove.type =
+          "button";
+
+        remove.textContent =
+          "×";
+
+
+        remove.addEventListener(
+          "click",
+          () => {
+
+            references.splice(
+              index,
+              1
+            );
+
+            renderReferences();
+
+          }
+        );
+
+
+        item.appendChild(img);
+
+        item.appendChild(remove);
+
+        referenceGrid.appendChild(
+          item
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     VIDEO IMAGE UPLOAD
+  ===================================================== */
+
+  videoImageInput.addEventListener(
+    "change",
+    () => {
+
+      const file =
+        videoImageInput.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+
+        showError(
+          "Please select an image."
+        );
+
+        return;
+
+      }
+
+      videoImageFile =
+        file;
+
+      const url =
+        URL.createObjectURL(
+          file
+        );
+
+      videoInputPreviewImage.src =
+        url;
+
+      videoInputPreview.style.display =
+        "block";
+
+    }
+  );
+
+
+  /* =====================================================
+     REMOVE VIDEO IMAGE
+  ===================================================== */
+
+  removeVideoImage.addEventListener(
+    "click",
+    () => {
+
+      videoImageFile = null;
+
+      videoImageInput.value = "";
+
+      videoInputPreview.style.display =
+        "none";
+
+      videoInputPreviewImage.src =
+        "";
+
+    }
+  );
+
+
+  /* =====================================================
+     VIDEO MODES
+  ===================================================== */
+
+  document
+    .querySelectorAll(".mode-btn")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(
+              ".mode-btn"
+            )
+            .forEach(btn => {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            });
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          videoModeType =
+            button.dataset.mode;
+
+
+          const hasImage =
+            videoModeType === "image";
+
+
+          if (
+            videoModeType === "text"
+          ) {
+
+            document
+              .getElementById(
+                "videoInputContainer"
+              )
+              .style.display =
+              "none";
+
+            animateThisImage.style.display =
+              "none";
+
+          } else {
+
+            document
+              .getElementById(
+                "videoInputContainer"
+              )
+              .style.display =
+              "block";
+
+            animateThisImage.style.display =
+              "block";
+
+          }
+
+        }
+      );
+
+    });
+
+
+  /* =====================================================
+     ANIMATE CURRENT IMAGE
+  ===================================================== */
+
+  animateThisImage.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !generatedImage.src ||
+        generatedImage.style.display === "none"
+      ) {
+
+        showError(
+          "Generate an image first, then animate it."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            generatedImage.src
+          );
+
+        const blob =
+          await response.blob();
+
+
+        videoImageFile =
+          new File(
+            [blob],
+            "generated-image.jpg",
+            {
+              type:
+                blob.type ||
+                "image/jpeg"
+            }
+          );
+
+
+        videoInputPreviewImage.src =
+          generatedImage.src;
+
+        videoInputPreview.style.display =
+          "block";
+
+
+        videoTab.click();
+
+
+        videoPrompt.value =
+          "Animate this image naturally. Keep the person's identity, face, hairstyle, clothing, environment and composition consistent. Add subtle realistic movement. Natural blinking and facial movement. Gentle movement in the hair and clothing caused by a light breeze. Slow cinematic camera movement. Realistic lighting and shadows. Photorealistic video, natural motion, authentic camera footage, no CGI appearance.";
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Could not prepare the image for video."
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     IMAGE GENERATION
+  ===================================================== */
+
+  imageGenerate.addEventListener(
+    "click",
+    generateImage
+  );
+
+
+  async function generateImage() {
+
+    const prompt =
+      imagePrompt.value.trim();
+
+
+    if (!prompt) {
+
+      showError(
+        "Please enter an image prompt."
+      );
+
+      imagePrompt.focus();
+
+      return;
+
+    }
+
+
+    if (
+      references.length === 0
+    ) {
+
+      showError(
+        "Add at least one reference image."
+      );
+
+      return;
+
+    }
+
+
+    hideError();
+
+    startLoading(
+      "Creating image...",
+      "FLUX 2 Klein is generating your image."
+    );
+
+
+    imageGenerate.disabled =
+      true;
+
+
+    try {
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "prompt",
+        prompt
+      );
+
+
+      references.forEach(
+        file => {
+
+          formData.append(
+            "image",
+            file,
+            file.name
+          );
+
+        }
+      );
+
+
+      const response =
+        await fetch(
+          `${API}/image`,
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+
+      if (!response.ok) {
+
+        let message =
+          "Image generation failed.";
+
+        try {
+
+          const data =
+            await response.json();
+
+          if (data.error) {
+            message =
+              data.error;
+          }
+
+        } catch (_) {}
+
+        throw new Error(
+          message
+        );
+
+      }
+
+
+      const blob =
+        await response.blob();
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      showImageResult(
+        url
+      );
+
+
+      saveHistory({
+        type: "image",
+        url: url,
+        prompt: prompt,
+        createdAt:
+          new Date().toISOString()
+      });
+
+
+    } catch (err) {
+
+      console.error(
+        "IMAGE ERROR:",
+        err
+      );
+
+      showError(
+        err.message ||
+        "Image generation failed."
+      );
+
+    } finally {
+
+      stopLoading();
+
+      imageGenerate.disabled =
+        false;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     VIDEO GENERATION
+  ===================================================== */
+
+  videoGenerate.addEventListener(
+    "click",
+    generateVideo
+  );
+
+
+  async function generateVideo() {
+
+    const prompt =
+      videoPrompt.value.trim();
+
+
+    if (!prompt) {
+
+      showError(
+        "Please enter a video prompt."
+      );
+
+      videoPrompt.focus();
+
+      return;
+
+    }
+
+
+    if (
+      videoModeType === "image" &&
+      !videoImageFile
+    ) {
+
+      showError(
+        "Image → Video mode requires a starting image."
+      );
+
+      return;
+
+    }
+
+
+    hideError();
+
+    startLoading(
+      "Generating video...",
+      "Hugging Face ZeroGPU is creating your video. This can take some time."
+    );
+
+
+    videoGenerate.disabled =
+      true;
+
+
+    try {
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "prompt",
+        prompt
+      );
+
+
+      formData.append(
+        "ratio",
+        videoRatio.value
+      );
+
+
+      formData.append(
+        "duration",
+        videoDuration.value
+      );
+
+
+      const useImage =
+        videoModeType === "image" ||
+        (
+          videoModeType === "auto" &&
+          videoImageFile
+        );
+
+
+      if (
+        useImage &&
+        videoImageFile
+      ) {
+
+        const resized =
+          await resizeImage(
+            videoImageFile,
+            511,
+            511
+          );
+
+
+        formData.append(
+          "image",
+          resized,
+          "video_input.jpg"
+        );
+
+      }
+
+
+      const response =
+        await fetch(
+          `${API}/video`,
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+
+      const contentType =
+        response.headers.get(
+          "content-type"
+        ) || "";
+
+
+      if (!response.ok) {
+
+        let message =
+          "Video generation failed.";
+
+        if (
+          contentType.includes(
+            "application/json"
+          )
+        ) {
+
+          try {
+
+            const data =
+              await response.json();
+
+            if (data.error) {
+              message =
+                data.error;
+            }
+
+          } catch (_) {}
+
+        } else {
+
+          const text =
+            await response.text();
+
+          if (text) {
+            message =
+              text;
+          }
+
+        }
+
+        throw new Error(
+          message
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.video) {
+
+        console.error(
+          "VIDEO RESPONSE:",
+          data
+        );
+
+        throw new Error(
+          "Video generation completed but no video was returned."
+        );
+
+      }
+
+
+      showVideoResult(
+        data.video
+      );
+
+
+      saveHistory({
+        type: "video",
+        url: data.video,
+        prompt: prompt,
+        createdAt:
+          new Date().toISOString()
+      });
+
+
+    } catch (err) {
+
+      console.error(
+        "VIDEO ERROR:",
+        err
+      );
+
+      showError(
+        err.message ||
+        "Video generation failed."
+      );
+
+    } finally {
+
+      stopLoading();
+
+      videoGenerate.disabled =
+        false;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SHOW IMAGE
+  ===================================================== */
+
+  function showImageResult(
+    url
+  ) {
+
+    currentResult =
+      url;
+
+    currentType =
+      "image";
+
+
+    generatedVideo.pause();
+
+    generatedVideo.removeAttribute(
+      "src"
+    );
+
+    generatedVideo.style.display =
+      "none";
+
+
+    generatedImage.src =
+      url;
+
+    generatedImage.style.display =
+      "block";
+
+
+    emptyState.style.display =
+      "none";
+
+
+    resultActions.style.display =
+      "grid";
+
+
+    useAsVideo.style.display =
+      "block";
+
+
+    resultTitle.textContent =
+      "Image Result";
+
+    resultStatus.textContent =
+      "Completed";
+
+    editAgain.style.display =
+      "block";
+
+  }
+
+
+  /* =====================================================
+     SHOW VIDEO
+  ===================================================== */
+
+  function showVideoResult(
+    url
+  ) {
+
+    currentResult =
+      url;
+
+    currentType =
+      "video";
+
+
+    generatedImage.style.display =
+      "none";
+
+    generatedImage.src =
+      "";
+
+
+    generatedVideo.src =
+      url;
+
+    generatedVideo.style.display =
+      "block";
+
+
+    emptyState.style.display =
+      "none";
+
+
+    resultActions.style.display =
+      "grid";
+
+
+    useAsVideo.style.display =
+      "none";
+
+
+    resultTitle.textContent =
+      "Video Result";
+
+    resultStatus.textContent =
+      "Completed";
+
+
+    generatedVideo.load();
+
+  }
+
+
+  /* =====================================================
+     DOWNLOAD
+  ===================================================== */
+
+  downloadResult.addEventListener(
+    "click",
+    async () => {
+
+      if (!currentResult) {
+        return;
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            currentResult
+          );
+
+
+        const blob =
+          await response.blob();
+
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+
+        const a =
+          document.createElement(
+            "a"
+          );
+
+
+        a.href =
+          url;
+
+
+        a.download =
+          currentType === "video"
+            ? `rashid-ai-${Date.now()}.mp4`
+            : `rashid-ai-${Date.now()}.png`;
+
+
+        document.body.appendChild(
+          a
+        );
+
+        a.click();
+
+        a.remove();
+
+
+        setTimeout(
+          () =>
+            URL.revokeObjectURL(
+              url
+            ),
+          1000
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Download failed."
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     USE IMAGE AS VIDEO
+  ===================================================== */
+
+  useAsVideo.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        currentType !== "image" ||
+        !currentResult
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            currentResult
+          );
+
+        const blob =
+          await response.blob();
+
+
+        videoImageFile =
+          new File(
+            [blob],
+            "generated-image.jpg",
+            {
+              type:
+                "image/jpeg"
+            }
+          );
+
+
+        videoInputPreviewImage.src =
+          currentResult;
+
+        videoInputPreview.style.display =
+          "block";
+
+
+        videoTab.click();
+
+
+        videoPrompt.value =
+          "Animate this image naturally. Keep the person's identity, face, hairstyle, clothing, environment and composition consistent. Add subtle realistic movement. Natural blinking and facial movement. Gentle movement in the hair and clothing caused by a light breeze. Slow cinematic camera movement. Realistic lighting and shadows. Photorealistic video, natural motion, authentic camera footage, no CGI appearance.";
+
+      } catch (err) {
+
+        console.error(err);
+
+        showError(
+          "Could not use this image."
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     EDIT AGAIN
+  ===================================================== */
+
+  editAgain.addEventListener(
+    "click",
+    () => {
+
+      if (
+        currentType !== "image" ||
+        !currentResult
+      ) {
+
+        return;
+
+      }
+
+
+      imagePrompt.value =
+        imagePrompt.value.trim() +
+        "\n\nEdit the previous image while keeping the subject and overall composition consistent.";
+
+
+      imagePrompt.focus();
+
+    }
+  );
+
+
+  /* =====================================================
+     FULLSCREEN
+  ===================================================== */
+
+  fullscreenResult.addEventListener(
+    "click",
+    () => {
+
+      if (!currentResult) {
+        return;
+      }
+
+
+      fullscreen.style.display =
+        "flex";
+
+
+      if (
+        currentType === "image"
+      ) {
+
+        fullscreenVideo.pause();
+
+        fullscreenVideo.style.display =
+          "none";
+
+
+        fullscreenImage.src =
+          currentResult;
+
+        fullscreenImage.style.display =
+          "block";
+
+      } else {
+
+        fullscreenImage.style.display =
+          "none";
+
+
+        fullscreenVideo.src =
+          currentResult;
+
+        fullscreenVideo.style.display =
+          "block";
+
+        fullscreenVideo.load();
+
+      }
+
+    }
+  );
+
+
+  closeFullscreen.addEventListener(
+    "click",
+    closeFullscreenView
+  );
+
+
+  fullscreen.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        fullscreen
+      ) {
+
+        closeFullscreenView();
+
+      }
+
+    }
+  );
+
+
+  function closeFullscreenView() {
+
+    fullscreen.style.display =
+      "none";
+
+    fullscreenVideo.pause();
+
+  }
+
+
+  /* =====================================================
+     HISTORY
+     
+     NOTE:
+     This currently stores history in browser localStorage.
+     Later we can replace this with Cloudflare R2/server history.
+  ===================================================== */
+
+  const HISTORY_KEY =
+    "rashid_ai_studio_history";
+
+
+  function getHistory() {
+
+    try {
+
+      return JSON.parse(
+        localStorage.getItem(
+          HISTORY_KEY
+        ) || "[]"
+      );
+
+    } catch (_) {
+
+      return [];
+
+    }
+
+  }
+
+
+  function saveHistory(
+    item
+  ) {
+
+    try {
+
+      let history =
+        getHistory();
+
+
+      /*
+       * Browser blob URLs do not survive page refresh.
+       *
+       * Therefore we don't rely on them for permanent
+       * storage.
+       *
+       * Video URLs from the server can survive.
+       */
+
+      history.unshift(
+        item
+      );
+
+
+      history =
+        history.slice(
+          0,
+          30
+        );
+
+
+      /*
+       * Only save history entries that have
+       * a normal HTTP URL.
+       */
+
+      history =
+        history.filter(
+          item =>
+            item.url &&
+            (
+              item.url.startsWith(
+                "http://"
+              ) ||
+              item.url.startsWith(
+                "https://"
+              )
+            )
+        );
+
+
+      localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(
+          history
+        )
+      );
+
+
+      renderHistory();
+
+    } catch (err) {
+
+      console.warn(
+        "History save failed:",
+        err
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RENDER HISTORY
+  ===================================================== */
+
+  function renderHistory() {
+
+    const history =
+      getHistory();
+
+
+    historyGrid.innerHTML =
+      "";
+
+
+    if (!history.length) {
+
+      historyGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          padding:30px;
+          text-align:center;
+          color:#777d8c;
+          font-size:11px;
+        ">
+          No saved server results yet.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    history.forEach(
+      (item, index) => {
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "history-item";
+
+
+        const media =
+          document.createElement(
+            "div"
+          );
+
+
+        media.className =
+          "history-media";
+
+
+        if (
+          item.type === "image"
+        ) {
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src =
+            item.url;
+
+          img.loading =
+            "lazy";
+
+          media.appendChild(
+            img
+          );
+
+        } else {
+
+          const video =
+            document.createElement(
+              "video"
+            );
+
+
+          video.src =
+            item.url;
+
+          video.muted =
+            true;
+
+          video.preload =
+            "metadata";
+
+
+          media.appendChild(
+            video
+          );
+
+
+          const badge =
+            document.createElement(
+              "div"
+            );
+
+
+          badge.className =
+            "video-badge";
+
+          badge.textContent =
+            "▶ VIDEO";
+
+
+          media.appendChild(
+            badge
+          );
+
+        }
+
+
+        const info =
+          document.createElement(
+            "div"
+          );
+
+
+        info.className =
+          "history-info";
+
+
+        const prompt =
+          document.createElement(
+            "p"
+          );
+
+
+        prompt.textContent =
+          item.prompt ||
+          "No prompt";
+
+
+        const date =
+          document.createElement(
+            "span"
+          );
+
+
+        date.textContent =
+          formatDate(
+            item.createdAt
+          );
+
+
+        info.appendChild(
+          prompt
+        );
+
+        info.appendChild(
+          date
+        );
+
+
+        card.appendChild(
+          media
+        );
+
+        card.appendChild(
+          info
+        );
+
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            if (
+              item.type === "image"
+            ) {
+
+              showImageResult(
+                item.url
+              );
+
+            } else {
+
+              showVideoResult(
+                item.url
+              );
+
+            }
+
+          }
+        );
+
+
+        historyGrid.appendChild(
+          card
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     CLEAR HISTORY
+  ===================================================== */
+
+  clearHistory.addEventListener(
+    "click",
+    () => {
+
+      const confirmed =
+        confirm(
+          "Clear browser history?"
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      localStorage.removeItem(
+        HISTORY_KEY
+      );
+
+
+      renderHistory();
+
+    }
+  );
+
+
+  /* =====================================================
+     DATE
+  ===================================================== */
+
+  function formatDate(
+    value
+  ) {
+
+    if (!value) {
+      return "";
+    }
+
+
+    try {
+
+      return new Date(
+        value
+      ).toLocaleString(
+        undefined,
+        {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+    } catch (_) {
+
+      return "";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     LOADING
+  ===================================================== */
+
+  function startLoading(
+    title,
+    message
+  ) {
+
+    loadingTitle.textContent =
+      title;
+
+    loadingText.textContent =
+      message;
+
+    loading.style.display =
+      "flex";
+
+    resultStatus.textContent =
+      "Generating...";
+
+    resultActions.style.display =
+      "none";
+
+    hideError();
+
+  }
+
+
+  function stopLoading() {
+
+    loading.style.display =
+      "none";
+
+    resultStatus.textContent =
+      "Ready";
+
+  }
+
+
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  function showError(
+    message
+  ) {
+
+    errorBox.textContent =
+      "❌ " + message;
+
+    errorBox.style.display =
+      "block";
+
+  }
+
+
+  function hideError() {
+
+    errorBox.style.display =
+      "none";
+
+    errorBox.textContent =
+      "";
+
+  }
+
+
+  /* =====================================================
+     KEYBOARD SHORTCUT
+  ===================================================== */
+
+  imagePrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.ctrlKey &&
+        event.key === "Enter"
+      ) {
+
+        generateImage();
+
+      }
+
+    }
+  );
+
+
+  videoPrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.ctrlKey &&
+        event.key === "Enter"
+      ) {
+
+        generateVideo();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     INITIALIZE
+  ===================================================== */
+
+  renderReferences();
+
+  renderHistory();
+
+
+  console.log(
+    "Rashid AI Studio initialized."
+  );
+
+</script>
+
+</body>
+</html>
