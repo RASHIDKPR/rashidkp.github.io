@@ -10,10 +10,19 @@
   content="width=device-width, initial-scale=1.0"
 >
 
+<meta
+  name="theme-color"
+  content="#080b12"
+>
+
 <title>Rashid AI Studio</title>
 
 
 <style>
+
+/* =====================================================
+   RESET
+===================================================== */
 
 * {
   box-sizing: border-box;
@@ -22,117 +31,196 @@
 }
 
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 body {
 
   min-height: 100vh;
 
   font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
     Arial,
-    Helvetica,
     sans-serif;
 
-  color: white;
+  color: #fff;
 
   background:
+
     radial-gradient(
-      circle at 10% 10%,
-      #243b55,
-      transparent 40%
+      circle at 10% 5%,
+      rgba(59, 130, 246, .20),
+      transparent 32%
     ),
 
     radial-gradient(
-      circle at 90% 90%,
-      #141e30,
-      #05070b
-    );
+      circle at 90% 20%,
+      rgba(124, 58, 237, .18),
+      transparent 32%
+    ),
 
-  padding: 20px 12px;
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(37, 99, 235, .10),
+      transparent 35%
+    ),
+
+    #070a11;
+
+  padding:
+    18px 12px 50px;
+
 }
 
+
+/* =====================================================
+   CONTAINER
+===================================================== */
 
 .container {
 
   width: 100%;
 
-  max-width: 950px;
+  max-width: 980px;
 
-  margin: auto;
+  margin:
+    0 auto;
+
 }
 
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header {
 
   text-align: center;
 
-  padding: 20px 0 25px;
+  padding:
+    20px 0 25px;
+
 }
 
 
 .header h1 {
 
-  font-size: 38px;
+  font-size:
+    clamp(28px, 5vw, 42px);
 
-  margin-bottom: 8px;
+  font-weight:
+    800;
+
+  letter-spacing:
+    -.8px;
+
 }
 
 
 .header p {
 
-  color: #888;
+  margin-top:
+    8px;
 
-  font-size: 14px;
+  color:
+    #8d96a8;
+
+  font-size:
+    14px;
+
 }
 
 
-/* ==========================================
+/* =====================================================
    TABS
-========================================== */
+===================================================== */
 
 .tabs {
 
-  display: flex;
+  display:
+    flex;
 
-  gap: 8px;
+  gap:
+    7px;
 
-  padding: 6px;
+  padding:
+    6px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:
+    16px;
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.06
-    );
+    rgba(255,255,255,.055);
 
-  border-radius: 15px;
+  backdrop-filter:
+    blur(20px);
 
-  margin-bottom: 20px;
+  margin-bottom:
+    18px;
+
 }
 
 
 .tab {
 
-  flex: 1;
+  flex:
+    1;
 
-  padding: 13px;
+  min-height:
+    46px;
 
-  border: none;
+  border:
+    none;
 
-  border-radius: 11px;
+  border-radius:
+    12px;
 
-  background: transparent;
+  color:
+    #8e96a5;
 
-  color: #888;
+  background:
+    transparent;
 
-  font-size: 15px;
+  font-size:
+    15px;
 
-  font-weight: bold;
+  font-weight:
+    700;
 
-  cursor: pointer;
+  cursor:
+    pointer;
+
+  transition:
+    .2s;
+
+}
+
+
+.tab:hover {
+
+  color:
+    #fff;
+
+  background:
+    rgba(255,255,255,.06);
+
 }
 
 
 .tab.active {
+
+  color:
+    #fff;
 
   background:
     linear-gradient(
@@ -141,79 +229,153 @@ body {
       #4f46e5
     );
 
-  color: white;
+  box-shadow:
+    0 8px 25px
+    rgba(99,102,241,.25);
+
 }
 
 
-/* ==========================================
-   CARD
-========================================== */
+/* =====================================================
+   MAIN CARD
+===================================================== */
 
 .card {
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      0.07
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.035)
     );
 
   border:
     1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.12
-    );
+    rgba(255,255,255,.10);
 
-  border-radius: 22px;
+  border-radius:
+    23px;
 
-  padding: 22px;
+  padding:
+    20px;
 
   backdrop-filter:
-    blur(20px);
+    blur(25px);
+
+  box-shadow:
+    0 20px 70px
+    rgba(0,0,0,.25);
+
 }
 
 
-/* ==========================================
+/* =====================================================
    MODE
-========================================== */
+===================================================== */
 
 .mode {
-
   display: none;
 }
 
 
 .mode.active {
-
   display: block;
 }
 
 
-/* ==========================================
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.section-title {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    10px;
+
+  margin-bottom:
+    12px;
+
+}
+
+
+.section-title h2 {
+
+  font-size:
+    18px;
+
+}
+
+
+.badge {
+
+  padding:
+    5px 9px;
+
+  border-radius:
+    20px;
+
+  background:
+    rgba(34,197,94,.12);
+
+  border:
+    1px solid
+    rgba(34,197,94,.25);
+
+  color:
+    #6ee7a0;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+
+}
+
+
+/* =====================================================
    UPLOAD
-========================================== */
+===================================================== */
 
 .upload {
 
-  display: block;
+  display:
+    block;
+
+  width:
+    100%;
 
   border:
     2px dashed
-    #555;
+    rgba(255,255,255,.18);
 
-  border-radius: 18px;
+  border-radius:
+    18px;
 
-  padding: 32px 15px;
+  padding:
+    32px 15px;
 
-  text-align: center;
+  text-align:
+    center;
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
-  transition: .2s;
+  background:
+    rgba(255,255,255,.025);
+
+  transition:
+    .2s;
+
 }
 
 
@@ -223,271 +385,451 @@ body {
     #8b5cf6;
 
   background:
-    rgba(
-      139,
-      92,
-      246,
-      .08
-    );
+    rgba(124,58,237,.07);
+
 }
 
 
 .upload-icon {
 
-  font-size: 42px;
+  font-size:
+    40px;
 
-  margin-bottom: 8px;
+  margin-bottom:
+    9px;
+
+}
+
+
+.upload b {
+
+  font-size:
+    15px;
+
 }
 
 
 .upload small {
 
-  display: block;
+  display:
+    block;
 
-  color: #777;
+  margin-top:
+    7px;
 
-  margin-top: 7px;
+  color:
+    #727b8b;
+
+  font-size:
+    12px;
+
 }
 
 
-#imageInput {
+input[type="file"] {
 
-  display: none;
+  display:
+    none;
+
 }
 
 
-/* ==========================================
+/* =====================================================
    IMAGE GRID
-========================================== */
+===================================================== */
 
 .image-grid {
 
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
     repeat(4, 1fr);
 
-  gap: 10px;
+  gap:
+    10px;
 
-  margin-top: 18px;
+  margin-top:
+    16px;
+
 }
 
 
 .image-card {
 
-  position: relative;
+  position:
+    relative;
 
-  overflow: hidden;
+  overflow:
+    hidden;
 
-  border-radius: 13px;
+  border-radius:
+    14px;
 
-  background: #111;
+  background:
+    #111722;
 
   border:
     1px solid
-    #333;
+    rgba(255,255,255,.10);
+
 }
 
 
 .image-card img {
 
-  display: block;
+  display:
+    block;
 
-  width: 100%;
+  width:
+    100%;
 
-  aspect-ratio: 1;
+  aspect-ratio:
+    1 / 1;
 
-  object-fit: cover;
+  object-fit:
+    cover;
+
 }
 
 
 .image-label {
 
-  position: absolute;
+  position:
+    absolute;
 
-  top: 6px;
+  top:
+    7px;
 
-  left: 6px;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      .7
-    );
+  left:
+    7px;
 
   padding:
     4px 7px;
 
-  border-radius: 7px;
+  border-radius:
+    7px;
 
-  font-size: 10px;
+  background:
+    rgba(0,0,0,.68);
+
+  backdrop-filter:
+    blur(8px);
+
+  font-size:
+    10px;
+
+  font-weight:
+    600;
+
 }
 
 
 .remove {
 
-  position: absolute;
+  position:
+    absolute;
 
-  top: 5px;
+  top:
+    6px;
 
-  right: 5px;
+  right:
+    6px;
 
-  width: 27px;
+  width:
+    27px;
 
-  height: 27px;
+  height:
+    27px;
 
-  border: none;
+  border:
+    none;
 
-  border-radius: 50%;
+  border-radius:
+    50%;
+
+  color:
+    #fff;
 
   background:
     #ef4444;
 
-  color: white;
+  cursor:
+    pointer;
 
-  cursor: pointer;
+  font-size:
+    17px;
+
+  line-height:
+    27px;
+
 }
 
 
 .image-count {
 
-  text-align: center;
+  margin-top:
+    9px;
 
-  color: #777;
+  text-align:
+    center;
 
-  font-size: 12px;
+  color:
+    #697384;
 
-  margin-top: 10px;
+  font-size:
+    12px;
+
 }
 
 
-/* ==========================================
+/* =====================================================
    TEXTAREA
-========================================== */
+===================================================== */
 
 textarea {
 
-  width: 100%;
+  width:
+    100%;
 
-  min-height: 150px;
+  min-height:
+    145px;
 
-  margin-top: 20px;
+  margin-top:
+    18px;
 
-  padding: 16px;
+  padding:
+    15px;
 
-  resize: vertical;
+  resize:
+    vertical;
 
-  border-radius: 15px;
+  outline:
+    none;
 
   border:
     1px solid
-    #444;
+    rgba(255,255,255,.12);
+
+  border-radius:
+    15px;
 
   background:
-    rgba(
-      0,
-      0,
-      0,
-      .35
-    );
+    rgba(0,0,0,.30);
 
-  color: white;
+  color:
+    #fff;
 
-  font-size: 15px;
+  font-family:
+    inherit;
 
-  line-height: 1.5;
+  font-size:
+    14px;
 
-  outline: none;
+  line-height:
+    1.6;
+
+  transition:
+    .2s;
+
+}
+
+
+textarea::placeholder {
+  color: #5f6877;
 }
 
 
 textarea:focus {
 
   border-color:
-    #8b5cf6;
+    rgba(139,92,246,.75);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(124,58,237,.10);
+
 }
 
 
-/* ==========================================
+/* =====================================================
+   PROMPT TOOLS
+===================================================== */
+
+.prompt-tools {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    7px;
+
+  margin-top:
+    9px;
+
+}
+
+
+.prompt-chip {
+
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  border-radius:
+    9px;
+
+  background:
+    rgba(255,255,255,.045);
+
+  color:
+    #9da5b4;
+
+  font-size:
+    11px;
+
+  cursor:
+    pointer;
+
+}
+
+
+.prompt-chip:hover {
+
+  color:
+    white;
+
+  border-color:
+    rgba(139,92,246,.5);
+
+}
+
+
+/* =====================================================
    OPTIONS
-========================================== */
+===================================================== */
 
 .options {
 
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
     repeat(3, 1fr);
 
-  gap: 10px;
+  gap:
+    10px;
 
-  margin-top: 15px;
+  margin-top:
+    15px;
+
 }
 
 
 .option {
 
-  padding: 10px;
-
-  border-radius: 10px;
+  padding:
+    11px;
 
   border:
     1px solid
-    #333;
+    rgba(255,255,255,.09);
+
+  border-radius:
+    12px;
 
   background:
-    rgba(
-      0,
-      0,
-      0,
-      .3
-    );
+    rgba(0,0,0,.20);
 
-  color: #aaa;
 }
 
 
 .option label {
 
-  display: block;
+  display:
+    block;
 
-  font-size: 11px;
+  margin-bottom:
+    7px;
 
-  margin-bottom: 6px;
+  color:
+    #727b8b;
+
+  font-size:
+    10px;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    .4px;
+
 }
 
 
 .option select {
 
-  width: 100%;
+  width:
+    100%;
 
-  background: #111;
+  padding:
+    5px 2px;
 
-  color: white;
+  border:
+    none;
 
-  border: none;
+  outline:
+    none;
 
-  outline: none;
+  background:
+    transparent;
+
+  color:
+    white;
+
+  font-size:
+    13px;
+
 }
 
 
-/* ==========================================
-   BUTTON
-========================================== */
+.option select option {
+
+  background:
+    #111722;
+
+  color:
+    white;
+
+}
+
+
+/* =====================================================
+   GENERATE BUTTON
+===================================================== */
 
 .generate {
 
-  width: 100%;
+  width:
+    100%;
 
-  margin-top: 18px;
+  min-height:
+    52px;
 
-  padding: 16px;
+  margin-top:
+    17px;
 
-  border: none;
+  border:
+    none;
 
-  border-radius: 14px;
+  border-radius:
+    14px;
 
   background:
     linear-gradient(
@@ -496,57 +838,96 @@ textarea:focus {
       #4f46e5
     );
 
-  color: white;
+  color:
+    white;
 
-  font-size: 16px;
+  font-size:
+    15px;
 
-  font-weight: bold;
+  font-weight:
+    750;
 
-  cursor: pointer;
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 10px 30px
+    rgba(79,70,229,.22);
+
+  transition:
+    .2s;
+
+}
+
+
+.generate:hover:not(:disabled) {
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 14px 35px
+    rgba(79,70,229,.30);
+
 }
 
 
 .generate:disabled {
 
-  opacity: .5;
+  opacity:
+    .55;
 
-  cursor: not-allowed;
+  cursor:
+    not-allowed;
+
+  transform:
+    none;
+
 }
 
 
-/* ==========================================
+/* =====================================================
    LOADING
-========================================== */
+===================================================== */
 
 .loading {
 
-  display: none;
+  display:
+    none;
 
-  text-align: center;
+  text-align:
+    center;
 
-  padding: 25px;
+  padding:
+    28px 10px 8px;
+
 }
 
 
 .spinner {
 
-  width: 40px;
+  width:
+    40px;
 
-  height: 40px;
+  height:
+    40px;
+
+  margin:
+    auto;
 
   border:
     4px solid
-    #333;
+    rgba(255,255,255,.10);
 
   border-top-color:
     #8b5cf6;
 
-  border-radius: 50%;
+  border-radius:
+    50%;
 
   animation:
-    spin 1s linear infinite;
+    spin 0.8s linear infinite;
 
-  margin: auto;
 }
 
 
@@ -560,260 +941,717 @@ textarea:focus {
 }
 
 
-/* ==========================================
-   ERROR
-========================================== */
+.loading-title {
 
-.error {
+  margin-top:
+    12px;
 
-  display: none;
+  font-size:
+    14px;
 
-  margin-top: 15px;
+  font-weight:
+    600;
 
-  padding: 13px;
-
-  border-radius: 11px;
-
-  color: #ff8a8a;
-
-  background:
-    rgba(
-      255,
-      0,
-      0,
-      .13
-    );
-
-  border:
-    1px solid
-    rgba(
-      255,
-      0,
-      0,
-      .3
-    );
 }
 
 
-/* ==========================================
+.loading-subtitle {
+
+  margin-top:
+    5px;
+
+  color:
+    #666f80;
+
+  font-size:
+    11px;
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error {
+
+  display:
+    none;
+
+  margin-top:
+    14px;
+
+  padding:
+    13px 14px;
+
+  border:
+    1px solid
+    rgba(239,68,68,.28);
+
+  border-radius:
+    12px;
+
+  background:
+    rgba(239,68,68,.10);
+
+  color:
+    #ff9999;
+
+  font-size:
+    13px;
+
+  line-height:
+    1.5;
+
+}
+
+
+/* =====================================================
    RESULT
-========================================== */
+===================================================== */
 
 .result {
 
-  display: none;
+  display:
+    none;
 
-  margin-top: 25px;
+  margin-top:
+    25px;
+
 }
 
 
 .result-title {
 
-  font-size: 20px;
+  display:
+    flex;
 
-  margin-bottom: 12px;
+  align-items:
+    center;
+
+  gap:
+    8px;
+
+  margin-bottom:
+    12px;
+
+  font-size:
+    18px;
+
+  font-weight:
+    700;
+
+}
+
+
+.result-image-wrapper {
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:
+    17px;
+
+  background:
+    #05070b;
+
 }
 
 
 .result img {
 
-  display: block;
+  display:
+    block;
 
-  width: 100%;
+  width:
+    100%;
 
-  max-height: 750px;
+  max-height:
+    800px;
 
-  object-fit: contain;
+  object-fit:
+    contain;
 
-  border-radius: 17px;
+  cursor:
+    pointer;
 
-  background: #111;
-
-  cursor: pointer;
 }
 
 
 .result video {
 
-  width: 100%;
+  display:
+    block;
 
-  border-radius: 17px;
+  width:
+    100%;
 
-  background: black;
+  max-height:
+    750px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:
+    17px;
+
+  background:
+    #000;
+
 }
 
 
-/* ==========================================
+/* =====================================================
    ACTIONS
-========================================== */
+===================================================== */
 
 .actions {
 
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
     1fr 1fr;
 
-  gap: 10px;
+  gap:
+    9px;
 
-  margin-top: 12px;
+  margin-top:
+    11px;
+
 }
 
 
 .action {
 
-  display: block;
+  min-height:
+    45px;
 
-  padding: 13px;
+  display:
+    flex;
 
-  border: none;
+  align-items:
+    center;
 
-  border-radius: 11px;
+  justify-content:
+    center;
 
-  text-align: center;
+  border:
+    none;
 
-  text-decoration: none;
+  border-radius:
+    11px;
 
-  cursor: pointer;
+  background:
+    #16a34a;
 
-  color: white;
+  color:
+    #fff;
 
-  background: #16a34a;
+  text-decoration:
+    none;
 
-  font-weight: bold;
+  font-size:
+    13px;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+
 }
 
 
 .action.secondary {
 
   background:
-    #333;
+    #30343c;
+
 }
 
 
-/* ==========================================
+.action.animate {
+
+  grid-column:
+    1 / -1;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #2563eb
+    );
+
+}
+
+
+.action:hover {
+
+  filter:
+    brightness(1.08);
+
+}
+
+
+/* =====================================================
+   VIDEO IMAGE PREVIEW
+===================================================== */
+
+.video-input {
+
+  display:
+    none;
+
+  position:
+    relative;
+
+  margin-top:
+    13px;
+
+  padding:
+    8px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  border-radius:
+    15px;
+
+  background:
+    rgba(0,0,0,.25);
+
+}
+
+
+.video-input img {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  max-height:
+    320px;
+
+  object-fit:
+    contain;
+
+  border-radius:
+    10px;
+
+}
+
+
+.video-input-remove {
+
+  position:
+    absolute;
+
+  top:
+    15px;
+
+  right:
+    15px;
+
+  width:
+    30px;
+
+  height:
+    30px;
+
+  border:
+    none;
+
+  border-radius:
+    50%;
+
+  background:
+    #ef4444;
+
+  color:
+    white;
+
+  cursor:
+    pointer;
+
+}
+
+
+/* =====================================================
+   FREE NOTICE
+===================================================== */
+
+.free-notice {
+
+  margin-top:
+    13px;
+
+  padding:
+    11px 13px;
+
+  border:
+    1px solid
+    rgba(34,197,94,.18);
+
+  border-radius:
+    11px;
+
+  background:
+    rgba(34,197,94,.06);
+
+  color:
+    #7bd99b;
+
+  font-size:
+    11px;
+
+  line-height:
+    1.5;
+
+}
+
+
+/* =====================================================
    HISTORY
-========================================== */
+===================================================== */
 
 .history {
 
-  margin-top: 25px;
+  display:
+    none;
+
+  margin-top:
+    28px;
+
 }
 
 
-.history h3 {
+.history-header {
 
-  margin-bottom: 12px;
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  margin-bottom:
+    12px;
+
+}
+
+
+.history-header h3 {
+
+  font-size:
+    17px;
+
+}
+
+
+.clear-history {
+
+  padding:
+    6px 9px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  border-radius:
+    8px;
+
+  background:
+    transparent;
+
+  color:
+    #777f8e;
+
+  font-size:
+    10px;
+
+  cursor:
+    pointer;
+
 }
 
 
 .history-grid {
 
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
     repeat(4, 1fr);
 
-  gap: 8px;
+  gap:
+    9px;
+
 }
 
 
 .history-item {
 
-  border-radius: 10px;
+  position:
+    relative;
 
-  overflow: hidden;
+  overflow:
+    hidden;
 
-  cursor: pointer;
+  border-radius:
+    11px;
 
-  background: #111;
+  background:
+    #111722;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  cursor:
+    pointer;
+
 }
 
 
 .history-item img {
 
-  width: 100%;
+  display:
+    block;
 
-  aspect-ratio: 1;
+  width:
+    100%;
 
-  object-fit: cover;
+  aspect-ratio:
+    1 / 1;
+
+  object-fit:
+    cover;
+
+  transition:
+    .2s;
+
 }
 
 
-/* ==========================================
-   MODAL
-========================================== */
+.history-item:hover img {
+
+  transform:
+    scale(1.04);
+
+}
+
+
+.history-number {
+
+  position:
+    absolute;
+
+  left:
+    5px;
+
+  bottom:
+    5px;
+
+  padding:
+    3px 6px;
+
+  border-radius:
+    6px;
+
+  background:
+    rgba(0,0,0,.7);
+
+  font-size:
+    9px;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN MODAL
+===================================================== */
 
 .modal {
 
-  display: none;
+  display:
+    none;
 
-  position: fixed;
+  position:
+    fixed;
 
-  inset: 0;
+  inset:
+    0;
 
-  z-index: 9999;
+  z-index:
+    99999;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
 
   background:
-    rgba(
-      0,
-      0,
-      0,
-      .94
-    );
+    rgba(0,0,0,.94);
 
-  align-items: center;
+  backdrop-filter:
+    blur(15px);
 
-  justify-content: center;
-
-  padding: 20px;
 }
 
 
 .modal img {
 
-  max-width: 96%;
+  max-width:
+    96vw;
 
-  max-height: 94%;
+  max-height:
+    92vh;
+
+  object-fit:
+    contain;
+
+  border-radius:
+    8px;
+
 }
 
 
-.close {
+.close-modal {
 
-  position: absolute;
+  position:
+    absolute;
 
-  top: 12px;
+  top:
+    10px;
 
-  right: 20px;
+  right:
+    18px;
 
-  font-size: 42px;
+  width:
+    45px;
 
-  cursor: pointer;
+  height:
+    45px;
+
+  border:
+    none;
+
+  background:
+    transparent;
+
+  color:
+    white;
+
+  font-size:
+    38px;
+
+  cursor:
+    pointer;
+
 }
 
 
-/* ==========================================
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer {
+
+  padding:
+    22px 0 5px;
+
+  text-align:
+    center;
+
+  color:
+    #444d5c;
+
+  font-size:
+    10px;
+
+}
+
+
+/* =====================================================
    MOBILE
-========================================== */
+===================================================== */
 
-@media(max-width:700px) {
+@media (max-width: 700px) {
 
   body {
 
     padding:
-      10px 8px;
+      10px 7px 35px;
+
+  }
+
+
+  .header {
+
+    padding:
+      15px 0 19px;
+
   }
 
 
   .header h1 {
 
-    font-size: 28px;
+    font-size:
+      29px;
+
+  }
+
+
+  .header p {
+
+    font-size:
+      12px;
+
   }
 
 
   .card {
 
-    padding: 16px;
+    padding:
+      14px;
+
+    border-radius:
+      19px;
+
+  }
+
+
+  .tabs {
+
+    margin-bottom:
+      12px;
+
+  }
+
+
+  .tab {
+
+    min-height:
+      43px;
+
+    font-size:
+      13px;
+
   }
 
 
@@ -821,13 +1659,7 @@ textarea:focus {
 
     grid-template-columns:
       repeat(2, 1fr);
-  }
 
-
-  .history-grid {
-
-    grid-template-columns:
-      repeat(3, 1fr);
   }
 
 
@@ -835,6 +1667,51 @@ textarea:focus {
 
     grid-template-columns:
       1fr;
+
+  }
+
+
+  .history-grid {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+  }
+
+
+  textarea {
+
+    min-height:
+      135px;
+
+  }
+
+
+  .actions {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+}
+
+
+@media (max-width: 400px) {
+
+  .header h1 {
+
+    font-size:
+      26px;
+
+  }
+
+
+  .action {
+
+    font-size:
+      11px;
+
   }
 
 }
@@ -850,26 +1727,26 @@ textarea:focus {
 <div class="container">
 
 
-<!-- ==========================================
+<!-- =====================================================
      HEADER
-========================================== -->
+===================================================== -->
 
-<div class="header">
+<header class="header">
 
   <h1>
     ✨ Rashid AI Studio
   </h1>
 
   <p>
-    Create realistic images and cinematic videos
+    Create realistic images & cinematic videos
   </p>
 
-</div>
+</header>
 
 
-<!-- ==========================================
+<!-- =====================================================
      TABS
-========================================== -->
+===================================================== -->
 
 <div class="tabs">
 
@@ -891,22 +1768,37 @@ textarea:focus {
 </div>
 
 
-<!-- ==========================================
-     CARD
-========================================== -->
+<!-- =====================================================
+     MAIN CARD
+===================================================== -->
 
 <div class="card">
 
 
-<!-- =================================================
+<!-- =====================================================
      IMAGE MODE
-================================================= -->
+===================================================== -->
 
-<div
+<section
   class="mode active"
   id="imageMode"
 >
 
+
+<div class="section-title">
+
+  <h2>
+    🖼️ AI Image Editor
+  </h2>
+
+  <span class="badge">
+    FLUX 9B
+  </span>
+
+</div>
+
+
+<!-- UPLOAD -->
 
 <label
   class="upload"
@@ -936,6 +1828,8 @@ textarea:focus {
 >
 
 
+<!-- IMAGE GRID -->
+
 <div
   class="image-grid"
   id="imageGrid"
@@ -950,14 +1844,57 @@ textarea:focus {
 </div>
 
 
+<!-- PROMPT -->
+
 <textarea
   id="imagePrompt"
-  placeholder="Describe what you want...
+  placeholder="Describe exactly what you want...
 
 Example:
-Take the person from image 1 and place them beside the person from image 2. Keep the environment from image 1. Use the clothing from image 3. Make everything look like one authentic photograph with natural lighting, realistic shadows, correct perspective and realistic skin texture."
+
+Take the person from image 1 and place them beside the person from image 2. Use the clothing style from image 3. Keep the environment from image 1. Make everything look like one real photograph with matching lighting, shadows, perspective and camera quality."
 ></textarea>
 
+
+<!-- PROMPT SHORTCUTS -->
+
+<div class="prompt-tools">
+
+  <button
+    class="prompt-chip"
+    data-prompt="Make everything look like one realistic photograph with natural lighting, realistic shadows and correct perspective."
+  >
+    📸 Photorealistic
+  </button>
+
+
+  <button
+    class="prompt-chip"
+    data-prompt="Preserve the person's face, identity, hairstyle and body proportions. Do not change their facial appearance."
+  >
+    👤 Preserve Face
+  </button>
+
+
+  <button
+    class="prompt-chip"
+    data-prompt="Natural golden-hour lighting, realistic skin texture, cinematic depth of field and professional camera quality."
+  >
+    🌅 Cinematic
+  </button>
+
+
+  <button
+    class="prompt-chip"
+    data-prompt="Make the final image look like an authentic smartphone photograph, not CGI or an illustration."
+  >
+    📱 Smartphone
+  </button>
+
+</div>
+
+
+<!-- GENERATE -->
 
 <button
   class="generate"
@@ -967,6 +1904,8 @@ Take the person from image 1 and place them beside the person from image 2. Keep
 </button>
 
 
+<!-- LOADING -->
+
 <div
   class="loading"
   id="imageLoading"
@@ -974,12 +1913,18 @@ Take the person from image 1 and place them beside the person from image 2. Keep
 
   <div class="spinner"></div>
 
-  <p style="margin-top:12px;color:#888;">
+  <div class="loading-title">
     Creating your image...
-  </p>
+  </div>
+
+  <div class="loading-subtitle">
+    FLUX 2 Klein 9B is processing your references
+  </div>
 
 </div>
 
+
+<!-- ERROR -->
 
 <div
   class="error"
@@ -987,20 +1932,26 @@ Take the person from image 1 and place them beside the person from image 2. Keep
 ></div>
 
 
+<!-- RESULT -->
+
 <div
   class="result"
   id="imageResult"
 >
 
   <div class="result-title">
-    ✨ Result
+    ✨ Generated Result
   </div>
 
 
-  <img
-    id="generatedImage"
-    alt="Generated image"
-  >
+  <div class="result-image-wrapper">
+
+    <img
+      id="generatedImage"
+      alt="Generated AI image"
+    >
+
+  </div>
 
 
   <div class="actions">
@@ -1008,7 +1959,7 @@ Take the person from image 1 and place them beside the person from image 2. Keep
     <a
       class="action"
       id="imageDownload"
-      download="rashid-ai.png"
+      download="rashid-ai-image.png"
     >
       ⬇️ Download
     </a>
@@ -1021,20 +1972,41 @@ Take the person from image 1 and place them beside the person from image 2. Keep
       🔄 Edit Again
     </button>
 
+
+    <button
+      class="action animate"
+      id="animateImage"
+    >
+      🎬 Animate This Image — FREE
+    </button>
+
   </div>
 
 </div>
 
 
+<!-- HISTORY -->
+
 <div
   class="history"
   id="historySection"
-  style="display:none;"
 >
 
-  <h3>
-    🕘 History
-  </h3>
+  <div class="history-header">
+
+    <h3>
+      🕘 History
+    </h3>
+
+    <button
+      class="clear-history"
+      id="clearHistory"
+    >
+      Clear
+    </button>
+
+  </div>
+
 
   <div
     class="history-grid"
@@ -1043,54 +2015,148 @@ Take the person from image 1 and place them beside the person from image 2. Keep
 
 </div>
 
-</div>
+
+</section>
 
 
-<!-- =================================================
+<!-- =====================================================
      VIDEO MODE
-================================================= -->
+===================================================== -->
 
-<div
+<section
   class="mode"
   id="videoMode"
 >
 
+
+<div class="section-title">
+
+  <h2>
+    🎬 AI Video Generator
+  </h2>
+
+  <span class="badge">
+    FREE
+  </span>
+
+</div>
+
+
+<div class="free-notice">
+
+  🆓 Free video generation uses Hugging Face
+  ZeroGPU. Availability and daily GPU quota
+  depend on Hugging Face.
+
+</div>
+
+
+<!-- OPTIONAL IMAGE -->
+
+<label
+  class="upload"
+  for="videoImageInput"
+  style="margin-top:15px;"
+>
+
+  <div class="upload-icon">
+    🖼️
+  </div>
+
+  <b>
+    Add an image to animate
+  </b>
+
+  <small>
+    Optional — leave empty for text-to-video
+  </small>
+
+</label>
+
+
+<input
+  type="file"
+  id="videoImageInput"
+  accept="image/png,image/jpeg,image/webp"
+>
+
+
+<!-- VIDEO IMAGE PREVIEW -->
+
+<div
+  class="video-input"
+  id="videoInputContainer"
+>
+
+  <img
+    id="videoInputPreview"
+    alt="Video input"
+  >
+
+
+  <button
+    class="video-input-remove"
+    id="removeVideoImage"
+  >
+    ×
+  </button>
+
+</div>
+
+
+<!-- VIDEO PROMPT -->
 
 <textarea
   id="videoPrompt"
   placeholder="Describe your video...
 
 Example:
-A young man standing in a beautiful garden smiles naturally at the camera. His hair moves gently in the breeze. The camera slowly pushes forward. Natural sunlight, realistic skin texture, cinematic smartphone footage, subtle handheld movement."
+
+A young man looks naturally at the camera and slowly smiles. A gentle breeze moves his hair and shirt. The camera slowly moves forward. Natural daylight, realistic skin texture, cinematic smartphone footage, subtle handheld movement, photorealistic."
 ></textarea>
 
 
+<!-- VIDEO PROMPT SHORTCUTS -->
+
+<div class="prompt-tools">
+
+  <button
+    class="prompt-chip video-chip"
+    data-prompt="Photorealistic cinematic video, natural movement, realistic lighting, realistic skin texture, authentic camera footage."
+  >
+    📸 Realistic
+  </button>
+
+
+  <button
+    class="prompt-chip video-chip"
+    data-prompt="The camera slowly moves forward toward the subject with smooth cinematic movement and natural depth of field."
+  >
+    🎥 Camera Push
+  </button>
+
+
+  <button
+    class="prompt-chip video-chip"
+    data-prompt="A gentle breeze naturally moves the subject's hair and clothing while the subject remains realistic and consistent."
+  >
+    🌬️ Wind
+  </button>
+
+
+  <button
+    class="prompt-chip video-chip"
+    data-prompt="Subtle natural facial movement, realistic blinking and a gentle natural smile."
+  >
+    😊 Face Motion
+  </button>
+
+</div>
+
+
+<!-- VIDEO OPTIONS -->
+
 <div class="options">
-
-
-  <div class="option">
-
-    <label>
-      Resolution
-    </label>
-
-    <select id="videoResolution">
-
-      <option value="480P">
-        480P
-      </option>
-
-      <option value="720P">
-        720P
-      </option>
-
-      <option value="1080P">
-        1080P
-      </option>
-
-    </select>
-
-  </div>
 
 
   <div class="option">
@@ -1101,28 +2167,16 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 
     <select id="videoRatio">
 
-      <option value="9:16">
-        9:16
+      <option value="480x832">
+        9:16 Portrait
       </option>
 
-      <option value="16:9">
-        16:9
+      <option value="832x480">
+        16:9 Landscape
       </option>
 
-      <option value="1:1">
-        1:1
-      </option>
-
-      <option value="4:3">
-        4:3
-      </option>
-
-      <option value="3:4">
-        3:4
-      </option>
-
-      <option value="adaptive">
-        Adaptive
+      <option value="640x640">
+        1:1 Square
       </option>
 
     </select>
@@ -1138,20 +2192,45 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 
     <select id="videoDuration">
 
+      <option value="3">
+        3 seconds
+      </option>
+
+      <option value="2">
+        2 seconds
+      </option>
+
+      <option value="4">
+        4 seconds
+      </option>
+
       <option value="5">
         5 seconds
       </option>
 
-      <option value="8">
-        8 seconds
+    </select>
+
+  </div>
+
+
+  <div class="option">
+
+    <label>
+      Mode
+    </label>
+
+    <select id="videoModeType">
+
+      <option value="auto">
+        Auto
       </option>
 
-      <option value="10">
-        10 seconds
+      <option value="image">
+        Image → Video
       </option>
 
-      <option value="15">
-        15 seconds
+      <option value="text">
+        Text → Video
       </option>
 
     </select>
@@ -1161,13 +2240,17 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 </div>
 
 
+<!-- GENERATE VIDEO -->
+
 <button
   class="generate"
   id="videoGenerate"
 >
-  🎬 Generate Video
+  🎬 Generate FREE Video
 </button>
 
+
+<!-- LOADING -->
 
 <div
   class="loading"
@@ -1176,12 +2259,18 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 
   <div class="spinner"></div>
 
-  <p style="margin-top:12px;color:#888;">
+  <div class="loading-title">
     Creating your video...
-  </p>
+  </div>
+
+  <div class="loading-subtitle">
+    Free ZeroGPU can take some time. Please wait.
+  </div>
 
 </div>
 
+
+<!-- ERROR -->
 
 <div
   class="error"
@@ -1189,13 +2278,15 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 ></div>
 
 
+<!-- VIDEO RESULT -->
+
 <div
   class="result"
   id="videoResult"
 >
 
   <div class="result-title">
-    🎬 Result
+    🎬 Generated Video
   </div>
 
 
@@ -1213,40 +2304,64 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
       id="videoDownload"
       target="_blank"
       rel="noopener"
+      download
     >
-      ⬇️ Open / Download
+      ⬇️ Download Video
     </a>
+
+
+    <button
+      class="action secondary"
+      id="videoNew"
+    >
+      🔄 New Video
+    </button>
 
   </div>
 
 </div>
 
+
+</section>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="footer">
+
+  Rashid AI Studio • AI generated content
+
 </div>
 
 
 </div>
 
-</div>
 
-
-<!-- ==========================================
-     MODAL
-========================================== -->
+<!-- =====================================================
+     FULLSCREEN MODAL
+===================================================== -->
 
 <div
   class="modal"
-  id="modal"
+  id="imageModal"
 >
 
-  <div
-    class="close"
+  <button
+    class="close-modal"
     id="closeModal"
   >
     ×
-  </div>
+  </button>
+
 
   <img
     id="modalImage"
+    alt="Fullscreen generated image"
   >
 
 </div>
@@ -1254,23 +2369,23 @@ A young man standing in a beautiful garden smiles naturally at the camera. His h
 
 <script>
 
-
-// =================================================
-// CONFIG
-// =================================================
+/* =====================================================
+   CONFIG
+===================================================== */
 
 const API =
   "https://image-api.itsmerashidkp.workers.dev";
 
 
-// =================================================
-// ELEMENTS
-// =================================================
+/* =====================================================
+   TABS
+===================================================== */
 
 const tabs =
   document.querySelectorAll(
     ".tab"
   );
+
 
 const modes =
   document.querySelectorAll(
@@ -1278,32 +2393,32 @@ const modes =
   );
 
 
-// =================================================
-// TAB SWITCH
-// =================================================
-
 tabs.forEach(tab => {
 
   tab.addEventListener(
     "click",
     () => {
 
-      const mode =
+      const modeId =
         tab.dataset.mode;
 
 
-      tabs.forEach(t =>
+      tabs.forEach(t => {
+
         t.classList.remove(
           "active"
-        )
-      );
+        );
+
+      });
 
 
-      modes.forEach(m =>
-        m.classList.remove(
+      modes.forEach(mode => {
+
+        mode.classList.remove(
           "active"
-        )
-      );
+        );
+
+      });
 
 
       tab.classList.add(
@@ -1312,7 +2427,9 @@ tabs.forEach(tab => {
 
 
       document
-        .getElementById(mode)
+        .getElementById(
+          modeId
+        )
         .classList.add(
           "active"
         );
@@ -1323,69 +2440,87 @@ tabs.forEach(tab => {
 });
 
 
-// =================================================
-// IMAGE VARIABLES
-// =================================================
+/* =====================================================
+   IMAGE ELEMENTS
+===================================================== */
 
 const imageInput =
   document.getElementById(
     "imageInput"
   );
 
+
 const imageGrid =
   document.getElementById(
     "imageGrid"
   );
+
 
 const imageCount =
   document.getElementById(
     "imageCount"
   );
 
+
 const imagePrompt =
   document.getElementById(
     "imagePrompt"
   );
+
 
 const imageGenerate =
   document.getElementById(
     "imageGenerate"
   );
 
+
 const imageLoading =
   document.getElementById(
     "imageLoading"
   );
+
 
 const imageError =
   document.getElementById(
     "imageError"
   );
 
+
 const imageResult =
   document.getElementById(
     "imageResult"
   );
+
 
 const generatedImage =
   document.getElementById(
     "generatedImage"
   );
 
+
 const imageDownload =
   document.getElementById(
     "imageDownload"
   );
+
 
 const editAgain =
   document.getElementById(
     "editAgain"
   );
 
+
+const animateImage =
+  document.getElementById(
+    "animateImage"
+  );
+
+
 const historySection =
   document.getElementById(
     "historySection"
   );
+
 
 const historyGrid =
   document.getElementById(
@@ -1393,26 +2528,37 @@ const historyGrid =
   );
 
 
+const clearHistory =
+  document.getElementById(
+    "clearHistory"
+  );
+
+
 let selectedFiles = [];
 
 let generatedImageURL = null;
 
-let history = [];
+let imageHistory = [];
 
 
-// =================================================
-// IMAGE SELECT
-// =================================================
+/* =====================================================
+   IMAGE SELECT
+===================================================== */
 
 imageInput.addEventListener(
   "change",
   () => {
 
-    addImages(
+    const files =
       Array.from(
         imageInput.files
-      )
+      );
+
+
+    addImages(
+      files
     );
+
 
     imageInput.value = "";
 
@@ -1420,11 +2566,13 @@ imageInput.addEventListener(
 );
 
 
-// =================================================
-// ADD IMAGES
-// =================================================
+/* =====================================================
+   ADD IMAGES
+===================================================== */
 
-function addImages(files) {
+function addImages(
+  files
+) {
 
   for (
     const file of files
@@ -1435,10 +2583,11 @@ function addImages(files) {
     ) {
 
       showImageError(
-        "Maximum 4 images allowed."
+        "Maximum 4 reference images allowed."
       );
 
       break;
+
     }
 
 
@@ -1449,6 +2598,7 @@ function addImages(files) {
     ) {
 
       continue;
+
     }
 
 
@@ -1464,13 +2614,14 @@ function addImages(files) {
 }
 
 
-// =================================================
-// RENDER REFERENCES
-// =================================================
+/* =====================================================
+   RENDER IMAGES
+===================================================== */
 
 function renderImages() {
 
-  imageGrid.innerHTML = "";
+  imageGrid.innerHTML =
+    "";
 
 
   selectedFiles.forEach(
@@ -1480,6 +2631,7 @@ function renderImages() {
         document.createElement(
           "div"
         );
+
 
       card.className =
         "image-card";
@@ -1538,12 +2690,18 @@ function renderImages() {
 
 
       remove.onclick =
-        () => {
+        event => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
 
           selectedFiles.splice(
             index,
             1
           );
+
 
           renderImages();
 
@@ -1554,9 +2712,11 @@ function renderImages() {
         img
       );
 
+
       card.appendChild(
         label
       );
+
 
       card.appendChild(
         remove
@@ -1577,14 +2737,19 @@ function renderImages() {
 }
 
 
-// =================================================
-// RESIZE
-// =================================================
+/* =====================================================
+   RESIZE IMAGE
+===================================================== */
 
-function resizeImage(file) {
+function resizeImage(
+  file
+) {
 
   return new Promise(
-    (resolve, reject) => {
+    (
+      resolve,
+      reject
+    ) => {
 
       const reader =
         new FileReader();
@@ -1606,6 +2771,7 @@ function resizeImage(file) {
 
               let width =
                 img.naturalWidth;
+
 
               let height =
                 img.naturalHeight;
@@ -1646,6 +2812,7 @@ function resizeImage(file) {
               canvas.width =
                 width;
 
+
               canvas.height =
                 height;
 
@@ -1672,11 +2839,12 @@ function resizeImage(file) {
 
                     reject(
                       new Error(
-                        "Image conversion failed."
+                        "Could not convert image."
                       )
                     );
 
                     return;
+
                   }
 
 
@@ -1685,8 +2853,11 @@ function resizeImage(file) {
                   );
 
                 },
+
                 "image/jpeg",
-                .9
+
+                .90
+
               );
 
             };
@@ -1732,9 +2903,9 @@ function resizeImage(file) {
 }
 
 
-// =================================================
-// IMAGE GENERATE
-// =================================================
+/* =====================================================
+   IMAGE GENERATION
+===================================================== */
 
 imageGenerate.onclick =
   async () => {
@@ -1751,6 +2922,7 @@ imageGenerate.onclick =
       );
 
       return;
+
     }
 
 
@@ -1765,14 +2937,17 @@ imageGenerate.onclick =
       );
 
       return;
+
     }
 
 
     imageGenerate.disabled =
       true;
 
+
     imageLoading.style.display =
       "block";
+
 
     imageResult.style.display =
       "none";
@@ -1820,11 +2995,14 @@ imageGenerate.onclick =
 
             body:
               form
+
           }
         );
 
 
-      if (!response.ok) {
+      if (
+        !response.ok
+      ) {
 
         let message =
           "Image generation failed.";
@@ -1897,9 +3075,7 @@ imageGenerate.onclick =
         "block";
 
 
-      // Add history
-
-      addHistory(
+      addImageHistory(
         generatedImageURL,
         prompt
       );
@@ -1907,9 +3083,10 @@ imageGenerate.onclick =
 
       imageResult.scrollIntoView({
         behavior:
-          "smooth"
+          "smooth",
+        block:
+          "start"
       });
-
 
     }
     catch (error) {
@@ -1929,6 +3106,7 @@ imageGenerate.onclick =
       imageGenerate.disabled =
         false;
 
+
       imageLoading.style.display =
         "none";
 
@@ -1937,9 +3115,9 @@ imageGenerate.onclick =
   };
 
 
-// =================================================
-// EDIT AGAIN
-// =================================================
+/* =====================================================
+   EDIT AGAIN
+===================================================== */
 
 editAgain.onclick =
   async () => {
@@ -1947,7 +3125,9 @@ editAgain.onclick =
     if (
       !generatedImage.src
     ) {
+
       return;
+
     }
 
 
@@ -1976,9 +3156,6 @@ editAgain.onclick =
         );
 
 
-      // Use generated result
-      // as Image 1
-
       selectedFiles =
         [file];
 
@@ -1987,13 +3164,12 @@ editAgain.onclick =
 
 
       imagePrompt.value =
-        "Edit this image again. Keep the subject and composition realistic. " +
-        "Make the requested changes while preserving natural lighting, " +
-        "realistic skin texture, perspective and photographic detail.";
+        "Edit this image again. Keep the subject, face, identity, composition and environment consistent. Make the requested changes while preserving realistic lighting, shadows, perspective, skin texture and photographic detail.";
 
 
       window.scrollTo({
-        top: 0,
+        top:
+          0,
         behavior:
           "smooth"
       });
@@ -2010,28 +3186,148 @@ editAgain.onclick =
   };
 
 
-// =================================================
-// HISTORY
-// =================================================
+/* =====================================================
+   ANIMATE GENERATED IMAGE
+===================================================== */
 
-function addHistory(
+animateImage.onclick =
+  async () => {
+
+    if (
+      !generatedImage.src
+    ) {
+
+      return;
+
+    }
+
+
+    try {
+
+      animateImage.disabled =
+        true;
+
+
+      const response =
+        await fetch(
+          generatedImage.src
+        );
+
+
+      const blob =
+        await response.blob();
+
+
+      videoImageFile =
+        new File(
+          [
+            blob
+          ],
+          "generated-image.jpg",
+          {
+            type:
+              "image/jpeg"
+          }
+        );
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => {
+
+          videoInputPreview.src =
+            reader.result;
+
+
+          videoInputContainer.style.display =
+            "block";
+
+        };
+
+
+      reader.readAsDataURL(
+        videoImageFile
+      );
+
+
+      videoPrompt.value =
+        `Animate this image naturally.
+
+Keep the person's identity, face, hairstyle, clothing, environment and composition consistent.
+
+Add subtle realistic movement.
+
+Natural blinking and facial movement.
+
+Gentle movement in the hair and clothing caused by a light breeze.
+
+Slow cinematic camera movement.
+
+Realistic lighting and shadows.
+
+Photorealistic video, natural motion, authentic camera footage, no CGI appearance.`;
+
+
+      document
+        .querySelector(
+          '[data-mode="videoMode"]'
+        )
+        .click();
+
+
+      window.scrollTo({
+        top:
+          0,
+        behavior:
+          "smooth"
+      });
+
+    }
+    catch (error) {
+
+      showImageError(
+        "Could not prepare the image for video."
+      );
+
+    }
+    finally {
+
+      animateImage.disabled =
+        false;
+
+    }
+
+  };
+
+
+/* =====================================================
+   IMAGE HISTORY
+===================================================== */
+
+function addImageHistory(
   url,
   prompt
 ) {
 
-  history.unshift({
-    url,
-    prompt
+  imageHistory.unshift({
+
+    url:
+      url,
+
+    prompt:
+      prompt
+
   });
 
 
-  // Maximum 8
-
   if (
-    history.length > 8
+    imageHistory.length > 8
   ) {
 
-    history.pop();
+    imageHistory.pop();
 
   }
 
@@ -2043,11 +3339,27 @@ function addHistory(
 
 function renderHistory() {
 
-  historyGrid.innerHTML = "";
+  historyGrid.innerHTML =
+    "";
 
 
-  history.forEach(
-    item => {
+  if (
+    imageHistory.length === 0
+  ) {
+
+    historySection.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  imageHistory.forEach(
+    (
+      item,
+      index
+    ) => {
 
       const div =
         document.createElement(
@@ -2057,6 +3369,10 @@ function renderHistory() {
 
       div.className =
         "history-item";
+
+
+      div.title =
+        item.prompt;
 
 
       const img =
@@ -2069,28 +3385,55 @@ function renderHistory() {
         item.url;
 
 
-      img.title =
-        item.prompt;
+      const number =
+        document.createElement(
+          "div"
+        );
 
 
-      img.onclick =
-        () => {
+      number.className =
+        "history-number";
 
-          generatedImage.src =
-            item.url;
 
-          imageDownload.href =
-            item.url;
-
-          imageResult.style.display =
-            "block";
-
-        };
+      number.textContent =
+        `#${index + 1}`;
 
 
       div.appendChild(
         img
       );
+
+
+      div.appendChild(
+        number
+      );
+
+
+      div.onclick =
+        () => {
+
+          generatedImage.src =
+            item.url;
+
+
+          imageDownload.href =
+            item.url;
+
+
+          imagePrompt.value =
+            item.prompt;
+
+
+          imageResult.style.display =
+            "block";
+
+
+          imageResult.scrollIntoView({
+            behavior:
+              "smooth"
+          });
+
+        };
 
 
       historyGrid.appendChild(
@@ -2102,16 +3445,35 @@ function renderHistory() {
 
 
   historySection.style.display =
-    history.length
-      ? "block"
-      : "none";
+    "block";
 
 }
 
 
-// =================================================
-// IMAGE ERRORS
-// =================================================
+/* =====================================================
+   CLEAR HISTORY
+===================================================== */
+
+clearHistory.onclick =
+  () => {
+
+    imageHistory =
+      [];
+
+
+    historyGrid.innerHTML =
+      "";
+
+
+    historySection.style.display =
+      "none";
+
+  };
+
+
+/* =====================================================
+   IMAGE ERRORS
+===================================================== */
 
 function showImageError(
   message
@@ -2119,6 +3481,7 @@ function showImageError(
 
   imageError.textContent =
     "❌ " + message;
+
 
   imageError.style.display =
     "block";
@@ -2134,54 +3497,108 @@ function hideImageError() {
 }
 
 
-// =================================================
-// VIDEO VARIABLES
-// =================================================
+/* =====================================================
+   PROMPT CHIPS
+===================================================== */
+
+document
+  .querySelectorAll(
+    ".prompt-chip:not(.video-chip)"
+  )
+  .forEach(
+    chip => {
+
+      chip.addEventListener(
+        "click",
+        () => {
+
+          const text =
+            chip.dataset.prompt;
+
+
+          if (
+            imagePrompt.value.trim()
+          ) {
+
+            imagePrompt.value +=
+              "\n\n" +
+              text;
+
+          }
+          else {
+
+            imagePrompt.value =
+              text;
+
+          }
+
+
+          imagePrompt.focus();
+
+        }
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   VIDEO ELEMENTS
+===================================================== */
 
 const videoPrompt =
   document.getElementById(
     "videoPrompt"
   );
 
-const videoResolution =
-  document.getElementById(
-    "videoResolution"
-  );
 
 const videoRatio =
   document.getElementById(
     "videoRatio"
   );
 
+
 const videoDuration =
   document.getElementById(
     "videoDuration"
   );
+
+
+const videoModeType =
+  document.getElementById(
+    "videoModeType"
+  );
+
 
 const videoGenerate =
   document.getElementById(
     "videoGenerate"
   );
 
+
 const videoLoading =
   document.getElementById(
     "videoLoading"
   );
+
 
 const videoError =
   document.getElementById(
     "videoError"
   );
 
+
 const videoResult =
   document.getElementById(
     "videoResult"
   );
 
+
 const generatedVideo =
   document.getElementById(
     "generatedVideo"
   );
+
 
 const videoDownload =
   document.getElementById(
@@ -2189,9 +3606,176 @@ const videoDownload =
   );
 
 
-// =================================================
-// VIDEO GENERATE
-// =================================================
+const videoImageInput =
+  document.getElementById(
+    "videoImageInput"
+  );
+
+
+const videoInputContainer =
+  document.getElementById(
+    "videoInputContainer"
+  );
+
+
+const videoInputPreview =
+  document.getElementById(
+    "videoInputPreview"
+  );
+
+
+const removeVideoImage =
+  document.getElementById(
+    "removeVideoImage"
+  );
+
+
+const videoNew =
+  document.getElementById(
+    "videoNew"
+  );
+
+
+let videoImageFile =
+  null;
+
+
+/* =====================================================
+   VIDEO IMAGE INPUT
+===================================================== */
+
+videoImageInput.addEventListener(
+  "change",
+  () => {
+
+    const file =
+      videoImageInput.files[0];
+
+
+    if (!file) {
+
+      return;
+
+    }
+
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+
+      showVideoError(
+        "Please select an image."
+      );
+
+      return;
+
+    }
+
+
+    videoImageFile =
+      file;
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      () => {
+
+        videoInputPreview.src =
+          reader.result;
+
+
+        videoInputContainer.style.display =
+          "block";
+
+      };
+
+
+    reader.readAsDataURL(
+      file
+    );
+
+  }
+);
+
+
+/* =====================================================
+   REMOVE VIDEO IMAGE
+===================================================== */
+
+removeVideoImage.onclick =
+  () => {
+
+    videoImageFile =
+      null;
+
+
+    videoImageInput.value =
+      "";
+
+
+    videoInputPreview.src =
+      "";
+
+
+    videoInputContainer.style.display =
+      "none";
+
+  };
+
+
+/* =====================================================
+   VIDEO PROMPT CHIPS
+===================================================== */
+
+document
+  .querySelectorAll(
+    ".video-chip"
+  )
+  .forEach(
+    chip => {
+
+      chip.addEventListener(
+        "click",
+        () => {
+
+          const text =
+            chip.dataset.prompt;
+
+
+          if (
+            videoPrompt.value.trim()
+          ) {
+
+            videoPrompt.value +=
+              "\n\n" +
+              text;
+
+          }
+          else {
+
+            videoPrompt.value =
+              text;
+
+          }
+
+
+          videoPrompt.focus();
+
+        }
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   VIDEO GENERATION
+===================================================== */
 
 videoGenerate.onclick =
   async () => {
@@ -2210,20 +3794,92 @@ videoGenerate.onclick =
       );
 
       return;
+
+    }
+
+
+    if (
+      videoModeType.value ===
+        "image" &&
+      !videoImageFile
+    ) {
+
+      showVideoError(
+        "Image → Video mode requires an image."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      videoModeType.value ===
+        "text" &&
+      videoImageFile
+    ) {
+
+      // Allow text mode to ignore image
+
     }
 
 
     videoGenerate.disabled =
       true;
 
+
     videoLoading.style.display =
       "block";
+
 
     videoResult.style.display =
       "none";
 
 
     try {
+
+      const form =
+        new FormData();
+
+
+      form.append(
+        "prompt",
+        prompt
+      );
+
+
+      form.append(
+        "ratio",
+        videoRatio.value
+      );
+
+
+      form.append(
+        "duration",
+        videoDuration.value
+      );
+
+
+      /*
+       * Auto:
+       * Image exists → Image to Video
+       * No image → Text to Video
+       */
+
+      if (
+        videoImageFile &&
+        videoModeType.value !==
+          "text"
+      ) {
+
+        form.append(
+          "image",
+          videoImageFile,
+          videoImageFile.name
+        );
+
+      }
+
 
       const response =
         await fetch(
@@ -2232,38 +3888,16 @@ videoGenerate.onclick =
             method:
               "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
             body:
-              JSON.stringify({
+              form
 
-                prompt:
-
-                  prompt,
-
-                resolution:
-
-                  videoResolution.value,
-
-                ratio:
-
-                  videoRatio.value,
-
-                duration:
-
-                  Number(
-                    videoDuration.value
-                  )
-
-              })
           }
         );
 
 
-      if (!response.ok) {
+      if (
+        !response.ok
+      ) {
 
         let message =
           "Video generation failed.";
@@ -2299,7 +3933,7 @@ videoGenerate.onclick =
       ) {
 
         throw new Error(
-          "No video URL returned."
+          "No video was returned."
         );
 
       }
@@ -2313,6 +3947,10 @@ videoGenerate.onclick =
         data.video;
 
 
+      videoDownload.download =
+        "rashid-ai-video.mp4";
+
+
       videoResult.style.display =
         "block";
 
@@ -2322,9 +3960,10 @@ videoGenerate.onclick =
 
       videoResult.scrollIntoView({
         behavior:
-          "smooth"
+          "smooth",
+        block:
+          "start"
       });
-
 
     }
     catch (error) {
@@ -2344,6 +3983,7 @@ videoGenerate.onclick =
       videoGenerate.disabled =
         false;
 
+
       videoLoading.style.display =
         "none";
 
@@ -2352,9 +3992,9 @@ videoGenerate.onclick =
   };
 
 
-// =================================================
-// VIDEO ERROR
-// =================================================
+/* =====================================================
+   VIDEO ERROR
+===================================================== */
 
 function showVideoError(
   message
@@ -2362,6 +4002,7 @@ function showVideoError(
 
   videoError.textContent =
     "❌ " + message;
+
 
   videoError.style.display =
     "block";
@@ -2377,19 +4018,48 @@ function hideVideoError() {
 }
 
 
-// =================================================
-// IMAGE FULLSCREEN
-// =================================================
+/* =====================================================
+   NEW VIDEO
+===================================================== */
 
-const modal =
+videoNew.onclick =
+  () => {
+
+    videoResult.style.display =
+      "none";
+
+
+    generatedVideo.pause();
+
+
+    generatedVideo.removeAttribute(
+      "src"
+    );
+
+
+    generatedVideo.load();
+
+
+    videoPrompt.focus();
+
+  };
+
+
+/* =====================================================
+   FULLSCREEN IMAGE
+===================================================== */
+
+const imageModal =
   document.getElementById(
-    "modal"
+    "imageModal"
   );
+
 
 const modalImage =
   document.getElementById(
     "modalImage"
   );
+
 
 const closeModal =
   document.getElementById(
@@ -2400,10 +4070,20 @@ const closeModal =
 generatedImage.onclick =
   () => {
 
+    if (
+      !generatedImage.src
+    ) {
+
+      return;
+
+    }
+
+
     modalImage.src =
       generatedImage.src;
 
-    modal.style.display =
+
+    imageModal.style.display =
       "flex";
 
   };
@@ -2412,20 +4092,21 @@ generatedImage.onclick =
 closeModal.onclick =
   () => {
 
-    modal.style.display =
+    imageModal.style.display =
       "none";
 
   };
 
 
-modal.onclick =
+imageModal.onclick =
   event => {
 
     if (
-      event.target === modal
+      event.target ===
+      imageModal
     ) {
 
-      modal.style.display =
+      imageModal.style.display =
         "none";
 
     }
@@ -2433,16 +4114,58 @@ modal.onclick =
   };
 
 
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
 document.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.key === "Escape"
+      event.key ===
+      "Escape"
     ) {
 
-      modal.style.display =
+      imageModal.style.display =
         "none";
+
+    }
+
+
+    /*
+     * Ctrl + Enter
+     */
+
+    if (
+      event.ctrlKey &&
+      event.key ===
+        "Enter"
+    ) {
+
+      const imageActive =
+        document
+          .getElementById(
+            "imageMode"
+          )
+          .classList
+          .contains(
+            "active"
+          );
+
+
+      if (
+        imageActive
+      ) {
+
+        imageGenerate.click();
+
+      }
+      else {
+
+        videoGenerate.click();
+
+      }
 
     }
 
@@ -2452,4 +4175,5 @@ document.addEventListener(
 </script>
 
 </body>
+
 </html>
