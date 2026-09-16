@@ -1,1441 +1,1361 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-<meta charset="UTF-8">
+  <title>AI Image Editor</title>
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<title>
-  AI Image Generator
-</title>
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #fff;
 
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          #243b55,
+          transparent 40%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          #141e30,
+          #05070b
+        );
 
-<style>
+      padding: 30px 15px;
+    }
 
-/* =====================================================
-   RESET
-===================================================== */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+    }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    /* HEADER */
 
-  font-family:
-    "Segoe UI",
-    system-ui,
-    sans-serif;
-}
+    h1 {
+      text-align: center;
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
 
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
 
-/* =====================================================
-   BODY
-===================================================== */
+    /* CARD */
 
-body {
+    .card {
+      background: rgba(255, 255, 255, 0.07);
 
-  min-height: 100vh;
+      border: 1px solid rgba(255, 255, 255, 0.12);
 
-  color: white;
+      border-radius: 22px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #0f0c29,
-      #302b63,
-      #24243e
-    );
+      padding: 25px;
 
-  display: flex;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
 
-  flex-direction: column;
+    /* UPLOAD */
 
-  align-items: center;
+    .upload-box {
+      display: block;
 
-  padding: 40px 20px;
-}
+      border: 2px dashed #555;
 
+      border-radius: 18px;
 
-/* =====================================================
-   CONTAINER
-===================================================== */
+      padding: 35px 20px;
 
-.container {
+      text-align: center;
 
-  width: 100%;
+      cursor: pointer;
 
-  max-width: 850px;
-}
+      transition: 0.2s;
+    }
 
+    .upload-box:hover {
+      border-color: #8b5cf6;
 
-/* =====================================================
-   HEADER
-===================================================== */
+      background: rgba(
+        139,
+        92,
+        246,
+        0.08
+      );
+    }
 
-h1 {
+    .upload-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
 
-  text-align: center;
+    .upload-text {
+      color: #aaa;
 
-  font-size: 3rem;
+      margin-top: 8px;
 
-  margin-bottom: 10px;
+      font-size: 14px;
+    }
 
-  background:
-    linear-gradient(
-      90deg,
-      #00d2ff,
-      #3a7bd5
-    );
+    #imageInput {
+      display: none;
+    }
 
-  -webkit-background-clip: text;
+    /* SOURCE PREVIEW */
 
-  -webkit-text-fill-color: transparent;
-}
+    .preview-container {
+      display: none;
 
+      margin-top: 20px;
 
-.subtitle {
+      text-align: center;
+    }
 
-  text-align: center;
+    .preview-container img {
+      display: block;
 
-  color: #a5a5a5;
+      width: 100%;
 
-  margin-bottom: 40px;
+      max-height: 450px;
 
-  font-size: 16px;
-}
+      border-radius: 15px;
 
+      object-fit: contain;
 
-/* =====================================================
-   MAIN CARD
-===================================================== */
+      background: #111;
+    }
 
-.card {
+    .file-name {
+      color: #aaa;
 
-  padding: 30px;
+      font-size: 13px;
 
-  border-radius: 22px;
+      margin-top: 10px;
+    }
 
-  background:
-    rgba(255,255,255,0.08);
+    /* PROMPT */
 
-  border:
-    1px solid
-    rgba(255,255,255,0.1);
+    textarea {
+      width: 100%;
 
-  backdrop-filter:
-    blur(15px);
+      min-height: 130px;
 
-  box-shadow:
-    0 25px 60px
-    rgba(0,0,0,0.35);
-}
+      resize: vertical;
 
+      margin-top: 25px;
 
-/* =====================================================
-   TEXTAREA
-===================================================== */
+      padding: 18px;
 
-textarea {
+      border-radius: 15px;
 
-  width: 100%;
+      border: 1px solid #444;
 
-  min-height: 130px;
+      background: rgba(0, 0, 0, 0.35);
 
-  padding: 18px;
+      color: white;
 
-  border-radius: 14px;
+      font-size: 16px;
 
-  border:
-    1px solid
-    rgba(255,255,255,0.15);
+      line-height: 1.5;
 
-  outline: none;
+      outline: none;
+    }
 
-  resize: vertical;
+    textarea:focus {
+      border-color: #8b5cf6;
+    }
 
-  color: white;
+    textarea::placeholder {
+      color: #777;
+    }
 
-  background:
-    rgba(0,0,0,0.3);
+    /* BUTTON */
 
-  font-size: 16px;
+    .generate-btn {
+      width: 100%;
 
-  line-height: 1.5;
+      margin-top: 18px;
 
-  transition:
-    border 0.2s;
-}
+      padding: 16px;
 
+      border: none;
 
-textarea::placeholder {
+      border-radius: 14px;
 
-  color: #888;
-}
+      background:
+        linear-gradient(
+          135deg,
+          #7c3aed,
+          #4f46e5
+        );
 
+      color: white;
 
-textarea:focus {
+      font-size: 17px;
 
-  border-color:
-    #00d2ff;
-}
+      font-weight: bold;
 
+      cursor: pointer;
 
-/* =====================================================
-   GENERATE BUTTON
-===================================================== */
+      transition: 0.2s;
+    }
 
-.generate-btn {
+    .generate-btn:hover {
+      transform: translateY(-1px);
 
-  width: 100%;
+      opacity: 0.9;
+    }
 
-  margin-top: 20px;
+    .generate-btn:disabled {
+      opacity: 0.5;
 
-  padding: 16px;
+      cursor: not-allowed;
 
-  border: none;
+      transform: none;
+    }
 
-  border-radius: 13px;
+    /* LOADING */
 
-  color: white;
+    .loading {
+      display: none;
 
-  font-size: 18px;
+      text-align: center;
 
-  font-weight: 700;
+      margin-top: 25px;
+    }
 
-  cursor: pointer;
+    .spinner {
+      width: 40px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #00d2ff,
-      #3a7bd5
-    );
+      height: 40px;
 
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-}
+      border: 4px solid #444;
 
+      border-top-color: #8b5cf6;
 
-.generate-btn:hover {
+      border-radius: 50%;
 
-  transform:
-    translateY(-2px);
-}
+      animation: spin 1s linear infinite;
 
+      margin: auto;
+    }
 
-.generate-btn:disabled {
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-  opacity: 0.6;
+    /* ERROR */
 
-  cursor:
-    not-allowed;
+    .error {
+      display: none;
 
-  transform: none;
-}
+      margin-top: 20px;
 
+      padding: 14px;
 
-/* =====================================================
-   LOADING
-===================================================== */
+      border-radius: 12px;
 
-.loading {
+      background: rgba(
+        255,
+        0,
+        0,
+        0.15
+      );
 
-  display: none;
+      border: 1px solid rgba(
+        255,
+        0,
+        0,
+        0.3
+      );
 
-  text-align: center;
+      color: #ff8a8a;
 
-  margin-top: 30px;
+      line-height: 1.5;
+    }
 
-  color:
-    #00d2ff;
-}
+    /* RESULT */
 
+    .result {
+      display: none;
 
-.spinner {
+      margin-top: 30px;
+    }
 
-  width: 42px;
+    .result h2 {
+      margin-bottom: 15px;
+    }
 
-  height: 42px;
+    .result img {
+      display: block;
 
-  margin:
-    0 auto 15px;
+      width: 100%;
 
-  border-radius: 50%;
+      max-height: 700px;
 
-  border:
-    4px solid
-    rgba(255,255,255,0.12);
+      object-fit: contain;
 
-  border-top-color:
-    #00d2ff;
+      border-radius: 18px;
 
-  animation:
-    spin 0.8s linear infinite;
-}
+      cursor: pointer;
 
+      background: #111;
+    }
 
-@keyframes spin {
+    /* DOWNLOAD */
 
-  from {
-    transform: rotate(0deg);
-  }
+    .download-btn {
+      display: block;
 
-  to {
-    transform: rotate(360deg);
-  }
+      text-align: center;
 
-}
+      text-decoration: none;
 
+      margin-top: 15px;
 
-/* =====================================================
-   ERROR
-===================================================== */
+      padding: 14px;
 
-.error {
+      border-radius: 13px;
 
-  display: none;
+      background: #16a34a;
 
-  margin-top: 20px;
+      color: white;
 
-  padding: 12px;
+      font-weight: bold;
+    }
 
-  border-radius: 10px;
+    .download-btn:hover {
+      opacity: 0.9;
+    }
 
-  text-align: center;
+    /* HINT */
 
-  color:
-    #ff7676;
+    .hint {
+      margin-top: 15px;
 
-  background:
-    rgba(255,0,0,0.08);
-}
+      color: #777;
 
+      font-size: 12px;
 
-/* =====================================================
-   RESULT
-===================================================== */
+      line-height: 1.5;
 
-.result {
+      text-align: center;
+    }
 
-  display: none;
+    /* MODAL */
 
-  margin-top: 40px;
-}
+    .modal {
+      display: none;
 
+      position: fixed;
 
-.result-card {
+      inset: 0;
 
-  padding: 20px;
+      background: rgba(
+        0,
+        0,
+        0,
+        0.92
+      );
 
-  border-radius: 22px;
+      z-index: 9999;
 
-  background:
-    rgba(255,255,255,0.08);
+      align-items: center;
 
-  border:
-    1px solid
-    rgba(255,255,255,0.1);
+      justify-content: center;
 
-  backdrop-filter:
-    blur(15px);
+      padding: 20px;
+    }
 
-  box-shadow:
-    0 25px 60px
-    rgba(0,0,0,0.35);
-}
+    .modal img {
+      max-width: 95%;
 
+      max-height: 95%;
 
-.result-title {
+      object-fit: contain;
+    }
 
-  text-align: center;
+    .close {
+      position: absolute;
 
-  font-size: 21px;
+      top: 15px;
 
-  font-weight: 700;
+      right: 25px;
 
-  margin-bottom: 20px;
-}
+      font-size: 45px;
 
+      cursor: pointer;
 
-/* =====================================================
-   IMAGE PREVIEW
-===================================================== */
+      color: white;
+    }
 
-.image-container {
+    /* MOBILE */
 
-  position: relative;
+    @media (max-width: 600px) {
 
-  overflow: hidden;
+      body {
+        padding: 15px 10px;
+      }
 
-  width: 100%;
+      h1 {
+        font-size: 28px;
+      }
 
-  border-radius: 17px;
+      .card {
+        padding: 18px;
+      }
 
-  background:
-    #080808;
-
-  cursor: pointer;
-}
-
-
-.image-container img {
-
-  display: block;
-
-  width: 100%;
-
-  max-height: 700px;
-
-  object-fit: contain;
-
-  transition:
-    transform 0.3s;
-}
-
-
-.image-container:hover img {
-
-  transform:
-    scale(1.02);
-}
-
-
-/* =====================================================
-   IMAGE OVERLAY
-===================================================== */
-
-.image-overlay {
-
-  position: absolute;
-
-  inset: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background:
-    rgba(0,0,0,0.35);
-
-  opacity: 0;
-
-  transition:
-    opacity 0.25s;
-}
-
-
-.image-container:hover
-.image-overlay {
-
-  opacity: 1;
-}
-
-
-.view-full {
-
-  padding:
-    13px 22px;
-
-  border-radius:
-    30px;
-
-  border:
-    1px solid
-    rgba(255,255,255,0.3);
-
-  color: white;
-
-  background:
-    rgba(0,0,0,0.7);
-
-  backdrop-filter:
-    blur(10px);
-
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-
-/* =====================================================
-   ACTIONS
-===================================================== */
-
-.actions {
-
-  display: flex;
-
-  gap: 12px;
-
-  margin-top: 18px;
-}
-
-
-.action {
-
-  flex: 1;
-
-  padding: 14px;
-
-  border: none;
-
-  border-radius: 12px;
-
-  color: white;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s;
-}
-
-
-.action:hover {
-
-  transform:
-    translateY(-2px);
-}
-
-
-.preview-action {
-
-  background:
-    rgba(255,255,255,0.12);
-
-  border:
-    1px solid
-    rgba(255,255,255,0.15);
-}
-
-
-.download-action {
-
-  background:
-    linear-gradient(
-      90deg,
-      #00d2ff,
-      #3a7bd5
-    );
-}
-
-
-/* =====================================================
-   FULLSCREEN PREVIEW MODAL
-===================================================== */
-
-.modal {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 25px;
-
-  background:
-    rgba(0,0,0,0.93);
-
-  backdrop-filter:
-    blur(15px);
-}
-
-
-.modal.active {
-
-  display: flex;
-}
-
-
-/* =====================================================
-   MODAL IMAGE
-===================================================== */
-
-.modal-image {
-
-  max-width: 95vw;
-
-  max-height: 88vh;
-
-  object-fit: contain;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 20px 80px
-    rgba(0,0,0,0.7);
-}
-
-
-/* =====================================================
-   CLOSE
-===================================================== */
-
-.close {
-
-  position: fixed;
-
-  top: 20px;
-
-  right: 25px;
-
-  width: 48px;
-
-  height: 48px;
-
-  border-radius: 50%;
-
-  border:
-    1px solid
-    rgba(255,255,255,0.2);
-
-  color: white;
-
-  background:
-    rgba(255,255,255,0.1);
-
-  font-size: 30px;
-
-  cursor: pointer;
-
-  z-index: 10001;
-}
-
-
-.close:hover {
-
-  background:
-    rgba(255,255,255,0.2);
-}
-
-
-/* =====================================================
-   MODAL DOWNLOAD
-===================================================== */
-
-.modal-download {
-
-  position: fixed;
-
-  bottom: 25px;
-
-  left: 50%;
-
-  transform:
-    translateX(-50%);
-
-  padding:
-    13px 25px;
-
-  border: none;
-
-  border-radius: 30px;
-
-  color: white;
-
-  background:
-    linear-gradient(
-      90deg,
-      #00d2ff,
-      #3a7bd5
-    );
-
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-
-  margin-top: 50px;
-
-  color: #666;
-
-  text-align: center;
-
-  font-size: 14px;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 600px) {
-
-  body {
-
-    padding:
-      25px 15px;
-  }
-
-
-  h1 {
-
-    font-size:
-      2.2rem;
-  }
-
-
-  .subtitle {
-
-    font-size:
-      14px;
-
-    margin-bottom:
-      25px;
-  }
-
-
-  .card {
-
-    padding:
-      20px;
-  }
-
-
-  .actions {
-
-    flex-direction:
-      column;
-  }
-
-
-  .modal {
-
-    padding:
-      10px;
-  }
-
-
-  .modal-image {
-
-    max-width:
-      100vw;
-
-    max-height:
-      84vh;
-  }
-
-}
-
-</style>
-
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <div class="container">
 
-<div class="container">
+    <h1>✨ AI Image Editor</h1>
 
-
-  <!-- =================================================
-       HEADER
-  ================================================= -->
-
-  <h1>
-    AI Image Generator
-  </h1>
+    <p class="subtitle">
+      Upload an image and tell AI what you want to change.
+    </p>
 
 
-  <p class="subtitle">
-    Create stunning images from text using Cloudflare Workers AI
-  </p>
+    <div class="card">
+
+      <!-- ========================= -->
+      <!-- IMAGE UPLOAD -->
+      <!-- ========================= -->
+
+      <label
+        class="upload-box"
+        for="imageInput"
+      >
+
+        <div class="upload-icon">
+          📷
+        </div>
+
+        <div>
+          Click to upload an image
+        </div>
+
+        <div class="upload-text">
+          JPG, PNG or WEBP
+        </div>
+
+      </label>
 
 
-  <!-- =================================================
-       INPUT CARD
-  ================================================= -->
-
-  <div class="card">
-
-
-    <textarea
-      id="prompt"
-      placeholder="Describe the image you want to create...
-
-Example:
-A futuristic city at sunset, cyberpunk style, cinematic lighting, highly detailed"
-    ></textarea>
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/png,image/jpeg,image/webp"
+      />
 
 
-    <button
-      class="generate-btn"
-      id="generateBtn"
-      onclick="generateImage()"
-    >
-      Generate Image
-    </button>
-
-
-    <!-- LOADING -->
-
-    <div
-      class="loading"
-      id="loading"
-    >
-
-      <div class="spinner"></div>
-
-      <div>
-        Generating your image...
-      </div>
-
-      <small>
-        Please wait
-      </small>
-
-    </div>
-
-
-    <!-- ERROR -->
-
-    <div
-      class="error"
-      id="error"
-    ></div>
-
-
-  </div>
-
-
-  <!-- =================================================
-       RESULT
-  ================================================= -->
-
-  <div
-    class="result"
-    id="result"
-  >
-
-
-    <div class="result-card">
-
-
-      <div class="result-title">
-
-        ✨ Created Image
-
-      </div>
-
-
-      <!-- IMAGE -->
+      <!-- ========================= -->
+      <!-- SOURCE IMAGE PREVIEW -->
+      <!-- ========================= -->
 
       <div
-        class="image-container"
-        onclick="openPreview()"
+        class="preview-container"
+        id="previewContainer"
       >
 
         <img
-          id="generatedImage"
-          alt="Generated AI Image"
-        >
+          id="sourcePreview"
+          alt="Selected image"
+        />
 
-
-        <div class="image-overlay">
-
-          <button
-            class="view-full"
-            onclick="
-              event.stopPropagation();
-              openPreview();
-            "
-          >
-            🔍 View Full Preview
-          </button>
-
-        </div>
+        <div
+          class="file-name"
+          id="fileName"
+        ></div>
 
       </div>
 
 
-      <!-- BUTTONS -->
+      <!-- ========================= -->
+      <!-- PROMPT -->
+      <!-- ========================= -->
 
-      <div class="actions">
+      <textarea
+        id="prompt"
+        placeholder="Tell AI what you want to change...
+
+Example:
+Change the shirt to a black suit. Keep the person's face, identity, pose and background unchanged."
+      ></textarea>
 
 
-        <button
-          class="action preview-action"
-          onclick="openPreview()"
+      <!-- ========================= -->
+      <!-- GENERATE -->
+      <!-- ========================= -->
+
+      <button
+        class="generate-btn"
+        id="generateBtn"
+      >
+        ✨ Generate / Edit Image
+      </button>
+
+
+      <!-- ========================= -->
+      <!-- LOADING -->
+      <!-- ========================= -->
+
+      <div
+        class="loading"
+        id="loading"
+      >
+
+        <div class="spinner"></div>
+
+        <p
+          style="
+            margin-top:12px;
+            color:#aaa;
+          "
         >
-          🔍 Preview
-        </button>
-
-
-        <button
-          class="action download-action"
-          onclick="downloadImage()"
-        >
-          💾 Download
-        </button>
-
+          AI is editing your image...
+        </p>
 
       </div>
 
+
+      <!-- ========================= -->
+      <!-- ERROR -->
+      <!-- ========================= -->
+
+      <div
+        class="error"
+        id="error"
+      ></div>
+
+
+      <!-- ========================= -->
+      <!-- RESULT -->
+      <!-- ========================= -->
+
+      <div
+        class="result"
+        id="result"
+      >
+
+        <h2>
+          ✨ Result
+        </h2>
+
+        <img
+          id="resultImage"
+          alt="AI generated image"
+        />
+
+
+        <a
+          id="downloadBtn"
+          class="download-btn"
+          download="ai-edited-image.png"
+        >
+          ⬇️ Download Image
+        </a>
+
+
+        <p class="hint">
+          Click the generated image to view it fullscreen.
+        </p>
+
+      </div>
 
     </div>
-
 
   </div>
 
 
-</div>
+  <!-- ========================= -->
+  <!-- FULLSCREEN MODAL -->
+  <!-- ========================= -->
 
-
-<!-- =================================================
-     FULLSCREEN PREVIEW
-================================================= -->
-
-<div
-  class="modal"
-  id="previewModal"
-  onclick="closePreview()"
->
-
-
-  <!-- CLOSE -->
-
-  <button
-    class="close"
-    onclick="
-      event.stopPropagation();
-      closePreview();
-    "
-  >
-    ×
-  </button>
-
-
-  <!-- IMAGE -->
-
-  <img
-    class="modal-image"
-    id="modalImage"
-    alt="Full Image Preview"
-    onclick="event.stopPropagation()"
+  <div
+    class="modal"
+    id="modal"
   >
 
+    <div
+      class="close"
+      id="closeModal"
+    >
+      ×
+    </div>
 
-  <!-- DOWNLOAD -->
+    <img
+      id="modalImage"
+      alt="Fullscreen result"
+    />
 
-  <button
-    class="modal-download"
-    onclick="
-      event.stopPropagation();
-      downloadImage();
-    "
-  >
-    💾 Download Image
-  </button>
+  </div>
 
 
-</div>
+  <script>
 
+    // =====================================================
+    // CLOUDFLARE WORKER
+    // =====================================================
 
-<!-- =================================================
-     FOOTER
-================================================= -->
+    const API_URL =
+      "https://image-api.itsmerashidkp.workers.dev";
 
-<footer>
 
-  Powered by Cloudflare Workers AI
-  •
-  Made by Muhammed Rashid KP
+    // =====================================================
+    // ELEMENTS
+    // =====================================================
 
-</footer>
-
-
-<script>
-
-
-// =====================================================
-// API
-// =====================================================
-
-const API_URL =
-  "https://image-api.itsmerashidkp.workers.dev";
-
-
-// =====================================================
-// IMAGE URL
-// =====================================================
-
-let currentImageUrl = null;
-
-
-// =====================================================
-// GENERATE IMAGE
-// =====================================================
-
-async function generateImage() {
-
-
-  const prompt =
-    document
-      .getElementById("prompt")
-      .value
-      .trim();
-
-
-  const button =
-    document
-      .getElementById("generateBtn");
-
-
-  const loading =
-    document
-      .getElementById("loading");
-
-
-  const result =
-    document
-      .getElementById("result");
-
-
-  const error =
-    document
-      .getElementById("error");
-
-
-  const image =
-    document
-      .getElementById("generatedImage");
-
-
-  const modalImage =
-    document
-      .getElementById("modalImage");
-
-
-  // -----------------------------------------------
-  // VALIDATE
-  // -----------------------------------------------
-
-  if (!prompt) {
-
-    alert(
-      "Please enter a prompt!"
-    );
-
-    return;
-  }
-
-
-  // -----------------------------------------------
-  // RESET UI
-  // -----------------------------------------------
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "Generating...";
-
-
-  loading.style.display =
-    "block";
-
-
-  result.style.display =
-    "none";
-
-
-  error.style.display =
-    "none";
-
-
-  error.textContent =
-    "";
-
-
-  // -----------------------------------------------
-  // REMOVE OLD IMAGE URL
-  // -----------------------------------------------
-
-  if (currentImageUrl) {
-
-    URL.revokeObjectURL(
-      currentImageUrl
-    );
-
-    currentImageUrl =
-      null;
-  }
-
-
-  try {
-
-
-    // =============================================
-    // API REQUEST
-    // =============================================
-
-    const response =
-      await fetch(
-        API_URL,
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "Content-Type":
-              "application/json"
-
-          },
-
-          body:
-            JSON.stringify({
-              prompt:
-                prompt
-            })
-
-        }
+    const imageInput =
+      document.getElementById(
+        "imageInput"
       );
 
-
-    // =============================================
-    // SERVER ERROR
-    // =============================================
-
-    if (!response.ok) {
-
-
-      let message =
-        "Server error";
-
-
-      try {
-
-        const data =
-          await response.json();
-
-
-        message =
-          data.error ||
-          message;
-
-      }
-
-      catch {
-
-        const text =
-          await response.text();
-
-
-        if (text) {
-
-          message =
-            text;
-        }
-      }
-
-
-      throw new Error(
-        `${response.status}: ${message}`
-      );
-    }
-
-
-    // =============================================
-    // CONTENT TYPE
-    // =============================================
-
-    const contentType =
-      response.headers
-        .get("content-type");
-
-
-    if (
-      !contentType ||
-      !contentType.startsWith("image/")
-    ) {
-
-      throw new Error(
-        "The API did not return an image."
-      );
-    }
-
-
-    // =============================================
-    // GET IMAGE
-    // =============================================
-
-    const blob =
-      await response.blob();
-
-
-    // =============================================
-    // CREATE LOCAL URL
-    // =============================================
-
-    currentImageUrl =
-      URL.createObjectURL(
-        blob
+    const sourcePreview =
+      document.getElementById(
+        "sourcePreview"
       );
 
-
-    // =============================================
-    // SET IMAGE
-    // =============================================
-
-    image.src =
-      currentImageUrl;
-
-
-    modalImage.src =
-      currentImageUrl;
-
-
-    // =============================================
-    // SHOW RESULT
-    // =============================================
-
-    result.style.display =
-      "block";
-
-
-    // =============================================
-    // SCROLL TO IMAGE
-    // =============================================
-
-    setTimeout(() => {
-
-      result.scrollIntoView({
-        behavior:
-          "smooth",
-
-        block:
-          "start"
-      });
-
-    }, 100);
-
-
-  }
-
-  catch (err) {
-
-
-    console.error(
-      "Generation error:",
-      err
-    );
-
-
-    error.textContent =
-      "❌ " +
-      err.message;
-
-
-    error.style.display =
-      "block";
-
-
-  }
-
-  finally {
-
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "Generate Image";
-
-
-    loading.style.display =
-      "none";
-
-  }
-
-}
-
-
-// =====================================================
-// OPEN PREVIEW
-// =====================================================
-
-function openPreview() {
-
-
-  if (!currentImageUrl) {
-
-    return;
-  }
-
-
-  const modal =
-    document
-      .getElementById(
-        "previewModal"
+    const previewContainer =
+      document.getElementById(
+        "previewContainer"
       );
 
+    const fileName =
+      document.getElementById(
+        "fileName"
+      );
 
-  const modalImage =
-    document
-      .getElementById(
+    const promptInput =
+      document.getElementById(
+        "prompt"
+      );
+
+    const generateBtn =
+      document.getElementById(
+        "generateBtn"
+      );
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+    const errorBox =
+      document.getElementById(
+        "error"
+      );
+
+    const result =
+      document.getElementById(
+        "result"
+      );
+
+    const resultImage =
+      document.getElementById(
+        "resultImage"
+      );
+
+    const downloadBtn =
+      document.getElementById(
+        "downloadBtn"
+      );
+
+    const modal =
+      document.getElementById(
+        "modal"
+      );
+
+    const modalImage =
+      document.getElementById(
         "modalImage"
       );
 
-
-  modalImage.src =
-    currentImageUrl;
-
-
-  modal.classList.add(
-    "active"
-  );
-
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-// =====================================================
-// CLOSE PREVIEW
-// =====================================================
-
-function closePreview() {
-
-
-  const modal =
-    document
-      .getElementById(
-        "previewModal"
+    const closeModal =
+      document.getElementById(
+        "closeModal"
       );
 
 
-  modal.classList.remove(
-    "active"
-  );
+    // =====================================================
+    // SELECTED FILE
+    // =====================================================
+
+    let selectedFile = null;
+
+    let resultURL = null;
 
 
-  document.body.style.overflow =
-    "";
+    // =====================================================
+    // IMAGE SELECT
+    // =====================================================
 
-}
+    imageInput.addEventListener(
+      "change",
+      () => {
 
+        const file =
+          imageInput.files[0];
 
-// =====================================================
-// ESC KEY
-// =====================================================
-
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closePreview();
-    }
-
-  }
-);
+        if (!file) {
+          return;
+        }
 
 
-// =====================================================
-// DOWNLOAD
-// =====================================================
+        // Check actual file type
+        if (
+          !file.type.startsWith(
+            "image/"
+          )
+        ) {
 
-function downloadImage() {
+          selectedFile = null;
 
+          showError(
+            "Please select a valid image file."
+          );
 
-  if (!currentImageUrl) {
-
-    alert(
-      "No image available."
-    );
-
-    return;
-  }
-
-
-  const link =
-    document.createElement(
-      "a"
-    );
+          return;
+        }
 
 
-  link.href =
-    currentImageUrl;
+        selectedFile = file;
 
 
-  link.download =
-    "ai-generated-image.png";
+        fileName.textContent =
+          file.name;
 
 
-  document.body.appendChild(
-    link
-  );
+        // Use FileReader instead of
+        // object URL for reliable preview
+
+        const reader =
+          new FileReader();
 
 
-  link.click();
+        reader.onload = () => {
+
+          sourcePreview.src =
+            reader.result;
+
+          previewContainer.style.display =
+            "block";
+
+        };
 
 
-  document.body.removeChild(
-    link
-  );
+        reader.onerror = () => {
 
-}
+          selectedFile = null;
+
+          showError(
+            "Could not load the selected image."
+          );
+
+        };
 
 
-// =====================================================
-// CTRL + ENTER
-// =====================================================
-
-document
-  .getElementById("prompt")
-  .addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.ctrlKey &&
-        event.key === "Enter"
-      ) {
-
-        generateImage();
+        reader.readAsDataURL(
+          file
+        );
 
       }
+    );
+
+
+    // =====================================================
+    // RESIZE IMAGE
+    // =====================================================
+
+    function resizeImage(file) {
+
+      return new Promise(
+        (resolve, reject) => {
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload = () => {
+
+            const img =
+              new Image();
+
+
+            img.onload = () => {
+
+              /*
+                Cloudflare FLUX.2 Klein 4B
+                reference image:
+                keep it below 512 x 512
+              */
+
+              const maxSize = 511;
+
+
+              let width =
+                img.naturalWidth;
+
+              let height =
+                img.naturalHeight;
+
+
+              if (
+                !width ||
+                !height
+              ) {
+
+                reject(
+                  new Error(
+                    "Could not read image dimensions."
+                  )
+                );
+
+                return;
+              }
+
+
+              // Keep original aspect ratio
+
+              if (
+                width > maxSize ||
+                height > maxSize
+              ) {
+
+                const scale =
+                  Math.min(
+                    maxSize / width,
+                    maxSize / height
+                  );
+
+
+                width =
+                  Math.max(
+                    1,
+                    Math.round(
+                      width * scale
+                    )
+                  );
+
+
+                height =
+                  Math.max(
+                    1,
+                    Math.round(
+                      height * scale
+                    )
+                  );
+
+              }
+
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+
+              canvas.width =
+                width;
+
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
+                );
+
+
+              if (!ctx) {
+
+                reject(
+                  new Error(
+                    "Could not create image canvas."
+                  )
+                );
+
+                return;
+              }
+
+
+              // Draw image
+
+              ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+              );
+
+
+              // Convert to JPEG
+
+              canvas.toBlob(
+                (blob) => {
+
+                  if (!blob) {
+
+                    reject(
+                      new Error(
+                        "Could not convert image."
+                      )
+                    );
+
+                    return;
+                  }
+
+
+                  resolve(blob);
+
+                },
+                "image/jpeg",
+                0.90
+              );
+
+            };
+
+
+            img.onerror = () => {
+
+              reject(
+                new Error(
+                  "Invalid image."
+                )
+              );
+
+            };
+
+
+            img.src =
+              reader.result;
+
+          };
+
+
+          reader.onerror = () => {
+
+            reject(
+              new Error(
+                "Could not read image file."
+              )
+            );
+
+          };
+
+
+          reader.readAsDataURL(
+            file
+          );
+
+        }
+      );
 
     }
-  );
 
-</script>
 
+    // =====================================================
+    // GENERATE / EDIT
+    // =====================================================
+
+    generateBtn.addEventListener(
+      "click",
+      async () => {
+
+        hideError();
+
+        result.style.display =
+          "none";
+
+
+        // Check image
+
+        if (!selectedFile) {
+
+          showError(
+            "Please select an image first."
+          );
+
+          return;
+        }
+
+
+        // Check prompt
+
+        const prompt =
+          promptInput.value.trim();
+
+
+        if (!prompt) {
+
+          showError(
+            "Please enter a prompt."
+          );
+
+          return;
+        }
+
+
+        // UI loading
+
+        generateBtn.disabled =
+          true;
+
+        loading.style.display =
+          "block";
+
+
+        try {
+
+          // -----------------------------------------------
+          // Resize image
+          // -----------------------------------------------
+
+          const resizedImage =
+            await resizeImage(
+              selectedFile
+            );
+
+
+          console.log(
+            "Original image:",
+            selectedFile.size,
+            "bytes"
+          );
+
+
+          console.log(
+            "Resized image:",
+            resizedImage.size,
+            "bytes"
+          );
+
+
+          // -----------------------------------------------
+          // Create multipart request
+          // -----------------------------------------------
+
+          const formData =
+            new FormData();
+
+
+          formData.append(
+            "prompt",
+            prompt
+          );
+
+
+          formData.append(
+            "image",
+            resizedImage,
+            "input.jpg"
+          );
+
+
+          // -----------------------------------------------
+          // Send to Worker
+          // -----------------------------------------------
+
+          console.log(
+            "Sending image to Cloudflare..."
+          );
+
+
+          const response =
+            await fetch(
+              API_URL,
+              {
+                method: "POST",
+                body: formData
+              }
+            );
+
+
+          // -----------------------------------------------
+          // Error response
+          // -----------------------------------------------
+
+          if (!response.ok) {
+
+            let message =
+              "Image generation failed.";
+
+
+            try {
+
+              const data =
+                await response.json();
+
+
+              if (data.error) {
+                message =
+                  data.error;
+              }
+
+            } catch (_) {
+
+              // Response wasn't JSON
+
+            }
+
+
+            throw new Error(
+              message
+            );
+
+          }
+
+
+          // -----------------------------------------------
+          // Get generated image
+          // -----------------------------------------------
+
+          const blob =
+            await response.blob();
+
+
+          console.log(
+            "Response:",
+            blob.type,
+            blob.size
+          );
+
+
+          if (
+            !blob.type.startsWith(
+              "image/"
+            )
+          ) {
+
+            throw new Error(
+              "Server did not return an image."
+            );
+
+          }
+
+
+          // -----------------------------------------------
+          // Create preview URL
+          // -----------------------------------------------
+
+          if (resultURL) {
+
+            URL.revokeObjectURL(
+              resultURL
+            );
+
+          }
+
+
+          resultURL =
+            URL.createObjectURL(
+              blob
+            );
+
+
+          resultImage.src =
+            resultURL;
+
+
+          downloadBtn.href =
+            resultURL;
+
+
+          result.style.display =
+            "block";
+
+
+          // Scroll to result
+
+          setTimeout(
+            () => {
+
+              result.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+
+            },
+            100
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "ERROR:",
+            error
+          );
+
+
+          showError(
+            error.message ||
+            "Something went wrong."
+          );
+
+        } finally {
+
+          generateBtn.disabled =
+            false;
+
+          loading.style.display =
+            "none";
+
+        }
+
+      }
+    );
+
+
+    // =====================================================
+    // ERROR
+    // =====================================================
+
+    function showError(message) {
+
+      errorBox.textContent =
+        "❌ " + message;
+
+      errorBox.style.display =
+        "block";
+
+    }
+
+
+    function hideError() {
+
+      errorBox.style.display =
+        "none";
+
+      errorBox.textContent =
+        "";
+
+    }
+
+
+    // =====================================================
+    // FULLSCREEN RESULT
+    // =====================================================
+
+    resultImage.addEventListener(
+      "click",
+      () => {
+
+        if (!resultImage.src) {
+          return;
+        }
+
+
+        modalImage.src =
+          resultImage.src;
+
+
+        modal.style.display =
+          "flex";
+
+      }
+    );
+
+
+    // Close button
+
+    closeModal.addEventListener(
+      "click",
+      () => {
+
+        modal.style.display =
+          "none";
+
+      }
+    );
+
+
+    // Click outside image
+
+    modal.addEventListener(
+      "click",
+      (event) => {
+
+        if (
+          event.target ===
+          modal
+        ) {
+
+          modal.style.display =
+            "none";
+
+        }
+
+      }
+    );
+
+
+    // =====================================================
+    // ESC TO CLOSE
+    // =====================================================
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          modal.style.display =
+            "none";
+
+        }
+
+      }
+    );
+
+
+    // =====================================================
+    // CTRL + ENTER
+    // =====================================================
+
+    promptInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.ctrlKey &&
+          event.key === "Enter"
+        ) {
+
+          generateBtn.click();
+
+        }
+
+      }
+    );
+
+  </script>
 
 </body>
-
 </html>
