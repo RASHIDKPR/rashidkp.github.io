@@ -2927,6 +2927,16 @@ function showLogin() {
     "hidden"
   );
 
+  // Always return to the clean login URL.
+  // This prevents the viewer/search state from interfering with navigation.
+  if (window.location.search || window.location.hash) {
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+  }
+
 }
 
 
@@ -3082,24 +3092,13 @@ async function createAccount() {
 
     setAuthMessage("");
 
-    const redirectTo =
-  "https://rashidkpr.github.io/rashidkp.github.io/";
-  
     const {
       data,
       error
     } =
       await supabaseClient.auth.signUp({
-
         email,
-
-        password,
-
-        options: {
-          emailRedirectTo:
-            redirectTo
-        }
-
+        password
       });
 
     if (error)
@@ -3113,6 +3112,10 @@ async function createAccount() {
       currentUser =
         data.user;
 
+      setAuthMessage(
+        ""
+      );
+
       showToast(
         "Account created successfully"
       );
@@ -3121,12 +3124,15 @@ async function createAccount() {
 
     } else {
 
+      // This normally only happens when Supabase still requires
+      // . The app itself no longer asks users
+      // to confirm their email.
       setAuthMessage(
-        "Account created! Check your email and confirm your account before signing in."
+        "Account created. Please sign in."
       );
 
       showToast(
-        "Check your email to confirm"
+        "Account created successfully"
       );
 
     }
@@ -3161,26 +3167,59 @@ async function createAccount() {
 
 async function logout() {
 
-  const {
-    error
-  } =
-    await supabaseClient.auth.signOut();
+  try {
 
-  if (error) {
+    const {
+      error
+    } =
+      await supabaseClient.auth.signOut();
 
-    showToast(
-      error.message
+    if (error) {
+      throw error;
+    }
+
+    currentUser = null;
+    currentSession = null;
+    allMedia = [];
+    filteredMedia = [];
+    selectedMedia.clear();
+    selectionMode = false;
+
+    // Close any open viewer, modal or upload panel.
+    try {
+      if (typeof closeViewer === "function") {
+        closeViewer();
+      }
+    } catch (_) {}
+
+    document.querySelectorAll(".modal").forEach((modal) => {
+      modal.classList.add("hidden");
+    });
+
+    if (uploadPanel) {
+      uploadPanel.classList.add("hidden");
+    }
+
+    // Remove shared-photo/query state so Back/refresh does not reopen it.
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
     );
 
-    return;
+    window.scrollTo(0, 0);
+
+    showLogin();
+
+  } catch (error) {
+
+    console.error("Logout error:", error);
+
+    showToast(
+      error?.message ||
+      "Logout failed"
+    );
   }
-
-  currentUser = null;
-  currentSession = null;
-  allMedia = [];
-  filteredMedia = [];
-
-  showLogin();
 }
 
 
