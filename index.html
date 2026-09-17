@@ -637,6 +637,59 @@ main {
   font-weight: 700;
 }
 
+.upload-pickers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.picker-btn {
+  min-height: 72px;
+  padding: 10px 7px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255,255,255,.045);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.picker-btn:hover {
+  background: rgba(124,92,255,.12);
+  border-color: rgba(124,92,255,.45);
+}
+
+.picker-icon {
+  font-size: 23px;
+  line-height: 1;
+}
+
+.upload-item-name {
+  display: block;
+  min-width: 0;
+}
+
+.upload-item-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 420px) {
+  .upload-pickers {
+    grid-template-columns: 1fr;
+  }
+}
+
 .upload-list {
   display: flex;
   flex-direction: column;
@@ -1322,11 +1375,47 @@ main {
       Maximum 50 MB per file
     </div>
 
-    <button
-      class="select-files"
-      id="selectFilesBtn">
-      Select files
-    </button>
+    <div class="upload-pickers">
+
+      <button
+        type="button"
+        class="picker-btn"
+        id="selectPhotosBtn">
+        <span class="picker-icon">📷</span>
+        <span>Photos</span>
+      </button>
+
+      <button
+        type="button"
+        class="picker-btn"
+        id="selectVideosBtn">
+        <span class="picker-icon">🎬</span>
+        <span>Videos</span>
+      </button>
+
+      <button
+        type="button"
+        class="picker-btn"
+        id="selectFilesBtn">
+        <span class="picker-icon">📄</span>
+        <span>Files</span>
+      </button>
+
+    </div>
+
+    <input
+      type="file"
+      id="photoInput"
+      accept="image/*"
+      multiple
+      hidden>
+
+    <input
+      type="file"
+      id="videoInput"
+      accept="video/*"
+      multiple
+      hidden>
 
     <input
       type="file"
@@ -1655,6 +1744,7 @@ let currentViewerItem = null;
 
 let selectedShareItem = null;
 let uploadRunning = false;
+let uploadQueue = [];
 
 
 /* =========================================================
@@ -1690,6 +1780,12 @@ const uploadList =
 
 const fileInput =
   document.getElementById("fileInput");
+
+const photoInput =
+  document.getElementById("photoInput");
+
+const videoInput =
+  document.getElementById("videoInput");
 
 const dropZone =
   document.getElementById("dropZone");
@@ -1876,9 +1972,85 @@ function getType(item) {
 }
 
 
+const ORIGINAL_NAME_STORAGE_KEY =
+  "rashid_original_media_names_v2";
+
+function getOriginalNameMap() {
+
+  try {
+    const value =
+      JSON.parse(
+        localStorage.getItem(
+          ORIGINAL_NAME_STORAGE_KEY
+        ) || "{}"
+      );
+
+    return value && typeof value === "object"
+      ? value
+      : {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function saveOriginalName(key, name, url = "") {
+
+  if (!key || !name)
+    return;
+
+  const map = getOriginalNameMap();
+  map[key] = name;
+
+  if (url)
+    map[url] = name;
+
+  try {
+    localStorage.setItem(
+      ORIGINAL_NAME_STORAGE_KEY,
+      JSON.stringify(map)
+    );
+  } catch (_) {}
+}
+
+function removeStoredOriginalName(item) {
+
+  const map = getOriginalNameMap();
+  const key = getItemKey(item);
+  const url = getItemURL(item);
+
+  delete map[key];
+  if (url) delete map[url];
+
+  try {
+    localStorage.setItem(
+      ORIGINAL_NAME_STORAGE_KEY,
+      JSON.stringify(map)
+    );
+  } catch (_) {}
+}
+
+
+function getStoredOriginalName(item) {
+
+  const map = getOriginalNameMap();
+  const key = getItemKey(item);
+  const url = getItemURL(item);
+
+  return (
+    map[key] ||
+    map[url] ||
+    ""
+  );
+}
+
 function getItemName(item) {
 
   return (
+    getStoredOriginalName(item) ||
+    item.original_name ||
+    item.originalName ||
+    item.file_name ||
+    item.filename ||
     item.name ||
     item.key?.split("/").pop() ||
     "Untitled"
@@ -2814,22 +2986,33 @@ function handleSelectedFiles(files) {
 
 async function uploadFiles(files) {
 
+  const incoming =
+    Array.from(files || [])
+      .filter(file => file && file.name);
+
+  if (!incoming.length)
+    return;
+
+  // Add new selections to a queue. This means Photos, Videos and Files
+  // can be selected separately even while another upload is running.
+  uploadQueue.push(...incoming);
+
   if (uploadRunning)
     return;
 
   uploadRunning = true;
 
-  for (const file of files) {
+  while (uploadQueue.length) {
 
-    await uploadSingleFile(
-      file
-    );
+    const file =
+      uploadQueue.shift();
+
+    await uploadSingleFile(file);
   }
 
   uploadRunning = false;
 
   await loadMedia();
-
   await loadStorage();
 }
 
@@ -2864,6 +3047,12 @@ function createUploadItem(file) {
         Waiting
       </span>
 
+    </div>
+
+    <div
+      class="upload-item-meta"
+      title="${escapeHTML(file.type || "Unknown type")}">
+      ${escapeHTML(file.type || "Unknown type")} · ${escapeHTML(formatBytes(file.size))}
     </div>
 
     <div class="upload-progress">
@@ -2908,6 +3097,62 @@ function updateUploadItem(
 }
 
 
+function extractKeyFromPublicURL(url) {
+
+  if (!url)
+    return "";
+
+  try {
+    const parsed =
+      new URL(url);
+
+    const marker =
+      "/storage/v1/object/public/" + BUCKET + "/";
+
+    const index =
+      parsed.pathname.indexOf(marker);
+
+    if (index !== -1) {
+      return decodeURIComponent(
+        parsed.pathname.slice(
+          index + marker.length
+        )
+      );
+    }
+  } catch (_) {}
+
+  return "";
+}
+
+
+function rememberUploadedFileName(data, file) {
+
+  const responseURL =
+    data?.url ||
+    data?.publicUrl ||
+    data?.public_url ||
+    data?.asset_url ||
+    "";
+
+  const responseKey =
+    data?.key ||
+    data?.path ||
+    data?.name ||
+    "";
+
+  const key =
+    responseKey ||
+    extractKeyFromPublicURL(responseURL);
+
+  if (key)
+    saveOriginalName(
+      key,
+      file.name,
+      responseURL
+    );
+}
+
+
 function uploadSingleFile(file) {
 
   return new Promise(resolve => {
@@ -2915,10 +3160,17 @@ function uploadSingleFile(file) {
     const wrapper =
       createUploadItem(file);
 
-    if (
-      file.size >
-      MAX_FILE_SIZE
-    ) {
+    if (!file || !file.name) {
+      updateUploadItem(
+        wrapper,
+        0,
+        "Invalid file"
+      );
+      resolve();
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
 
       updateUploadItem(
         wrapper,
@@ -2931,19 +3183,23 @@ function uploadSingleFile(file) {
       );
 
       resolve();
-
       return;
     }
 
     const xhr =
       new XMLHttpRequest();
 
-    xhr.open(
-      "POST",
-      WORKER_URL + "/upload"
+    xhr.timeout =
+      5 * 60 * 1000;
+
+    updateUploadItem(
+      wrapper,
+      0,
+      "Uploading…"
     );
 
-    xhr.upload.onprogress =
+    xhr.upload.addEventListener(
+      "progress",
       event => {
 
         if (!event.lengthComputable)
@@ -2959,9 +3215,38 @@ function uploadSingleFile(file) {
         updateUploadItem(
           wrapper,
           percentage,
-          percentage + "%"
+          `Uploading ${percentage}%`
         );
-      };
+      }
+    );
+
+    xhr.upload.addEventListener(
+      "load",
+      () => {
+        updateUploadItem(
+          wrapper,
+          100,
+          "Processing…"
+        );
+      }
+    );
+
+    xhr.upload.addEventListener(
+      "error",
+      () => {
+        updateUploadItem(
+          wrapper,
+          0,
+          "Upload error"
+        );
+      }
+    );
+
+    xhr.open(
+      "POST",
+      WORKER_URL + "/upload",
+      true
+    );
 
     xhr.onload =
       () => {
@@ -2970,6 +3255,20 @@ function uploadSingleFile(file) {
           xhr.status >= 200 &&
           xhr.status < 300
         ) {
+
+          let data = {};
+
+          try {
+            data =
+              JSON.parse(
+                xhr.responseText || "{}"
+              );
+          } catch (_) {}
+
+          rememberUploadedFileName(
+            data,
+            file
+          );
 
           updateUploadItem(
             wrapper,
@@ -2983,14 +3282,14 @@ function uploadSingleFile(file) {
             "Upload failed";
 
           try {
-
             const data =
               JSON.parse(
-                xhr.responseText
+                xhr.responseText || "{}"
               );
 
             message =
               data.error ||
+              data.message ||
               message;
 
           } catch (_) {}
@@ -3025,12 +3324,43 @@ function uploadSingleFile(file) {
         resolve();
       };
 
+    xhr.ontimeout =
+      () => {
+
+        updateUploadItem(
+          wrapper,
+          0,
+          "Timed out"
+        );
+
+        showToast(
+          `${file.name}: upload timed out`
+        );
+
+        resolve();
+      };
+
+    xhr.onabort =
+      () => {
+
+        updateUploadItem(
+          wrapper,
+          0,
+          "Cancelled"
+        );
+
+        resolve();
+      };
+
     const formData =
       new FormData();
 
+    // Keep the real browser filename. File.name is the original
+    // selected filename (without the local filesystem path).
     formData.append(
       "file",
-      file
+      file,
+      file.name
     );
 
     xhr.send(
@@ -3506,28 +3836,94 @@ async function deleteItem(item) {
     const key =
       getItemKey(item);
 
-    const response =
-      await fetch(
-        WORKER_URL +
-        "/media/" +
-        encodeURIComponent(key),
-        {
-          method: "DELETE"
-        }
-      );
-
-    const data =
-      await response
-        .json()
-        .catch(() => ({}));
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Delete failed"
-      );
+    if (!key) {
+      throw new Error("Missing media key");
     }
+
+    /*
+      IMPORTANT:
+      Some Fastify proxies reject an empty DELETE request when
+      Content-Type is application/json. Fastify documents this as
+      FST_ERR_CTP_INVALID_JSON_BODY / empty JSON body.
+
+      So every delete attempt below sends a small JSON body containing
+      the key. We try the query endpoint first, then the path endpoint.
+      This also avoids problems with encoded '/' inside keys such as:
+      videos/uuid.mp4
+    */
+
+    const encodedKey =
+      encodeURIComponent(key);
+
+    const deleteAttempts = [
+      WORKER_URL +
+        "/media?key=" +
+        encodedKey,
+      WORKER_URL +
+        "/media/" +
+        encodedKey
+    ];
+
+    let response = null;
+    let data = {};
+    let lastError = "Delete failed";
+
+    for (const endpoint of deleteAttempts) {
+
+      try {
+
+        response =
+          await fetch(
+            endpoint,
+            {
+              method: "DELETE",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                key: key
+              })
+            }
+          );
+
+        const text =
+          await response.text();
+
+        try {
+          data = text
+            ? JSON.parse(text)
+            : {};
+        } catch (_) {
+          data = {
+            error: text
+          };
+        }
+
+        if (response.ok) {
+          break;
+        }
+
+        lastError =
+          data?.error ||
+          data?.message ||
+          `Delete failed (${response.status})`;
+
+      } catch (requestError) {
+
+        lastError =
+          requestError?.message ||
+          "Delete request failed";
+      }
+    }
+
+    if (!response || !response.ok) {
+      throw new Error(lastError);
+    }
+
+    removeStoredOriginalName(item);
 
     showToast(
       "Deleted successfully"
@@ -3540,7 +3936,10 @@ async function deleteItem(item) {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Delete API error:",
+      error
+    );
 
     showToast(
       error.message ||
@@ -3548,7 +3947,6 @@ async function deleteItem(item) {
     );
   }
 }
-
 
 /* =========================================================
    VIEW TRACKING
@@ -3642,14 +4040,31 @@ function openSharedPhotoFromURL() {
   if (!key)
     return;
 
-  const decoded =
-    decodeURIComponent(key);
+  // URLSearchParams.get() already decodes the parameter value.
+  // Consume the one-time ?photo=... link so a browser refresh
+  // does not reopen the same media item. The shared link still
+  // works normally the first time it is opened.
+  params.delete("photo");
+
+  const cleanQuery =
+    params.toString();
+
+  const cleanURL =
+    window.location.pathname +
+    (cleanQuery ? "?" + cleanQuery : "") +
+    window.location.hash;
+
+  window.history.replaceState(
+    window.history.state,
+    document.title,
+    cleanURL
+  );
 
   const item =
     allMedia.find(
       media =>
         getItemKey(media) ===
-        decoded
+        key
     );
 
   if (item) {
@@ -3743,6 +4158,20 @@ document.getElementById(
 
 
 document.getElementById(
+  "selectPhotosBtn"
+).addEventListener(
+  "click",
+  () => photoInput.click()
+);
+
+document.getElementById(
+  "selectVideosBtn"
+).addEventListener(
+  "click",
+  () => videoInput.click()
+);
+
+document.getElementById(
   "selectFilesBtn"
 ).addEventListener(
   "click",
@@ -3750,18 +4179,27 @@ document.getElementById(
 );
 
 
-fileInput.addEventListener(
-  "change",
-  event => {
+function handlePickerChange(input) {
 
-    handleSelectedFiles(
-      event.target.files
-    );
+  input.addEventListener(
+    "change",
+    event => {
 
-    fileInput.value = "";
+      handleSelectedFiles(
+        event.target.files
+      );
 
-  }
-);
+      // Reset the input so selecting the exact same filename again
+      // still fires the change event.
+      input.value = "";
+
+    }
+  );
+}
+
+handlePickerChange(photoInput);
+handlePickerChange(videoInput);
+handlePickerChange(fileInput);
 
 
 searchInput.addEventListener(
