@@ -270,6 +270,55 @@ header {
   background: var(--card2);
 }
 
+.header-search-panel {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  padding: 8px 0 10px;
+  background: rgba(10,11,17,.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.header-search-panel.hidden {
+  display: none !important;
+}
+
+.header-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 10px 0 14px;
+  border-radius: 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.header-search-box span {
+  font-size: 16px;
+}
+
+.header-search-box input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.header-search-box button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--card2);
+  color: var(--text);
+  font-size: 20px;
+}
+
 .profile-btn {
   width: 42px;
   height: 42px;
@@ -984,6 +1033,34 @@ main {
   margin: -8px 0 16px;
 }
 
+.date-filter-wrap {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px 0 13px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.date-filter-wrap .filter-input {
+  min-height: 36px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+@media (max-width: 700px) {
+  .date-filter-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
 .filter-input,
 .sort-select {
   min-height: 42px;
@@ -1552,6 +1629,13 @@ main {
         </button>
 
         <button
+          class="icon-btn"
+          id="headerSearchBtn"
+          title="Search">
+          🔍
+        </button>
+
+        <button
           class="profile-btn"
           id="profileBtn"
           title="Account">
@@ -1568,6 +1652,20 @@ main {
     </div>
 
   </header>
+
+  <div class="header-search-panel hidden" id="headerSearchPanel">
+    <div class="container">
+      <div class="header-search-box">
+        <span>🔍</span>
+        <input
+          type="search"
+          id="headerSearchInput"
+          placeholder="Search photos, videos and files..."
+          autocomplete="off">
+        <button type="button" id="closeHeaderSearchBtn" title="Close search">×</button>
+      </div>
+    </div>
+  </div>
 
 
   <main>
@@ -1648,19 +1746,6 @@ main {
 
 
       <div class="toolbar">
-
-        <div class="search-box">
-
-          <span class="search-icon">
-            🔍
-          </span>
-
-          <input
-            type="search"
-            id="searchInput"
-            placeholder="Search photos, videos and files...">
-
-        </div>
 
         <button
           class="refresh-btn"
@@ -1755,11 +1840,14 @@ main {
       </div>
 
       <div class="quick-tools">
-        <input
-          class="filter-input"
-          type="date"
-          id="dateFilterInput"
-          title="Filter by date">
+        <label class="date-filter-wrap" for="dateFilterInput">
+          <span>📅 Select date</span>
+          <input
+            class="filter-input"
+            type="date"
+            id="dateFilterInput"
+            title="Select date to filter media">
+        </label>
 
         <select
           class="sort-select"
@@ -2354,7 +2442,16 @@ const mediaGrid =
   document.getElementById("mediaGrid");
 
 const searchInput =
-  document.getElementById("searchInput");
+  document.getElementById("headerSearchInput");
+
+const headerSearchBtn =
+  document.getElementById("headerSearchBtn");
+
+const headerSearchPanel =
+  document.getElementById("headerSearchPanel");
+
+const closeHeaderSearchBtn =
+  document.getElementById("closeHeaderSearchBtn");
 
 const storageText =
   document.getElementById("storageText");
@@ -3178,7 +3275,13 @@ async function logout() {
     currentSession = null;
     allMedia = [];
     filteredMedia = [];
-    selectedMedia.clear();
+    currentSearch = "";
+    currentDateFilter = "";
+    currentSort = "newest";
+    if (searchInput) searchInput.value = "";
+    if (dateFilterInput) dateFilterInput.value = "";
+    if (headerSearchPanel) headerSearchPanel.classList.add("hidden");
+    selectedMediaKeys.clear();
     selectionMode = false;
 
     // Close any open viewer, modal or upload panel.
@@ -5327,6 +5430,25 @@ handlePickerChange(photoInput);
 handlePickerChange(videoInput);
 handlePickerChange(fileInput);
 
+
+function openHeaderSearch() {
+  headerSearchPanel.classList.remove("hidden");
+  setTimeout(() => searchInput.focus(), 40);
+}
+
+function closeHeaderSearch() {
+  headerSearchPanel.classList.add("hidden");
+}
+
+headerSearchBtn.addEventListener("click", () => {
+  if (headerSearchPanel.classList.contains("hidden")) {
+    openHeaderSearch();
+  } else {
+    closeHeaderSearch();
+  }
+});
+
+closeHeaderSearchBtn.addEventListener("click", closeHeaderSearch);
 
 searchInput.addEventListener(
   "input",
