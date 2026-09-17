@@ -8,7 +8,6 @@
 <title>Rashid Photos</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 
 <style>
 * {
@@ -563,6 +562,58 @@ main {
   font-size: 11px;
 }
 
+/* ================= MULTI SELECT ================= */
+
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.media-card.select-mode {
+  cursor: pointer;
+}
+
+.media-card.selected {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 2px rgba(124,92,255,.18);
+}
+
+.select-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.25);
+  color: white;
+  font-size: 16px;
+}
+
+.media-card.selected .select-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
 .favorite-badge {
   position: absolute;
   top: 10px;
@@ -887,16 +938,135 @@ main {
   border-color: rgba(255,85,113,.2);
 }
 
-.qr-box {
-  margin: 20px auto 0;
-  padding: 15px;
-  background: white;
-  width: fit-content;
-  border-radius: 15px;
+
+/* ================= ENHANCED UI ================= */
+
+.media-card {
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 
-.qr-box canvas {
+.media-card:active {
+  transform: scale(.985);
+}
+
+.media-card.selected {
+  animation: selectPop .18s ease-out;
+}
+
+@keyframes selectPop {
+  0% { transform: scale(.97); }
+  100% { transform: scale(1); }
+}
+
+.date-group {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 2px 0;
+  color: var(--text);
+}
+
+.date-group-title {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.date-group-count {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.quick-tools {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: -8px 0 16px;
+}
+
+.filter-input,
+.sort-select {
+  min-height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 0 12px;
+  outline: none;
+}
+
+.filter-input:focus,
+.sort-select:focus {
+  border-color: rgba(124,92,255,.55);
+}
+
+.storage-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.storage-stat {
+  min-width: 0;
+  padding: 10px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+}
+
+.storage-stat-label {
   display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-bottom: 3px;
+}
+
+.storage-stat-value {
+  display: block;
+  font-size: 12px;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bulk-bar {
+  position: sticky;
+  top: 10px;
+  z-index: 50;
+  backdrop-filter: blur(18px);
+  background: rgba(21,25,34,.92);
+  box-shadow: 0 12px 35px rgba(0,0,0,.18);
+}
+
+.bulk-actions .action-btn {
+  cursor: pointer;
+}
+
+.upload-panel.hidden {
+  display: none !important;
+}
+
+.upload-panel.closing {
+  animation: uploadClose .22s ease forwards;
+}
+
+@keyframes uploadClose {
+  to { opacity: 0; transform: translateY(12px) scale(.98); }
+}
+
+@media (max-width: 700px) {
+  .media-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+  .storage-breakdown { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .storage-stat { padding: 8px; }
+  .quick-tools { display: grid; grid-template-columns: 1fr 1fr; }
+  .quick-tools .filter-input { width: 100%; }
+}
+
+@media (max-width: 430px) {
+  .media-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .quick-tools { grid-template-columns: 1fr; }
 }
 
 /* ================= PROFILE ================= */
@@ -1253,6 +1423,21 @@ main {
             id="storageWarning">
           </div>
 
+          <div class="storage-breakdown">
+            <div class="storage-stat">
+              <span class="storage-stat-label">📷 Photos</span>
+              <span class="storage-stat-value" id="storagePhotos">0 B</span>
+            </div>
+            <div class="storage-stat">
+              <span class="storage-stat-label">🎬 Videos</span>
+              <span class="storage-stat-value" id="storageVideos">0 B</span>
+            </div>
+            <div class="storage-stat">
+              <span class="storage-stat-label">📄 Files</span>
+              <span class="storage-stat-value" id="storageFiles">0 B</span>
+            </div>
+          </div>
+
         </div>
 
       </section>
@@ -1278,6 +1463,55 @@ main {
           id="refreshBtn">
           ↻ Refresh
         </button>
+
+        <button
+          class="refresh-btn"
+          id="selectModeBtn">
+          ☑ Select
+        </button>
+
+      </div>
+
+
+      <div
+        class="bulk-bar hidden"
+        id="bulkBar">
+
+        <strong id="selectedCount">0 selected</strong>
+
+        <div class="bulk-actions">
+
+          <button
+            class="action-btn"
+            id="selectAllBtn">
+            ☑ Select all
+          </button>
+
+          <button
+            class="action-btn"
+            id="bulkFavoriteBtn">
+            ♥ Favorite
+          </button>
+
+          <button
+            class="action-btn"
+            id="bulkDownloadBtn">
+            ↓ Download
+          </button>
+
+          <button
+            class="action-btn danger"
+            id="bulkDeleteBtn">
+            🗑 Delete
+          </button>
+
+          <button
+            class="action-btn"
+            id="cancelSelectBtn">
+            Cancel
+          </button>
+
+        </div>
 
       </div>
 
@@ -1314,6 +1548,24 @@ main {
           ❤️ Favorites
         </button>
 
+      </div>
+
+      <div class="quick-tools">
+        <input
+          class="filter-input"
+          type="date"
+          id="dateFilterInput"
+          title="Filter by date">
+
+        <select
+          class="sort-select"
+          id="sortSelect"
+          title="Sort media">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="name">Name A–Z</option>
+          <option value="size">Largest first</option>
+        </select>
       </div>
 
 
@@ -1561,21 +1813,6 @@ main {
           📤 Share
         </button>
 
-        <button
-          class="action-btn"
-          id="generateQRBtn">
-          QR Code
-        </button>
-
-      </div>
-
-
-      <div
-        class="qr-box hidden"
-        id="qrBox">
-
-        <canvas id="qrCanvas"></canvas>
-
       </div>
 
     </div>
@@ -1738,11 +1975,15 @@ let filteredMedia = [];
 
 let currentFilter = "all";
 let currentSearch = "";
+let currentDateFilter = "";
+let currentSort = "newest";
 
 let currentViewerIndex = -1;
 let currentViewerItem = null;
 
 let selectedShareItem = null;
+let selectionMode = false;
+let selectedMediaKeys = new Set();
 let uploadRunning = false;
 let uploadQueue = [];
 
@@ -1771,6 +2012,21 @@ const storageBar =
 
 const storageWarning =
   document.getElementById("storageWarning");
+
+const storagePhotos =
+  document.getElementById("storagePhotos");
+
+const storageVideos =
+  document.getElementById("storageVideos");
+
+const storageFiles =
+  document.getElementById("storageFiles");
+
+const dateFilterInput =
+  document.getElementById("dateFilterInput");
+
+const sortSelect =
+  document.getElementById("sortSelect");
 
 const uploadPanel =
   document.getElementById("uploadPanel");
@@ -2435,6 +2691,7 @@ async function logout() {
 }
 
 
+
 /* ================= PROFILE ================= */
 
 function updateProfileUI() {
@@ -2688,6 +2945,29 @@ function applyFilters() {
       });
   }
 
+  if (currentDateFilter) {
+    result = result.filter(item => {
+      if (!item.created_at) return false;
+      const d = new Date(item.created_at);
+      if (Number.isNaN(d.getTime())) return false;
+      const localDate =
+        d.getFullYear() + "-" +
+        String(d.getMonth() + 1).padStart(2, "0") + "-" +
+        String(d.getDate()).padStart(2, "0");
+      return localDate === currentDateFilter;
+    });
+  }
+
+  if (currentSort === "oldest") {
+    result.sort((a,b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+  } else if (currentSort === "name") {
+    result.sort((a,b) => getItemName(a).localeCompare(getItemName(b), undefined, { sensitivity: "base" }));
+  } else if (currentSort === "size") {
+    result.sort((a,b) => Number(b.size || 0) - Number(a.size || 0));
+  } else {
+    result.sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+  }
+
   filteredMedia =
     result;
 
@@ -2695,44 +2975,50 @@ function applyFilters() {
 }
 
 
+function formatDateGroup(value) {
+  if (!value) return "Unknown date";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "Unknown date";
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const day = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = Math.round((today - day) / 86400000);
+  if (diff === 0) return "Today";
+  if (diff === 1) return "Yesterday";
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+}
+
 function renderMedia() {
-
   if (!filteredMedia.length) {
-
+    const title = currentFilter === "favorite" ? "No favorites yet" : currentDateFilter ? "Nothing on this date" : currentSearch ? "No matching media" : "No media found";
+    const icon = currentFilter === "favorite" ? "❤️" : currentSearch ? "🔍" : "📷";
     mediaGrid.innerHTML = `
       <div class="empty">
-
-        <div class="empty-icon">
-          📷
-        </div>
-
-        <div>
-          No media found.
-        </div>
-
-        <div
-          style="font-size:12px;margin-top:7px;">
-          Upload your first photo, video or file.
-        </div>
-
-      </div>
-    `;
-
+        <div class="empty-icon">${icon}</div>
+        <div>${title}</div>
+        <div style="font-size:12px;margin-top:7px;">${currentFilter === "favorite" ? "Favorite items will appear here." : "Upload your first photo, video or file."}</div>
+      </div>`;
     return;
   }
 
-  mediaGrid.innerHTML =
-    filteredMedia
-      .map(
-        (item, index) =>
-          createMediaCard(
-            item,
-            index
-          )
-      )
-      .join("");
-}
+  const groups = new Map();
+  filteredMedia.forEach((item, index) => {
+    const label = formatDateGroup(item.created_at);
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push({ item, index });
+  });
 
+  const html = [];
+  for (const [label, entries] of groups) {
+    html.push(`
+      <div class="date-group">
+        <span class="date-group-title">${escapeHTML(label)}</span>
+        <span class="date-group-count">${entries.length} item${entries.length === 1 ? "" : "s"}</span>
+      </div>`);
+    html.push(entries.map(({item,index}) => createMediaCard(item,index)).join(""));
+  }
+  mediaGrid.innerHTML = html.join("");
+}
 
 function createMediaCard(
   item,
@@ -2797,10 +3083,25 @@ function createMediaCard(
     `;
   }
 
+  const selected =
+    selectedMediaKeys.has(
+      getItemKey(item)
+    );
+
   return `
     <article
-      class="media-card"
+      class="media-card${selectionMode ? " select-mode" : ""}${selected ? " selected" : ""}"
       data-index="${index}">
+
+      ${
+        selectionMode
+          ? `
+            <div class="select-check">
+              ${selected ? "✓" : ""}
+            </div>
+          `
+          : ""
+      }
 
       ${content}
 
@@ -2834,6 +3135,223 @@ function createMediaCard(
 
     </article>
   `;
+}
+
+
+/* =========================================================
+   MULTI SELECT
+========================================================= */
+
+function updateSelectionUI() {
+
+  const bar =
+    document.getElementById("bulkBar");
+
+  const count =
+    document.getElementById("selectedCount");
+
+  const button =
+    document.getElementById("selectModeBtn");
+
+  if (selectionMode) {
+    bar.classList.remove("hidden");
+    count.textContent =
+      `${selectedMediaKeys.size} selected`;
+    button.textContent = "✓ Done";
+  } else {
+    bar.classList.add("hidden");
+    button.textContent = "☑ Select";
+  }
+}
+
+
+function toggleSelectionMode() {
+
+  selectionMode = !selectionMode;
+
+  if (!selectionMode) {
+    selectedMediaKeys.clear();
+  }
+
+  updateSelectionUI();
+  renderMedia();
+}
+
+
+function toggleMediaSelection(item) {
+
+  const key =
+    getItemKey(item);
+
+  if (!key) return;
+
+  if (selectedMediaKeys.has(key)) {
+    selectedMediaKeys.delete(key);
+  } else {
+    selectedMediaKeys.add(key);
+  }
+
+  updateSelectionUI();
+  renderMedia();
+}
+
+
+function getSelectedItems() {
+  return allMedia.filter(item =>
+    selectedMediaKeys.has(
+      getItemKey(item)
+    )
+  );
+}
+
+
+function bulkAddFavorite() {
+
+  const items =
+    getSelectedItems();
+
+  if (!items.length) {
+    showToast("Select at least one item");
+    return;
+  }
+
+  items.forEach(item =>
+    setFavorite(item, true)
+  );
+
+  showToast(
+    `${items.length} item${items.length === 1 ? "" : "s"} added to favorites`
+  );
+
+  selectedMediaKeys.clear();
+  selectionMode = false;
+  updateSelectionUI();
+  applyFilters();
+}
+
+
+async function bulkDownload() {
+  const items = getSelectedItems();
+  if (!items.length) {
+    showToast("Select at least one item");
+    return;
+  }
+
+  showToast(`Preparing ${items.length} download${items.length === 1 ? "" : "s"}...`);
+  let done = 0;
+  for (const item of items) {
+    try {
+      await downloadItem(item);
+      done++;
+      await new Promise(resolve => setTimeout(resolve, 180));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  showToast(`${done} download${done === 1 ? "" : "s"} started`);
+}
+
+
+function selectAllVisible() {
+  if (!selectionMode) return;
+  filteredMedia.forEach(item => {
+    const key = getItemKey(item);
+    if (key) selectedMediaKeys.add(key);
+  });
+  updateSelectionUI();
+  renderMedia();
+}
+
+
+async function bulkDelete() {
+
+  const items =
+    getSelectedItems();
+
+  if (!items.length) {
+    showToast("Select at least one item");
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      `Delete ${items.length} selected item${items.length === 1 ? "" : "s"}?`
+    );
+
+  if (!confirmed) return;
+
+  try {
+
+    showToast(
+      `Deleting ${items.length} item${items.length === 1 ? "" : "s"}...`
+    );
+
+    let failed = 0;
+
+    for (const item of items) {
+
+      const key =
+        getItemKey(item);
+
+      if (!key) {
+        failed++;
+        continue;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            WORKER_URL +
+              "/media?key=" +
+              encodeURIComponent(key),
+            {
+              method: "DELETE"
+            }
+          );
+
+        const data =
+          await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "Delete failed"
+          );
+        }
+
+        removeStoredOriginalName(item);
+
+      } catch (error) {
+        console.error(error);
+        failed++;
+      }
+    }
+
+    selectedMediaKeys.clear();
+    selectionMode = false;
+    updateSelectionUI();
+
+    await loadMedia();
+    await loadStorage();
+
+    if (failed) {
+      showToast(
+        `${items.length - failed} deleted, ${failed} failed`
+      );
+    } else {
+      showToast(
+        `${items.length} deleted successfully`
+      );
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    showToast(
+      error.message ||
+      "Bulk delete failed"
+    );
+  }
 }
 
 
@@ -2896,6 +3414,10 @@ async function loadStorage() {
 
     storageBar.style.width =
       percentage + "%";
+
+    if (storagePhotos) storagePhotos.textContent = formatBytes(Number(data.photos || 0));
+    if (storageVideos) storageVideos.textContent = formatBytes(Number(data.videos || 0));
+    if (storageFiles) storageFiles.textContent = formatBytes(Number(data.files || 0));
 
     if (percentage >= 100) {
 
@@ -3014,6 +3536,17 @@ async function uploadFiles(files) {
 
   await loadMedia();
   await loadStorage();
+
+  // Upload queue is finished: close the panel automatically.
+  setTimeout(() => {
+    if (!uploadRunning) {
+      uploadPanel.classList.add("closing");
+      setTimeout(() => {
+        uploadPanel.classList.remove("closing");
+        uploadPanel.classList.add("hidden");
+      }, 220);
+    }
+  }, 450);
 }
 
 
@@ -3689,11 +4222,6 @@ function openShareModal(item) {
   ).value =
     getShareURL(item);
 
-  document.getElementById(
-    "qrBox"
-  ).classList.add(
-    "hidden"
-  );
 
   document.getElementById(
     "shareModal"
@@ -3769,44 +4297,6 @@ async function nativeShare() {
 
     await copyShareURL();
   }
-}
-
-
-function generateQR() {
-
-  if (!selectedShareItem)
-    return;
-
-  const url =
-    getShareURL(
-      selectedShareItem
-    );
-
-  const box =
-    document.getElementById(
-      "qrBox"
-    );
-
-  box.classList.remove(
-    "hidden"
-  );
-
-  QRCode.toCanvas(
-    document.getElementById(
-      "qrCanvas"
-    ),
-    url,
-    {
-      width: 220,
-      margin: 2
-    },
-    error => {
-
-      if (error)
-        console.error(error);
-
-    }
-  );
 }
 
 
@@ -4215,6 +4705,23 @@ searchInput.addEventListener(
 );
 
 
+dateFilterInput.addEventListener(
+  "change",
+  event => {
+    currentDateFilter = event.target.value || "";
+    applyFilters();
+  }
+);
+
+sortSelect.addEventListener(
+  "change",
+  event => {
+    currentSort = event.target.value || "newest";
+    applyFilters();
+  }
+);
+
+
 /* TABS */
 
 document
@@ -4271,8 +4778,15 @@ mediaGrid.addEventListener(
     const item =
       filteredMedia[index];
 
-    if (item)
-      openViewer(item);
+    if (!item)
+      return;
+
+    if (selectionMode) {
+      toggleMediaSelection(item);
+      return;
+    }
+
+    openViewer(item);
 
   }
 );
@@ -4378,6 +4892,59 @@ document.getElementById(
 );
 
 
+/* MULTI SELECT */
+
+document.getElementById(
+  "selectModeBtn"
+).addEventListener(
+  "click",
+  toggleSelectionMode
+);
+
+
+document.getElementById(
+  "cancelSelectBtn"
+).addEventListener(
+  "click",
+  () => {
+    selectionMode = false;
+    selectedMediaKeys.clear();
+    updateSelectionUI();
+    renderMedia();
+  }
+);
+
+
+document.getElementById(
+  "bulkFavoriteBtn"
+).addEventListener(
+  "click",
+  bulkAddFavorite
+);
+
+document.getElementById(
+  "selectAllBtn"
+).addEventListener(
+  "click",
+  selectAllVisible
+);
+
+document.getElementById(
+  "bulkDownloadBtn"
+).addEventListener(
+  "click",
+  bulkDownload
+);
+
+
+document.getElementById(
+  "bulkDeleteBtn"
+).addEventListener(
+  "click",
+  bulkDelete
+);
+
+
 /* SHARE */
 
 document.getElementById(
@@ -4395,13 +4962,6 @@ document.getElementById(
   nativeShare
 );
 
-
-document.getElementById(
-  "generateQRBtn"
-).addEventListener(
-  "click",
-  generateQR
-);
 
 
 /* CLOSE MODALS */
