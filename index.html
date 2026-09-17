@@ -1071,32 +1071,241 @@ main {
 
 /* ================= PROFILE ================= */
 
-.profile-info {
+.profile-card {
+  padding: 4px 0 0;
+}
+
+.profile-hero {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 15px;
+  padding: 6px 0 18px;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  flex: 0 0 auto;
 }
 
 .profile-large {
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid rgba(255,255,255,.14);
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
 }
 
-.profile-info strong {
+.profile-online {
+  position: absolute;
+  right: 2px;
+  bottom: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #35d07f;
+  border: 3px solid #151922;
+}
+
+.profile-identity {
+  min-width: 0;
+}
+
+.profile-identity strong {
   display: block;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.profile-info span {
+.profile-identity span {
+  display: block;
+  margin-top: 4px;
   color: var(--muted);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-label {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 8px;
+  margin: 2px 0 16px;
+}
+
+.profile-stat {
+  padding: 12px 8px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.035);
+  text-align: center;
+}
+
+.profile-stat-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.profile-stat-label {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.profile-storage {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: rgba(255,255,255,.035);
+  margin-bottom: 14px;
+}
+
+.profile-storage-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
   font-size: 12px;
+  margin-bottom: 9px;
+}
+
+.profile-storage-head span:last-child {
+  color: var(--muted);
+}
+
+.profile-storage-track {
+  height: 7px;
+  background: rgba(255,255,255,.09);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.profile-storage-fill {
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width .35s ease;
+}
+
+.profile-storage-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+ .admin-section {
+  margin: 14px 0 4px;
+  padding: 14px;
+  border: 1px solid rgba(124,92,255,.22);
+  border-radius: 18px;
+  background: rgba(124,92,255,.06);
+}
+
+.admin-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.admin-section-head span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.admin-modal-card {
+  width: min(620px, 100%);
+}
+
+.admin-add-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.admin-add-row input {
+  flex: 1;
+  min-width: 0;
+  height: 45px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: white;
+  padding: 0 12px;
+}
+
+.admin-user-list, .trash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-user-row, .trash-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255,255,255,.035);
+}
+
+.admin-user-email, .trash-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trash-meta {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.trash-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 520px) {
+  .admin-add-row { flex-direction: column; }
+  .admin-user-row, .trash-row { align-items: flex-start; }
+  .trash-actions { flex-wrap: wrap; }
 }
 
 .profile-actions {
-  margin-top: 20px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
+  margin-top: 4px;
+}
+
+.profile-action-main {
+  min-height: 44px;
+}
+
+.profile-action-main.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 430px) {
+  .profile-stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 
 /* ================= TOAST ================= */
@@ -1844,19 +2053,20 @@ main {
 
     </div>
 
+    <div class="modal-body profile-card">
 
-    <div class="modal-body">
+      <div class="profile-hero">
 
-      <div class="profile-info">
+        <div class="profile-avatar-wrap">
+          <img
+            class="profile-large"
+            id="accountAvatar"
+            src=""
+            alt="Profile">
+          <span class="profile-online"></span>
+        </div>
 
-        <img
-          class="profile-large"
-          id="accountAvatar"
-          src=""
-          alt="Profile">
-
-        <div>
-
+        <div class="profile-identity">
           <strong id="accountName">
             User
           </strong>
@@ -1865,15 +2075,95 @@ main {
             email
           </span>
 
+          <div class="profile-label">
+            Personal media library
+          </div>
         </div>
 
       </div>
 
+      <div class="profile-stats">
+
+        <div class="profile-stat">
+          <span class="profile-stat-value" id="profileTotal">0</span>
+          <span class="profile-stat-label">Total</span>
+        </div>
+
+        <div class="profile-stat">
+          <span class="profile-stat-value" id="profilePhotos">0</span>
+          <span class="profile-stat-label">Photos</span>
+        </div>
+
+        <div class="profile-stat">
+          <span class="profile-stat-value" id="profileVideos">0</span>
+          <span class="profile-stat-label">Videos</span>
+        </div>
+
+        <div class="profile-stat">
+          <span class="profile-stat-value" id="profileFavorites">0</span>
+          <span class="profile-stat-label">Favorites</span>
+        </div>
+
+      </div>
+
+      <div class="profile-storage">
+        <div class="profile-storage-head">
+          <span>Storage</span>
+          <span id="profileStorageText">0 B / 1 GB</span>
+        </div>
+
+        <div class="profile-storage-track">
+          <div
+            class="profile-storage-fill"
+            id="profileStorageFill">
+          </div>
+        </div>
+
+        <div class="profile-storage-meta">
+          <span id="profileStorageUsed">0 B used</span>
+          <span id="profileStorageFree">1 GB free</span>
+        </div>
+      </div>
+
+      <div
+        class="admin-section hidden"
+        id="adminSection">
+
+        <div class="admin-section-head">
+          <strong>🛡 Admin controls</strong>
+          <span>Manage upload access & trash</span>
+        </div>
+
+        <button
+          class="action-btn profile-action-main full"
+          id="manageAccessBtn">
+          👥 Manage upload access
+        </button>
+
+        <button
+          class="action-btn profile-action-main full"
+          id="openTrashBtn">
+          🗑 Recently deleted
+        </button>
+
+      </div>
 
       <div class="profile-actions">
 
         <button
-          class="action-btn danger"
+          class="action-btn profile-action-main"
+          id="profileFavoritesBtn">
+          ♥ Favorites
+        </button>
+
+        <button
+          class="action-btn profile-action-main"
+          id="profileRefreshBtn">
+          ↻ Refresh stats
+        </button>
+
+        <button
+          class="action-btn danger profile-action-main full"
           id="logoutBtn">
           Sign out
         </button>
@@ -1884,6 +2174,70 @@ main {
 
   </div>
 
+</div>
+
+
+<!-- ================= ADMIN ACCESS ================= -->
+
+<div
+  class="modal hidden"
+  id="adminModal">
+
+  <div class="modal-card admin-modal-card">
+
+    <div class="modal-head">
+      <strong>🛡 Upload access</strong>
+      <button class="close-btn" data-close="adminModal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p style="color:var(--muted);font-size:12px;margin-bottom:14px;">
+        Only the admin and emails listed here can upload. Everyone else can sign in and view media only.
+      </p>
+
+      <div class="admin-add-row">
+        <input
+          id="allowedEmailInput"
+          type="email"
+          placeholder="user@example.com"
+          autocomplete="off">
+        <button class="action-btn primary" id="addAllowedEmailBtn">
+          + Add
+        </button>
+      </div>
+
+      <div class="admin-user-list" id="allowedUserList">
+        <div style="color:var(--muted);font-size:12px;">Loading…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= TRASH ================= -->
+
+<div
+  class="modal hidden"
+  id="trashModal">
+
+  <div class="modal-card admin-modal-card">
+
+    <div class="modal-head">
+      <strong>🗑 Recently deleted</strong>
+      <button class="close-btn" data-close="trashModal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <p style="color:var(--muted);font-size:12px;margin-bottom:14px;">
+        Deleted items stay here for 30 days, then are permanently removed.
+      </p>
+      <div class="trash-list" id="trashList">
+        <div style="color:var(--muted);font-size:12px;">Loading…</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 
@@ -1986,6 +2340,9 @@ let selectionMode = false;
 let selectedMediaKeys = new Set();
 let uploadRunning = false;
 let uploadQueue = [];
+let isAdmin = false;
+let canUpload = false;
+let allowedUploadUsers = [];
 
 
 /* =========================================================
@@ -2021,6 +2378,30 @@ const storageVideos =
 
 const storageFiles =
   document.getElementById("storageFiles");
+
+const profileTotal =
+  document.getElementById("profileTotal");
+
+const profilePhotos =
+  document.getElementById("profilePhotos");
+
+const profileVideos =
+  document.getElementById("profileVideos");
+
+const profileFavorites =
+  document.getElementById("profileFavorites");
+
+const profileStorageText =
+  document.getElementById("profileStorageText");
+
+const profileStorageFill =
+  document.getElementById("profileStorageFill");
+
+const profileStorageUsed =
+  document.getElementById("profileStorageUsed");
+
+const profileStorageFree =
+  document.getElementById("profileStorageFree");
 
 const dateFilterInput =
   document.getElementById("dateFilterInput");
@@ -2386,6 +2767,117 @@ function setFavorite(item, value) {
 }
 
 
+function updateProfileStats() {
+
+  const total = allMedia.length;
+
+  const photos =
+    allMedia.filter(item => item.type === "image").length;
+
+  const videos =
+    allMedia.filter(item => item.type === "video").length;
+
+  const favorites =
+    allMedia.filter(item => isFavorite(item)).length;
+
+  if (profileTotal) profileTotal.textContent = total;
+  if (profilePhotos) profilePhotos.textContent = photos;
+  if (profileVideos) profileVideos.textContent = videos;
+  if (profileFavorites) profileFavorites.textContent = favorites;
+}
+
+function updateProfileStorage(used, limit) {
+
+  used = Number(used || 0);
+  limit = Number(limit || 1024 * 1024 * 1024);
+
+  const percentage = Math.min(100, Math.max(0, (used / limit) * 100));
+  const remaining = Math.max(0, limit - used);
+
+  if (profileStorageText) {
+    profileStorageText.textContent = `${formatBytes(used)} / ${formatBytes(limit)}`;
+  }
+
+  if (profileStorageFill) {
+    profileStorageFill.style.width = percentage + "%";
+  }
+
+  if (profileStorageUsed) {
+    profileStorageUsed.textContent = `${formatBytes(used)} used`;
+  }
+
+  if (profileStorageFree) {
+    profileStorageFree.textContent = `${formatBytes(remaining)} free`;
+  }
+}
+
+
+/* =========================================================
+   WORKER AUTH / ACCESS
+========================================================= */
+
+async function getAccessToken() {
+  const { data } = await supabaseClient.auth.getSession();
+  return data?.session?.access_token || currentSession?.access_token || "";
+}
+
+async function workerFetch(path, options = {}) {
+  const token = await getAccessToken();
+  const headers = new Headers(options.headers || {});
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+  if (options.body && typeof options.body === "object" && !(options.body instanceof FormData)) {
+    headers.set("Content-Type", "application/json");
+    options.body = JSON.stringify(options.body);
+  }
+  return fetch(WORKER_URL + path, { ...options, headers });
+}
+
+async function loadPermissions() {
+  try {
+    const response = await workerFetch("/me", { cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Unable to check access");
+    isAdmin = !!data.isAdmin;
+    canUpload = !!data.canUpload;
+  } catch (error) {
+    console.error("Permission check failed", error);
+    isAdmin = false;
+    canUpload = false;
+  }
+  updateAccessUI();
+}
+
+function updateAccessUI() {
+  const uploadButtons = [
+    document.getElementById("mainUploadBtn"),
+    document.getElementById("headerUploadBtn")
+  ];
+
+  uploadButtons.forEach(button => {
+    if (!button) return;
+    button.classList.toggle("hidden", !canUpload);
+  });
+
+  const adminSection = document.getElementById("adminSection");
+  if (adminSection) adminSection.classList.toggle("hidden", !isAdmin);
+
+  const deleteButton = document.getElementById("viewerDeleteBtn");
+  if (deleteButton) deleteButton.classList.toggle("hidden", !isAdmin);
+
+  const bulkDeleteButton = document.getElementById("bulkDeleteBtn");
+  if (bulkDeleteButton) bulkDeleteButton.classList.toggle("hidden", !isAdmin);
+
+  const subtitle = document.getElementById("welcomeSubtitle");
+  if (subtitle) {
+    subtitle.textContent = isAdmin
+      ? "Admin library • full upload and management access."
+      : canUpload
+      ? "Upload access enabled for your account."
+      : "View-only access • uploads are disabled for your account.";
+  }
+}
+
+
 /* =========================================================
    AUTH
 ========================================================= */
@@ -2448,6 +2940,7 @@ async function showApp() {
     "hidden"
   );
 
+  await loadPermissions();
   updateProfileUI();
 
   await loadEverything();
@@ -3018,6 +3511,8 @@ function renderMedia() {
     html.push(entries.map(({item,index}) => createMediaCard(item,index)).join(""));
   }
   mediaGrid.innerHTML = html.join("");
+
+  updateProfileStats();
 }
 
 function createMediaCard(
@@ -3265,6 +3760,11 @@ function selectAllVisible() {
 
 async function bulkDelete() {
 
+  if (!isAdmin) {
+    showToast("Only the admin can delete media");
+    return;
+  }
+
   const items =
     getSelectedItems();
 
@@ -3301,13 +3801,9 @@ async function bulkDelete() {
       try {
 
         const response =
-          await fetch(
-            WORKER_URL +
-              "/media?key=" +
-              encodeURIComponent(key),
-            {
-              method: "DELETE"
-            }
+          await workerFetch(
+            "/media?key=" + encodeURIComponent(key),
+            { method: "DELETE" }
           );
 
         const data =
@@ -3352,6 +3848,157 @@ async function bulkDelete() {
       "Bulk delete failed"
     );
   }
+}
+
+
+/* =========================================================
+   ADMIN ACCESS
+========================================================= */
+
+async function loadAllowedUsers() {
+  const list = document.getElementById("allowedUserList");
+  if (!list) return;
+  list.innerHTML = `<div style="color:var(--muted);font-size:12px;">Loading…</div>`;
+
+  try {
+    const response = await workerFetch("/admin/users", { cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Unable to load users");
+    allowedUploadUsers = Array.isArray(data.users) ? data.users : [];
+
+    if (!allowedUploadUsers.length) {
+      list.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:8px 0;">No extra upload users yet.</div>`;
+      return;
+    }
+
+    list.innerHTML = allowedUploadUsers.map(user => `
+      <div class="admin-user-row">
+        <div class="admin-user-email">📧 ${escapeHTML(user.email)}</div>
+        <button class="action-btn danger remove-access-btn" data-email="${escapeHTML(user.email)}">Remove</button>
+      </div>
+    `).join("");
+
+    list.querySelectorAll(".remove-access-btn").forEach(button => {
+      button.addEventListener("click", () => removeAllowedEmail(button.dataset.email));
+    });
+  } catch (error) {
+    list.innerHTML = `<div style="color:#ff8fa3;font-size:12px;">${escapeHTML(error.message || "Unable to load users")}</div>`;
+  }
+}
+
+async function addAllowedEmail() {
+  const input = document.getElementById("allowedEmailInput");
+  const email = input?.value.trim().toLowerCase();
+  if (!email) { showToast("Enter an email address"); return; }
+
+  try {
+    const response = await workerFetch("/admin/users", { method: "POST", body: { email } });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Unable to add email");
+    input.value = "";
+    showToast(`${email} can now upload`);
+    await loadAllowedUsers();
+  } catch (error) {
+    showToast(error.message || "Unable to add email");
+  }
+}
+
+async function removeAllowedEmail(email) {
+  if (!email || !confirm(`Remove upload access for ${email}?`)) return;
+  try {
+    const response = await workerFetch("/admin/users?email=" + encodeURIComponent(email), { method: "DELETE" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Unable to remove email");
+    showToast("Upload access removed");
+    await loadAllowedUsers();
+  } catch (error) {
+    showToast(error.message || "Unable to remove email");
+  }
+}
+
+async function openAdminModal() {
+  if (!isAdmin) return;
+  document.getElementById("adminModal").classList.remove("hidden");
+  await loadAllowedUsers();
+}
+
+
+/* =========================================================
+   TRASH
+========================================================= */
+
+async function openTrashModal() {
+  if (!isAdmin) return;
+  document.getElementById("trashModal").classList.remove("hidden");
+  await loadTrash();
+}
+
+async function loadTrash() {
+  const list = document.getElementById("trashList");
+  if (!list) return;
+  list.innerHTML = `<div style="color:var(--muted);font-size:12px;">Loading…</div>`;
+
+  try {
+    const response = await workerFetch("/trash", { cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Unable to load trash");
+    const items = Array.isArray(data.trash) ? data.trash : [];
+
+    if (!items.length) {
+      list.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px 10px;">🗑️<br><br>Trash is empty.</div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(item => {
+      const deleted = item.deleted_at ? new Date(item.deleted_at).toLocaleString() : "";
+      return `
+        <div class="trash-row">
+          <div style="min-width:0;">
+            <div class="trash-name">${escapeHTML(item.name || item.original_key || "Deleted item")}</div>
+            <div class="trash-meta">Deleted ${escapeHTML(deleted)} • Auto-remove after 30 days</div>
+          </div>
+          <div class="trash-actions">
+            <button class="action-btn restore-trash-btn" data-id="${item.id}">Restore</button>
+            <button class="action-btn danger permanent-trash-btn" data-id="${item.id}">Delete forever</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    list.querySelectorAll(".restore-trash-btn").forEach(button => {
+      button.addEventListener("click", () => restoreTrashItem(button.dataset.id));
+    });
+    list.querySelectorAll(".permanent-trash-btn").forEach(button => {
+      button.addEventListener("click", () => permanentlyDeleteTrashItem(button.dataset.id));
+    });
+  } catch (error) {
+    list.innerHTML = `<div style="color:#ff8fa3;font-size:12px;">${escapeHTML(error.message || "Unable to load trash")}</div>`;
+  }
+}
+
+async function restoreTrashItem(id) {
+  if (!confirm("Restore this item?")) return;
+  try {
+    const response = await workerFetch("/trash/restore", { method: "POST", body: { id: Number(id) } });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Restore failed");
+    showToast("Restored successfully");
+    await loadTrash();
+    await loadMedia();
+    await loadStorage();
+  } catch (error) { showToast(error.message || "Restore failed"); }
+}
+
+async function permanentlyDeleteTrashItem(id) {
+  if (!confirm("Permanently delete this item? This cannot be undone.")) return;
+  try {
+    const response = await workerFetch("/trash/permanent?id=" + encodeURIComponent(id), { method: "DELETE" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Permanent delete failed");
+    showToast("Permanently deleted");
+    await loadTrash();
+    await loadStorage();
+  } catch (error) { showToast(error.message || "Permanent delete failed"); }
 }
 
 
@@ -3419,6 +4066,8 @@ async function loadStorage() {
     if (storageVideos) storageVideos.textContent = formatBytes(Number(data.videos || 0));
     if (storageFiles) storageFiles.textContent = formatBytes(Number(data.files || 0));
 
+    updateProfileStorage(used, limit);
+
     if (percentage >= 100) {
 
       storageWarning.classList.remove(
@@ -3468,6 +4117,11 @@ async function loadStorage() {
 ========================================================= */
 
 function openUploadPanel() {
+
+  if (!canUpload) {
+    showToast("Upload access is not enabled for this account");
+    return;
+  }
 
   uploadPanel.classList.remove(
     "hidden"
@@ -3686,6 +4340,13 @@ function rememberUploadedFileName(data, file) {
 }
 
 
+function buildUploadFormData(file) {
+  const formData = new FormData();
+  formData.append("file", file, file.name);
+  return formData;
+}
+
+
 function uploadSingleFile(file) {
 
   return new Promise(resolve => {
@@ -3885,20 +4546,25 @@ function uploadSingleFile(file) {
         resolve();
       };
 
-    const formData =
-      new FormData();
+    getAccessToken().then(token => {
+      if (!token) {
+        updateUploadItem(wrapper, 0, "Login required");
+        resolve();
+        return;
+      }
 
-    // Keep the real browser filename. File.name is the original
-    // selected filename (without the local filesystem path).
-    formData.append(
-      "file",
-      file,
-      file.name
-    );
+      xhr.setRequestHeader(
+        "Authorization",
+        `Bearer ${token}`
+      );
 
-    xhr.send(
-      formData
-    );
+      xhr.send(
+        buildUploadFormData(file)
+      );
+    }).catch(() => {
+      updateUploadItem(wrapper, 0, "Login required");
+      resolve();
+    });
   });
 }
 
@@ -4306,6 +4972,11 @@ async function nativeShare() {
 
 async function deleteItem(item) {
 
+  if (!isAdmin) {
+    showToast("Only the admin can delete media");
+    return;
+  }
+
   const name =
     getItemName(item);
 
@@ -4330,84 +5001,14 @@ async function deleteItem(item) {
       throw new Error("Missing media key");
     }
 
-    /*
-      IMPORTANT:
-      Some Fastify proxies reject an empty DELETE request when
-      Content-Type is application/json. Fastify documents this as
-      FST_ERR_CTP_INVALID_JSON_BODY / empty JSON body.
+    const response =
+      await workerFetch(
+        "/media?key=" + encodeURIComponent(key),
+        { method: "DELETE" }
+      );
 
-      So every delete attempt below sends a small JSON body containing
-      the key. We try the query endpoint first, then the path endpoint.
-      This also avoids problems with encoded '/' inside keys such as:
-      videos/uuid.mp4
-    */
-
-    const encodedKey =
-      encodeURIComponent(key);
-
-    const deleteAttempts = [
-      WORKER_URL +
-        "/media?key=" +
-        encodedKey,
-      WORKER_URL +
-        "/media/" +
-        encodedKey
-    ];
-
-    let response = null;
-    let data = {};
-    let lastError = "Delete failed";
-
-    for (const endpoint of deleteAttempts) {
-
-      try {
-
-        response =
-          await fetch(
-            endpoint,
-            {
-              method: "DELETE",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                key: key
-              })
-            }
-          );
-
-        const text =
-          await response.text();
-
-        try {
-          data = text
-            ? JSON.parse(text)
-            : {};
-        } catch (_) {
-          data = {
-            error: text
-          };
-        }
-
-        if (response.ok) {
-          break;
-        }
-
-        lastError =
-          data?.error ||
-          data?.message ||
-          `Delete failed (${response.status})`;
-
-      } catch (requestError) {
-
-        lastError =
-          requestError?.message ||
-          "Delete request failed";
-      }
-    }
+    const data =
+      await response.json().catch(() => ({}));
 
     if (!response || !response.ok) {
       throw new Error(lastError);
@@ -4800,6 +5401,8 @@ document.getElementById(
   "click",
   () => {
 
+    updateProfileStats();
+
     document.getElementById(
       "accountModal"
     ).classList.remove(
@@ -4817,6 +5420,47 @@ document.getElementById(
 ).addEventListener(
   "click",
   logout
+);
+
+
+document.getElementById("manageAccessBtn")?.addEventListener("click", openAdminModal);
+document.getElementById("openTrashBtn")?.addEventListener("click", openTrashModal);
+document.getElementById("addAllowedEmailBtn")?.addEventListener("click", addAllowedEmail);
+document.getElementById("allowedEmailInput")?.addEventListener("keydown", event => {
+  if (event.key === "Enter") addAllowedEmail();
+});
+
+
+/* PROFILE ACTIONS */
+
+document.getElementById(
+  "profileFavoritesBtn"
+).addEventListener(
+  "click",
+  () => {
+    currentFilter = "favorite";
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.classList.toggle(
+        "active",
+        tab.dataset.filter === "favorite"
+      );
+    });
+    document.getElementById("accountModal").classList.add("hidden");
+    applyFilters();
+  }
+);
+
+document.getElementById(
+  "profileRefreshBtn"
+).addEventListener(
+  "click",
+  async () => {
+    showToast("Refreshing profile...");
+    await loadMedia();
+    await loadStorage();
+    updateProfileStats();
+    showToast("Profile updated");
+  }
 );
 
 
